@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoungpotentialsAPI", "YoungpotentialsAPI\YoungpotentialsAPI.csproj", "{81280AEA-7207-47DE-A82C-290634B56D20}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6129D816-4F79-45A1-90FD-FCD4F9F4E6E1} = {6129D816-4F79-45A1-90FD-FCD4F9F4E6E1}
+		{1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F} = {1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Youngpotentials.Service", "Youngpotentials.Service\Youngpotentials.Service.csproj", "{6129D816-4F79-45A1-90FD-FCD4F9F4E6E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F} = {1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F}
+		{5A530EA0-C56B-47AC-B691-02F4926B6D93} = {5A530EA0-C56B-47AC-B691-02F4926B6D93}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Youngpotentials.DAO", "Youngpotentials.DAO\Youngpotentials.DAO.csproj", "{5A530EA0-C56B-47AC-B691-02F4926B6D93}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F} = {1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Youngpotentials.Domain", "Youngpotentials.Domain\Youngpotentials.Domain.csproj", "{1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81280AEA-7207-47DE-A82C-290634B56D20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81280AEA-7207-47DE-A82C-290634B56D20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81280AEA-7207-47DE-A82C-290634B56D20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81280AEA-7207-47DE-A82C-290634B56D20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6129D816-4F79-45A1-90FD-FCD4F9F4E6E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6129D816-4F79-45A1-90FD-FCD4F9F4E6E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6129D816-4F79-45A1-90FD-FCD4F9F4E6E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6129D816-4F79-45A1-90FD-FCD4F9F4E6E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A530EA0-C56B-47AC-B691-02F4926B6D93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A530EA0-C56B-47AC-B691-02F4926B6D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A530EA0-C56B-47AC-B691-02F4926B6D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A530EA0-C56B-47AC-B691-02F4926B6D93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CD0BF9A-AE96-4677-BC7C-CDEB73A41B2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF4C685C-F143-4E85-86D2-81FEA81E3B20}
+	EndGlobalSection
+EndGlobal
