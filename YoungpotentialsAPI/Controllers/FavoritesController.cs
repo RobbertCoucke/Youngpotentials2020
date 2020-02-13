@@ -11,12 +11,12 @@ namespace YoungpotentialsAPI.Controllers
     public class FavoritesController : Controller
     {
 
-        private IFavoritesService _favoritesService;
+        //private IFavoritesService _favoritesService;
 
-        public FavoritesController(IFavoritesService favoritesService)
-        {
-            _favoritesService = favoritesService;
-        }
+        //public FavoritesController(IFavoritesService favoritesService)
+        //{
+        //    _favoritesService = favoritesService;
+        //}
 
         public IActionResult Index()
         {

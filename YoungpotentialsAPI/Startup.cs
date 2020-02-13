@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Youngpotentials.DAO;
 using Youngpotentials.Service;
 using YoungpotentialsAPI.Helpers;
 
@@ -73,6 +74,9 @@ namespace YoungpotentialsAPI
             });
 
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IUserDAO, UserDAO>();
+            services.AddSingleton<IStudentDAO, StudentDAO>();
+            services.AddSingleton<ICompanyDAO, CompanyDAO>();
 
         }
 

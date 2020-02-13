@@ -11,12 +11,12 @@ namespace YoungpotentialsAPI.Controllers
     public class OfferController : Controller
     {
 
-        private IOfferService _offerService;
+        //private IOfferService _offerService;
 
-        public OfferController(IOfferService offerService)
-        {
-            _offerService = offerService;
-        }
+        //public OfferController(IOfferService offerService)
+        //{
+        //    _offerService = offerService;
+        //}
 
         public IActionResult Index()
         {
