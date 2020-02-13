@@ -19,26 +19,26 @@ namespace Youngpotentials.Service
     public class UserService : IUserService
     {
 
-        private IUserDAO _userDAO;
-        private IStudentDAO _studentDAO;
-        private ICompanyDAO _companyDAO;
-        private IDocentDAO _docentDAO;
+        //private IUserDAO _userDAO;
+        //private IStudentDAO _studentDAO;
+        //private ICompanyDAO _companyDAO;
+        //private IDocentDAO _docentDAO;
 
-        public UserService(IUserDAO userDAO, IStudentDAO studentDAO, ICompanyDAO companyDAO, IDocentDAO docentDAO)
-        {
-            _userDAO = userDAO;
-            _studentDAO = studentDAO;
-            _companyDAO = companyDAO;
-            _docentDAO = docentDAO;
-        }
+        //public UserService(IUserDAO userDAO, IStudentDAO studentDAO, ICompanyDAO companyDAO, IDocentDAO docentDAO)
+        //{
+        //    _userDAO = userDAO;
+        //    _studentDAO = studentDAO;
+        //    _companyDAO = companyDAO;
+        //    _docentDAO = docentDAO;
+        //}
         
         public AspNetUser Authenticate(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
 
-            var user = _userDAO.GetUserByEmail(email);
-
+            // var user = _userDAO.GetUserByEmail(email);
+            var user = new AspNetUser();
             if (user == null)
                 return null;
 

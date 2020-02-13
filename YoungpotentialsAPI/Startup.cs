@@ -72,7 +72,7 @@ namespace YoungpotentialsAPI
                 };
             });
 
-            services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<IUserService, UserService>();
 
         }
 
