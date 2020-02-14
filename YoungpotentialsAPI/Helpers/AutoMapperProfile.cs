@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Youngpotentials.Domain.testEntities;
+using Youngpotentials.Domain.Entities;
 using YoungpotentialsAPI.Models.Requests;
 using YoungpotentialsAPI.Models.Responses;
 
@@ -13,9 +13,11 @@ namespace YoungpotentialsAPI.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<AspNetUser, UserResponse>();
-            CreateMap<UserRegistrationRequest, AspNetUser>();
-            CreateMap<UserUpdateRequest, AspNetUser>();
+            CreateMap<AspNetUsers, UserResponse>();
+            CreateMap<UserRegistrationRequest, AspNetUsers>();
+            CreateMap<UserUpdateRequest, AspNetUsers>();
+            CreateMap<UserRegistrationRequest, Students>();
+            CreateMap<UserRegistrationRequest, Companies>();
         }
     }
 }

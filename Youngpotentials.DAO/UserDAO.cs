@@ -14,8 +14,8 @@ namespace Youngpotentials.DAO
         AspNetUsers CreateUser(AspNetUsers user);
         void UpdateUser(AspNetUsers user);
         IEnumerable<AspNetUsers> GetAllUsers();
-        void DeleteUser(string id);
-
+        void DeleteUser(int id);
+        AspNetUsers GetUserById(int id);
        
     }
     public class UserDAO : IUserDAO
@@ -35,7 +35,7 @@ namespace Youngpotentials.DAO
             return user;
         }
 
-        public void DeleteUser(string id)
+        public void DeleteUser(int id)
         {
             var record = _db.AspNetUsers.FirstOrDefault(x => x.Id == id);
             _db.AspNetUsers.Remove(record);
@@ -50,6 +50,11 @@ namespace Youngpotentials.DAO
         public AspNetUsers GetUserByEmail(string email)
         {
            return _db.AspNetUsers.Where(u => u.Email == email).FirstOrDefault();
+        }
+
+        public AspNetUsers GetUserById(int id)
+        {
+            return _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
         }
 
         public void UpdateUser(AspNetUsers user)

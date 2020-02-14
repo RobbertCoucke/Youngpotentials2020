@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Youngpotentials.DAO\Youngpotentials.DAO.csproj" />
     <ProjectReference Include="..\Youngpotentials.Domain\Youngpotentials.Domain.csproj" />
   </ItemGroup>
 

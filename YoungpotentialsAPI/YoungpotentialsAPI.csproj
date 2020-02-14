@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Youngpotentials.DAO\Youngpotentials.DAO.csproj" />
     <ProjectReference Include="..\Youngpotentials.Domain\Youngpotentials.Domain.csproj" />
     <ProjectReference Include="..\Youngpotentials.Service\Youngpotentials.Service.csproj" />
   </ItemGroup>

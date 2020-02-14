@@ -54,6 +54,7 @@ namespace YoungpotentialsAPI
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                         var userId = int.Parse(context.Principal.Identity.Name);
+                        //var userId = context.Principal.Identity.Name;
                         var user = userService.GetById(userId);
                         if (user == null)
                         {
@@ -77,7 +78,8 @@ namespace YoungpotentialsAPI
             services.AddSingleton<IUserDAO, UserDAO>();
             services.AddSingleton<IStudentDAO, StudentDAO>();
             services.AddSingleton<ICompanyDAO, CompanyDAO>();
-
+            services.AddSingleton<IStudentService, StudentService>();
+            services.AddSingleton<ICompanyService, CompanyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

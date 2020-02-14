@@ -1,44 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Youngpotentials.Domain.testEntities;
+using Youngpotentials.DAO;
+using Youngpotentials.Domain.Entities;
 
 namespace Youngpotentials.Service
 {
 
     public interface IUserService
     {
-        AspNetUser Authenticate(string email, string password);
-        IEnumerable<AspNetUser> GetAll();
-        AspNetUser GetById(int id);
-        AspNetUser Create(AspNetUser user, string password);
-        void Update(AspNetUser user, string password = null);
+        AspNetUsers Authenticate(string email, string password);
+        IEnumerable<AspNetUsers> GetAll();
+        AspNetUsers GetById(int id);
+        AspNetUsers Create(AspNetUsers user, string password);
+        void Update(AspNetUsers user, string password = null);
         void Delete(int id);
     }
 
     public class UserService : IUserService
     {
 
-        //private IUserDAO _userDAO;
-        //private IStudentDAO _studentDAO;
-        //private ICompanyDAO _companyDAO;
-        //private IDocentDAO _docentDAO;
+        private IUserDAO _userDAO;
+        private IStudentDAO _studentDAO;
+        private ICompanyDAO _companyDAO;
 
-        //public UserService(IUserDAO userDAO, IStudentDAO studentDAO, ICompanyDAO companyDAO, IDocentDAO docentDAO)
-        //{
-        //    _userDAO = userDAO;
-        //    _studentDAO = studentDAO;
-        //    _companyDAO = companyDAO;
-        //    _docentDAO = docentDAO;
-        //}
-        
-        public AspNetUser Authenticate(string email, string password)
+        public UserService(IUserDAO userDAO, IStudentDAO studentDAO, ICompanyDAO companyDAO)
+        {
+            _userDAO = userDAO;
+            _studentDAO = studentDAO;
+            _companyDAO = companyDAO;
+        }
+
+        public AspNetUsers Authenticate(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
 
-            // var user = _userDAO.GetUserByEmail(email);
-            var user = new AspNetUser();
+            var user = _userDAO.GetUserByEmail(email);
             if (user == null)
                 return null;
 
@@ -48,29 +46,47 @@ namespace Youngpotentials.Service
             return user;
         }
 
-        public AspNetUser Create(AspNetUser user, string password)
+        public AspNetUsers Create(AspNetUsers user, string password)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new Exception("password is required");
+            }
+
+            if(_userDAO.GetUserByEmail(user.Email) != null)
+            {
+                throw new Exception("email is already taken");
+            }
+
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            //todo change to create student or company
+            _userDAO.CreateUser(user);
+            return user;
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            _userDAO.DeleteUser(id);
         }
 
-        public IEnumerable<AspNetUser> GetAll()
+        public IEnumerable<AspNetUsers> GetAll()
         {
-            throw new NotImplementedException();
+            return _userDAO.GetAllUsers();
         }
 
-        public AspNetUser GetById(int id)
+        public AspNetUsers GetById(int id)
         {
-            throw new NotImplementedException();
+            return _userDAO.GetUserById(id);
         }
 
-        public void Update(AspNetUser user, string password = null)
+        public void Update(AspNetUsers user, string password = null)
         {
-            throw new NotImplementedException();
+            _userDAO.UpdateUser(user);
         }
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

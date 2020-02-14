@@ -11,10 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using YoungpotentialsAPI.Models.Responses;
 using YoungpotentialsAPI.Models.Requests;
-using Youngpotentials.Domain.testEntities;
 using Youngpotentials.Service;
 using AutoMapper;
 using YoungpotentialsAPI.Helpers;
+using Youngpotentials.Domain.Entities;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -25,12 +25,16 @@ namespace YoungpotentialsAPI.Controllers
     public class UserController : Controller
     {
         private IUserService _userService;
+        private IStudentService _studentService;
+        private ICompanyService _companyService;
         private readonly AppSettings _appSettings;
         private IMapper _mapper;
 
-        public UserController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public UserController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IStudentService studentService, ICompanyService companyService)
         {
             _userService = userService;
+            _companyService = companyService;
+            _studentService = studentService;
             _appSettings = appSettings.Value;
             _mapper = mapper;
         }
@@ -63,23 +67,44 @@ namespace YoungpotentialsAPI.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
                 Token = tokenString
             });
 
+        }
+
+        [HttpGet("test")]
+        public JsonResult Test()
+        {
+            return Json("het werk woehoe!");
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
         public IActionResult Register([FromBody]UserRegistrationRequest model)
         {
-            var user = _mapper.Map<AspNetUser>(model);
+            var user = _mapper.Map<AspNetUsers>(model);
 
-            try
-            {
-                _userService.Create(user, model.Password);
+            try {
+
+                user = _userService.Create(user, model.Password);
+                if (model.IsStudent)
+                {
+                    var student = _mapper.Map<Students>(model);
+                    student.UserId = user.Id;
+                    _studentService.CreateStudent(student);
+                
+                }
+                else
+                {
+                    var company = _mapper.Map<Companies>(model);
+                    company.UserId = user.Id;
+                    _companyService.CreateCompany(company);
+                }
+
+
                 return Ok();
+
+
             }
             catch (Exception e)
             {
@@ -88,12 +113,18 @@ namespace YoungpotentialsAPI.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("getAll")]
         public IActionResult GetAll()
         {
+            var result = new List<UserResponse>();
             var users = _userService.GetAll();
-            var model = _mapper.Map<IList<UserResponse>>(users);
-            return Ok(model);
+            foreach(var user in users)
+            {
+                var model = _mapper.Map<UserResponse>(user);
+                result.Add(model);
+            }
+            
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -108,7 +139,7 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult Update(int id, [FromBody]UserUpdateRequest model)
         {
 
-            var user = _mapper.Map<AspNetUser>(model);
+            var user = _mapper.Map<AspNetUsers>(model);
             user.Id = id;
             try
             {
