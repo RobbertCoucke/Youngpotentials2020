@@ -49,7 +49,7 @@ namespace Youngpotentials.DAO
 
         public AspNetUsers GetUserByEmail(string email)
         {
-           return _db.AspNetUsers.Where(u => u.Email == email).FirstOrDefault();
+           return _db.AspNetUsers.Where(u => u.Email == email).Include(u=> u.AspNetUserRoles).FirstOrDefault();
         }
 
         public AspNetUsers GetUserById(int id)

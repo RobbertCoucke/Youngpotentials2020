@@ -50,15 +50,22 @@ namespace YoungpotentialsAPI.Controllers
                 return BadRequest(new { message = "email or password is incorrect" });
             }
 
+            //CHANGE THIS!!!!!
+            var role = user.AspNetUserRoles.First().Role.Name;
+      
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var claims = new Claim(ClaimTypes.Role, "Admin");
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new Claim[] {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    //ipv "Admin" role ophalen van user
+                    new Claim(ClaimTypes.Role, role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
@@ -72,6 +79,7 @@ namespace YoungpotentialsAPI.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("test")]
         public JsonResult Test()
         {
