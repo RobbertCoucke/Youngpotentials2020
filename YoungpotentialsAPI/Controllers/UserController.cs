@@ -129,6 +129,7 @@ namespace YoungpotentialsAPI.Controllers
             }
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpGet("getAll")]
         public IActionResult GetAll()
         {
