@@ -35,6 +35,7 @@ namespace YoungpotentialsAPI.Models.Requests
         public string FirstName { get; set; }
         public string CvUrl { get; set; }
 
+        [Required]
         public bool IsStudent { get; set; }
 
 

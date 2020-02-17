@@ -13,7 +13,7 @@ namespace YoungpotentialsAPI.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<AspNetUsers, UserResponse>();
+            CreateMap<AspNetUsers, AuthenticationResponse>();
             CreateMap<UserRegistrationRequest, AspNetUsers>();
             CreateMap<UserUpdateRequest, AspNetUsers>();
             CreateMap<UserRegistrationRequest, Students>();

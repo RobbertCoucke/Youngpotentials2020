@@ -12,6 +12,7 @@ namespace Youngpotentials.DAO
     {
         IEnumerable<AspNetRoles> GetAllRoles();
         AspNetRoles GetRoleById(int id);
+        AspNetRoles GetRoleByName(string name);
     }
     public class RoleDAO : IRoleDAO
     {
@@ -29,8 +30,12 @@ namespace Youngpotentials.DAO
 
         public AspNetRoles GetRoleById(int id)
         {
-            return _db.AspNetRoles.Where(r => r.Id).FirstOrDefault();
+            return _db.AspNetRoles.Where(r => r.Id == id).FirstOrDefault();
         }
 
+        public AspNetRoles GetRoleByName(string name)
+        {
+            return _db.AspNetRoles.Where(r => r.Name == name).FirstOrDefault();
+        }
     }
 }

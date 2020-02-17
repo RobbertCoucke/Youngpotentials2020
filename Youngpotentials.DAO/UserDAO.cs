@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Youngpotentials.Domain;
 using Youngpotentials.Domain.Entities;
 
 namespace Youngpotentials.DAO
@@ -49,7 +50,7 @@ namespace Youngpotentials.DAO
 
         public AspNetUsers GetUserByEmail(string email)
         {
-           return _db.AspNetUsers.Where(u => u.Email == email).Include(u=> u.AspNetUserRoles).FirstOrDefault();
+           return _db.AspNetUsers.Where(u => u.Email == email).Include(u=> u.Role).FirstOrDefault();
         }
 
         public AspNetUsers GetUserById(int id)

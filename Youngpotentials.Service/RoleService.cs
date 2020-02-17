@@ -10,6 +10,7 @@ namespace Youngpotentials.Service
     {
         IEnumerable<AspNetRoles> GetAllRoles();
         AspNetRoles GetRoleById(int id);
+        AspNetRoles GetRoleByName(string name);
     }
     public class RoleService : IRoleService
     {
@@ -29,6 +30,11 @@ namespace Youngpotentials.Service
         public AspNetRoles GetRoleById(int id)
         {
             return _roleDAO.GetRoleById(id);
+        }
+
+        public AspNetRoles GetRoleByName(string name)
+        {
+            return _roleDAO.GetRoleByName(name);
         }
     }
 }
