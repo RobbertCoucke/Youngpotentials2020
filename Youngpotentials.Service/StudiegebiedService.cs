@@ -6,7 +6,7 @@ using Youngpotentials.Domain.Entities;
 
 namespace Youngpotentials.Service
 {
-    public interface IStuidegebiedService
+    public interface IStudiegebiedService
     {
         IEnumerable<Studiegebied> GetAll();
         Studiegebied GetById(string id);
@@ -14,7 +14,7 @@ namespace Youngpotentials.Service
         void UpdateStudegebied(Studiegebied studiegebied);
         void DeleteStudieGebied(string id);
     }
-    public class StudiegebiedService : IStuidegebiedService
+    public class StudiegebiedService : IStudiegebiedService
     {
         private IStudiegebiedDAO _studiegebiedDAO;
 
