@@ -29,6 +29,7 @@ namespace Youngpotentials.Service
             _userDAO = userDAO;
             _studentDAO = studentDAO;
             _companyDAO = companyDAO;
+            _roleDAO = roleDAO;
         }
 
         public AspNetUsers Authenticate(string email, string password)
