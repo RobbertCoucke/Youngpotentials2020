@@ -11,7 +11,7 @@ namespace Youngpotentials.DAO
     {
         IEnumerable<Opleiding> GetAll();
         Opleiding GetById(string id);
-        IEnumerable<Opleiding> GetByStudiegebied(string id);
+        IEnumerable<Opleiding> GetAllByStudiegebied(string id);
         void DeleteById(string id);
         void Update(Opleiding opleiding);
         Opleiding CreateOpleiding(Opleiding opleiding);
@@ -53,7 +53,7 @@ namespace Youngpotentials.DAO
                                 .Include(o => o.OpleidingOffer).FirstOrDefault();
         }
 
-        public IEnumerable<Opleiding> GetByStudiegebied(string id)
+        public IEnumerable<Opleiding> GetAllByStudiegebied(string id)
         {
             return _db.Opleiding.Where(op => op.IdStudiegebied == id).Include(s => s.IdStudiegebiedNavigation)
                     .Include(a => a.Afstudeerrichting)
