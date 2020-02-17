@@ -80,6 +80,16 @@ namespace YoungpotentialsAPI
             services.AddSingleton<ICompanyDAO, CompanyDAO>();
             services.AddSingleton<IStudentService, StudentService>();
             services.AddSingleton<ICompanyService, CompanyService>();
+            services.AddSingleton<IStudiegebiedService, StudiegebiedService>();
+            services.AddSingleton<IStudiegebiedDAO, StudiegebiedDAO>();
+            services.AddSingleton<IOpleidingService, OpleidingService>();
+            services.AddSingleton<IOpleidingDAO, OpleidingDAO>();
+            services.AddSingleton<IAfstudeerrichtingService, AfstudeerrichtingService>();
+            services.AddSingleton<IAfstudeerrichtingDAO, AfstudeerrichtingDAO>();
+            services.AddSingleton<IKeuzeService, KeuzeService>();
+            services.AddSingleton<IKeuzeDAO, KeuzeDAO>();
+            services.AddSingleton<IRoleService, RoleService>();
+            services.AddSingleton<IRoleDAO, RoleDAO>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
