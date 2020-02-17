@@ -26,17 +26,19 @@ namespace YoungpotentialsAPI.Controllers
     {
         private IUserService _userService;
         private IStudentService _studentService;
+        private IRoleService _roleService;
         private ICompanyService _companyService;
         private readonly AppSettings _appSettings;
         private IMapper _mapper;
 
-        public UserController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IStudentService studentService, ICompanyService companyService)
+        public UserController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IStudentService studentService, ICompanyService companyService, IRoleService roleService)
         {
             _userService = userService;
             _companyService = companyService;
             _studentService = studentService;
             _appSettings = appSettings.Value;
             _mapper = mapper;
+            _roleService = roleService;
         }
 
         [AllowAnonymous]
@@ -50,8 +52,7 @@ namespace YoungpotentialsAPI.Controllers
                 return BadRequest(new { message = "email or password is incorrect" });
             }
 
-            //CHANGE THIS!!!!!
-            var role = user.AspNetUserRoles.First().Role.Name;
+            var role = user.Role.Name;
       
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -70,16 +71,16 @@ namespace YoungpotentialsAPI.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new
+            return Ok(new AuthenticationResponse
             {
-                Id = user.Id,
                 Email = user.Email,
+                Role = user.Role.Name,
                 Token = tokenString
-            });
+            }) ;
 
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "User")]
         [HttpGet("test")]
         public JsonResult Test()
         {
@@ -94,7 +95,15 @@ namespace YoungpotentialsAPI.Controllers
 
             try {
 
+                if (model.IsStudent)
+                    user.RoleId = _roleService.GetRoleByName("User").Id;
+                else
+                    user.RoleId = _roleService.GetRoleByName("Company").Id;
+
                 user = _userService.Create(user, model.Password);
+
+                
+
                 if (model.IsStudent)
                 {
                     var student = _mapper.Map<Students>(model);
@@ -118,7 +127,6 @@ namespace YoungpotentialsAPI.Controllers
             {
                 return BadRequest(new { message = e.Message });
             }
-
         }
 
         [HttpGet("getAll")]

@@ -7,10 +7,6 @@ namespace Youngpotentials.Domain.Entities
     {
         public AspNetUsers()
         {
-            AspNetUserClaims = new HashSet<AspNetUserClaims>();
-            AspNetUserLogins = new HashSet<AspNetUserLogins>();
-            AspNetUserRoles = new HashSet<AspNetUserRoles>();
-            AspNetUserTokens = new HashSet<AspNetUserTokens>();
             Companies = new HashSet<Companies>();
             Students = new HashSet<Students>();
         }
@@ -22,8 +18,6 @@ namespace Youngpotentials.Domain.Entities
         public string NormalizedEmail { get; set; }
         public bool EmailConfirmed { get; set; }
         public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-
         public string SecurityStamp { get; set; }
         public string ConcurrencyStamp { get; set; }
         public string PhoneNumber { get; set; }
@@ -36,11 +30,10 @@ namespace Youngpotentials.Domain.Entities
         public int? ZipCode { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
+        public byte[] PasswordSalt { get; set; }
+        public int? RoleId { get; set; }
 
-        public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
-        public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
-        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual AspNetRoles Role { get; set; }
         public virtual ICollection<Companies> Companies { get; set; }
         public virtual ICollection<Students> Students { get; set; }
     }

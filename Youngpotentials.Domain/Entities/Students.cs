@@ -15,7 +15,7 @@ namespace Youngpotentials.Domain.Entities
         public string Name { get; set; }
         public string CvUrl { get; set; }
         public string FirstName { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public virtual AspNetUsers User { get; set; }
         public virtual ICollection<Applications> Applications { get; set; }

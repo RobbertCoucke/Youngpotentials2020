@@ -122,8 +122,6 @@ namespace Youngpotentials.Domain.Entities
             {
                 entity.HasIndex(e => e.RoleId);
 
-                entity.Property(e => e.RoleId).IsRequired();
-
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetRoleClaims)
                     .HasForeignKey(d => d.RoleId);
@@ -136,6 +134,8 @@ namespace Youngpotentials.Domain.Entities
                     .IsUnique()
                     .HasFilter("([NormalizedName] IS NOT NULL)");
 
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
                 entity.Property(e => e.Name).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedName).HasMaxLength(256);
@@ -146,10 +146,6 @@ namespace Youngpotentials.Domain.Entities
                 entity.HasIndex(e => e.UserId);
 
                 entity.Property(e => e.UserId).IsRequired();
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserClaims)
-                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<AspNetUserLogins>(entity =>
@@ -163,10 +159,6 @@ namespace Youngpotentials.Domain.Entities
                 entity.Property(e => e.ProviderKey).HasMaxLength(128);
 
                 entity.Property(e => e.UserId).IsRequired();
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserLogins)
-                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<AspNetUserRoles>(entity =>
@@ -178,10 +170,6 @@ namespace Youngpotentials.Domain.Entities
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetUserRoles)
                     .HasForeignKey(d => d.RoleId);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserRoles)
-                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<AspNetUserTokens>(entity =>
@@ -191,10 +179,6 @@ namespace Youngpotentials.Domain.Entities
                 entity.Property(e => e.LoginProvider).HasMaxLength(128);
 
                 entity.Property(e => e.Name).HasMaxLength(128);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AspNetUserTokens)
-                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<AspNetUsers>(entity =>
@@ -225,9 +209,18 @@ namespace Youngpotentials.Domain.Entities
 
                 entity.Property(e => e.PasswordHash).IsRequired();
 
+                entity.Property(e => e.PasswordSalt).IsRequired();
+
+                entity.Property(e => e.RoleId).HasColumnName("roleId");
+
                 entity.Property(e => e.Telephone).HasMaxLength(50);
 
                 entity.Property(e => e.UserName).HasMaxLength(256);
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AspNetUsers)
+                    .HasForeignKey(d => d.RoleId)
+                    .HasConstraintName("FK_AspNetUsers_AspNetRoles");
             });
 
             modelBuilder.Entity<Companies>(entity =>
@@ -240,9 +233,7 @@ namespace Youngpotentials.Domain.Entities
 
                 entity.Property(e => e.Url).IsRequired();
 
-                entity.Property(e => e.UserId)
-                    .HasColumnName("userId")
-                    .HasMaxLength(450);
+                entity.Property(e => e.UserId).HasColumnName("userId");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Companies)
@@ -415,19 +406,11 @@ namespace Youngpotentials.Domain.Entities
 
             modelBuilder.Entity<Students>(entity =>
             {
-                entity.Property(e => e.Id)
-                    .HasColumnName("ID")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.CvUrl).IsRequired();
-
                 entity.Property(e => e.FirstName).HasMaxLength(50);
 
                 entity.Property(e => e.Name).IsRequired();
 
-                entity.Property(e => e.UserId)
-                    .HasColumnName("userId")
-                    .HasMaxLength(450);
+                entity.Property(e => e.UserId).HasColumnName("userId");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Students)
