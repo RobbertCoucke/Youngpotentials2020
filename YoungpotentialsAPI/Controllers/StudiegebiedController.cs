@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -17,18 +16,12 @@ namespace YoungpotentialsAPI.Controllers
     public class StudiegebiedController : Controller
     {
         private IStudiegebiedService _studiegebiedService;
-        private IUserService _userService;
         private IMapper _mapper;
-        private readonly AppSettings _appSettings;
 
-        public StudiegebiedController(IUserService userService,
-                                      IStudiegebiedService studiegebiedService, IMapper mapper,
-                                      IOptions<AppSettings> appSettings)
+        public StudiegebiedController(IStudiegebiedService studiegebiedService, IMapper mapper )
         {
             _studiegebiedService = studiegebiedService;
-            _userService = userService;
             _mapper = mapper;
-            _appSettings = appSettings.Value;
         }
 
         [HttpGet]
