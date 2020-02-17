@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace YoungpotentialsAPI.Controllers
 {
+
     [ApiController]
     [Route("[controller]")]
     public class OfferController : Controller
