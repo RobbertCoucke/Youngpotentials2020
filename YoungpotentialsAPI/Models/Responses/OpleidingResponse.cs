@@ -7,9 +7,9 @@ namespace YoungpotentialsAPI.Models.Responses
 {
     public class OpleidingResponse
     {
+        public string Id { get; set; }
         public string NaamOpleiding { get; set; }
         public string IdStudiegebied { get; set; }
-        public StudiegebiedResponse IdStudiegebiedNavigation { get; set; }
     }
 
 

@@ -42,7 +42,7 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult GetById(string id)
         {
             var opleiding = _opleidingService.GetById(id);
-            var model = _mapper.Map<OpleidingResponse>(opleiding);
+            var model = _mapper.Map<OpleidingResponseDetail>(opleiding);
             return Ok(model);
 
         }

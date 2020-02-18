@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace YoungpotentialsAPI.Models.Responses
 {
-    public class OpleidingResponseDetail : OpleidingResponse
+    public class StudiegebiedResponseDetail : StudiegebiedResponse
     {
-        public IEnumerable<AfstudeerrichtingResponse> Afstudeerrichting { get; set; }
+        public IEnumerable<OpleidingResponse> Opleiding { get; set; }
     }
 }

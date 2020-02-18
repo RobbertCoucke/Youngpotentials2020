@@ -8,6 +8,7 @@ namespace YoungpotentialsAPI.Models.Responses
 {
     public class StudiegebiedResponse
     {
+        public string Id { get; set; }
         public string Studiegebied1 { get; set; }
         public string Kleur { get; set; }
     }

@@ -42,7 +42,7 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult GetById(string id)
         {
             var studieGebied = _studiegebiedService.GetById(id);
-            var model = _mapper.Map<StudiegebiedResponse>(studieGebied);
+            var model = _mapper.Map<StudiegebiedResponseDetail>(studieGebied);
             return Ok(model);
         }
 
