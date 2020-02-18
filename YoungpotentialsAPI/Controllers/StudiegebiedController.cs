@@ -67,10 +67,11 @@ namespace YoungpotentialsAPI.Controllers
         {
             var studiegebied = _mapper.Map<Studiegebied>(studiegebiedRequest);
 
-              IEnumerable<Studiegebied> studiegebieds = _studiegebiedService.GetAll();
-              studiegebied.Id = "s"+ (studiegebieds.Count() + 1).ToString();
-              _studiegebiedService.CreateStudiegebied(studiegebied);
-
+            IEnumerable<Studiegebied> studiegebieds = _studiegebiedService.GetAll();
+            var lastItem = studiegebieds.Last().Id.Substring(1);
+            var idFromLastElement = Convert.ToInt32(lastItem);
+            studiegebied.Id = "s" + ((idFromLastElement + 1).ToString());
+            _studiegebiedService.CreateStudiegebied(studiegebied);
             return Ok();
         }
 

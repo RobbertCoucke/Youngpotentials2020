@@ -38,6 +38,15 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(string id)
+        {
+            var opleiding = _opleidingService.GetById(id);
+            var model = _mapper.Map<OpleidingResponse>(opleiding);
+            return Ok(model);
+
+        }
+
         [HttpGet("studiegebied/{id}")]
         public IActionResult GetAllByStudiegebiedId(string id)
         {
@@ -66,6 +75,21 @@ namespace YoungpotentialsAPI.Controllers
             {
                 return BadRequest(new { message = e.Message });
             }
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] OpleidingRequest opleidingRequest)
+        {
+            var opleiding = _mapper.Map<Opleiding>(opleidingRequest);
+
+            IEnumerable<Opleiding> opleidingen = _opleidingService.GetAll();
+
+            var item = opleidingen.Last().Id.Substring(1);
+            var idFromLastElement = Convert.ToInt32(item);
+            opleiding.Id = "o" + (idFromLastElement + 1).ToString();
+            _opleidingService.CreateOpleiding(opleiding);
+
+            return Ok();
         }
 
 

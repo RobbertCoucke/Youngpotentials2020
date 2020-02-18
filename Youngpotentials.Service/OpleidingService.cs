@@ -64,7 +64,7 @@ namespace Youngpotentials.Service
             {
                 o.IdStudiegebied = studiegebiedId;
             }
-            _opleidingDAO.Update(opleiding);
+            _opleidingDAO.Update(o);
 
         }
     }
