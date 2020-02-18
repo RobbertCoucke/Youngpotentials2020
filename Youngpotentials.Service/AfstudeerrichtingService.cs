@@ -50,7 +50,19 @@ namespace Youngpotentials.Service
 
         public void Update(Afstudeerrichting afstudeerrichting)
         {
-             _afstudeerrichtingDAO.Update(afstudeerrichting);
+            var a = GetById(afstudeerrichting.Id);
+            string afstudeerrichtingNaam = afstudeerrichting.AfstudeerrichtingNaam.Trim();
+            string opleidingId = afstudeerrichting.OpleidingId.Trim();
+            if (afstudeerrichtingNaam != "" && afstudeerrichtingNaam != null)
+            {
+                a.AfstudeerrichtingNaam = afstudeerrichtingNaam;
+            }
+
+            if (opleidingId != null && opleidingId != "")
+            {
+                a.OpleidingId = opleidingId;
+            }
+            _afstudeerrichtingDAO.Update(afstudeerrichting);
         }
     }
 }

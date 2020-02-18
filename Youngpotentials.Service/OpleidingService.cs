@@ -50,7 +50,22 @@ namespace Youngpotentials.Service
 
         public void Update(Opleiding opleiding)
         {
-            _opleidingDAO.Update(opleiding);
+
+            var o = GetById(opleiding.Id);
+            string opleidingNaam = opleiding.NaamOpleiding;
+            string studiegebiedId = opleiding.IdStudiegebied;
+
+            if (opleidingNaam != "" && opleidingNaam != null)
+            {
+                o.NaamOpleiding = opleidingNaam;
+            }
+
+            if (studiegebiedId != null && studiegebiedId != "")
+            {
+                o.IdStudiegebied = studiegebiedId;
+            }
+            _opleidingDAO.Update(o);
+
         }
     }
 }

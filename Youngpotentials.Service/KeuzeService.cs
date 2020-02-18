@@ -50,6 +50,18 @@ namespace Youngpotentials.Service
 
         public void Update(Keuze keuze)
         {
+            var k = GetById(keuze.Id);
+            string keuzeNaam = keuze.Keuze1.Trim();
+            string afstudeerrichtingNaam = keuze.AfstudeerrichtingId.Trim();
+            if (keuzeNaam != "" && keuzeNaam != null)
+            {
+                k.Keuze1 = keuzeNaam;
+            }
+
+            if (afstudeerrichtingNaam != null && afstudeerrichtingNaam != "")
+            {
+                k.AfstudeerrichtingId = afstudeerrichtingNaam;
+            }
             _keuzeDAO.Update(keuze);
         }
     }

@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Youngpotentials.Domain.Entities;
 
 namespace YoungpotentialsAPI.Models.Responses
 {
-    public class StudiegebiedResponse
+    public class OpleidingResponse
     {
         public string Id { get; set; }
-        public string Studiegebied1 { get; set; }
-        public string Kleur { get; set; }
+        public string NaamOpleiding { get; set; }
+        public string IdStudiegebied { get; set; }
     }
+
+
+
 }

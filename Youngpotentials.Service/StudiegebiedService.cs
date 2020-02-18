@@ -44,7 +44,19 @@ namespace Youngpotentials.Service
 
         public void UpdateStudegebied(Studiegebied studiegebied)
         {
-            _studiegebiedDAO.UpdateStudegebied(studiegebied);
+            var s = GetById(studiegebied.Id);
+            string studiegebiedNaam = studiegebied.Studiegebied1.Trim();
+            string kleur = studiegebied.Kleur.Trim();
+            if(studiegebiedNaam != "" && studiegebiedNaam != null)
+            {
+                s.Studiegebied1 = studiegebiedNaam;
+            }
+
+            if (kleur != null && kleur != "")
+            {
+                s.Kleur = kleur;
+            }
+            _studiegebiedDAO.UpdateStudegebied(s);
         }
     }
 }

@@ -42,14 +42,16 @@ namespace Youngpotentials.DAO
         {
             return _db.Afstudeerrichting.Include(o => o.Opleiding)
                                         .Include(a => a.AfstudeerrichtingOffer)
-                                        .Include(k => k.Keuze).ToList();
+                                        .Include(k => k.Keuze)
+                                        .ToList();
         }
 
         public Afstudeerrichting GetById(string id)
         {
             return _db.Afstudeerrichting.Where(a => a.Id == id).Include(o => o.Opleiding)
                                                                .Include(a => a.AfstudeerrichtingOffer)
-                                                               .Include(k => k.Keuze).FirstOrDefault();
+                                                               .Include(k => k.Keuze)
+                                                               .FirstOrDefault();
         }
 
         public IEnumerable<Afstudeerrichting> GetAllByOpleiding(string id)
