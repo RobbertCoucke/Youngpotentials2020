@@ -12,7 +12,7 @@ using YoungpotentialsAPI.Models.Responses;
 namespace YoungpotentialsAPI.Controllers
 {
     [ApiController]
-    [Route("controller")]
+    [Route("[controller]")]
     public class FavoritesController : Controller
     {
 
