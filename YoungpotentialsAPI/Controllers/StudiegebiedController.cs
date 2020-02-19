@@ -16,22 +16,58 @@ namespace YoungpotentialsAPI.Controllers
     public class StudiegebiedController : Controller
     {
         private IStudiegebiedService _studiegebiedService;
+        private IOpleidingService _opleidingService;
+        private IAfstudeerrichtingService _afstudeerrichtingService;
+        private IKeuzeService _keuzeService;
         private IMapper _mapper;
 
-        public StudiegebiedController(IStudiegebiedService studiegebiedService, IMapper mapper )
+        public StudiegebiedController(IStudiegebiedService studiegebiedService, IMapper mapper
+                                      ,IOpleidingService opleidingService, IAfstudeerrichtingService afstudeerrichtingService,
+                                       IKeuzeService keuzeService)
         {
             _studiegebiedService = studiegebiedService;
             _mapper = mapper;
+            _opleidingService = opleidingService;
+            _afstudeerrichtingService = afstudeerrichtingService;
+            _keuzeService = keuzeService;
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var result = new List<StudiegebiedResponse>();
+            var result = new List<StudiegebiedResponseDetail>();
             var studiegebieds = _studiegebiedService.GetAll();
             foreach(var s in studiegebieds)
             {
-                var model = _mapper.Map<StudiegebiedResponse>(s);
+                if(s.Opleiding.Count() != 0)
+                {
+                    foreach(var o in s.Opleiding)
+                    {
+                        var listVanAlleAfstudeerRichtingVanO = _opleidingService.GetById(o.Id).Afstudeerrichting;
+                        if(listVanAlleAfstudeerRichtingVanO.Count != 0)
+                        {
+                            foreach(var a in listVanAlleAfstudeerRichtingVanO)
+                            {
+                                if(a.Keuze.Count() != 0)
+                                {
+                                    var listOfAlleKeuzesVanAfr = _afstudeerrichtingService.GetById(a.Id).Keuze;
+                                    foreach(var k in listOfAlleKeuzesVanAfr)
+                                    {
+                                        var keuze = _keuzeService.GetById(k.Id);
+                                        a.Keuze.Add(keuze);
+                                    }
+
+                                }
+
+                                var afstudeerrichting = _afstudeerrichtingService.GetById(a.Id);
+                                o.Afstudeerrichting.Add(afstudeerrichting);
+                                
+                            }
+
+                        }
+                    }
+                }
+                var model = _mapper.Map<StudiegebiedResponseDetail>(s);
                 result.Add(model);
             }
 

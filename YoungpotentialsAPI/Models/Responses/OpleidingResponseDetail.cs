@@ -7,6 +7,6 @@ namespace YoungpotentialsAPI.Models.Responses
 {
     public class OpleidingResponseDetail : OpleidingResponse
     {
-        public IEnumerable<AfstudeerrichtingResponse> Afstudeerrichting { get; set; }
+        public IEnumerable<AfstudeerrichtingResponseDetail> Afstudeerrichting { get; set; }
     }
 }
