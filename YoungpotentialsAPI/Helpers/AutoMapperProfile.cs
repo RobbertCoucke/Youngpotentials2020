@@ -29,7 +29,7 @@ namespace YoungpotentialsAPI.Helpers
             CreateMap<Studiegebied, StudiegebiedResponseDetail>();
             CreateMap<Opleiding, OpleidingResponseDetail>();
             CreateMap<Afstudeerrichting, AfstudeerrichtingResponseDetail>();
-
+            CreateMap<Offers, OfferResponse>();
         }
     }
 }

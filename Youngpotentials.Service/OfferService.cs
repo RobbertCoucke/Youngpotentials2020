@@ -30,27 +30,27 @@ namespace Youngpotentials.Service
         }
         public Offers CreateOffer(Offers offer)
         {
-            throw new NotImplementedException();
+            return _offerDAO.CreateOffer(offer);
         }
 
         public void DeleteOffer(int id)
         {
-            throw new NotImplementedException();
+            _offerDAO.DeleteOffer(id);
         }
 
         public IEnumerable<Offers> GetAllOffers()
         {
-            throw new NotImplementedException();
+            return _offerDAO.GetAllOffers();
         }
 
         public IEnumerable<Offers> GetAllOffersByCompany(int id)
         {
-            throw new NotImplementedException();
+            return _offerDAO.GetAllOffersByCompany(id);
         }
 
         public Offers GetOffersById(int id)
         {
-            throw new NotImplementedException();
+            return _offerDAO.GetOffersById(id);
         }
 
         public IEnumerable<Offers> GetOffersByTagId(string id)
@@ -70,12 +70,17 @@ namespace Youngpotentials.Service
 
         public IEnumerable<Offers> GetOffersByTypesAndTags(IList<string> ids, IList<string> types)
         {
+
+
+
+
             throw new NotImplementedException();
         }
 
         public void UpdateOffer(Offers offer)
         {
-            throw new NotImplementedException();
+            //CHECK FOR NULLS AND STUFF
+            _offerDAO.UpdateOffer(offer);
         }
     }
 }
