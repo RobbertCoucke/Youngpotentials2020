@@ -19,6 +19,7 @@ namespace YoungpotentialsAPI.Helpers
             CreateMap<UserRegistrationRequest, Students>();
             CreateMap<UserRegistrationRequest, Companies>();
             CreateMap<Studiegebied, StudiegebiedResponse>();
+            CreateMap<Offers, OfferResponse>();
         }
     }
 }
