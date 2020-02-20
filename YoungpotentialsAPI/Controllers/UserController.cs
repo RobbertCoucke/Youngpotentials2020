@@ -155,22 +155,22 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(model);
         }
 
-        //[HttpPut("{id}")]
-        //public IActionResult Update(int id, [FromBody]UserUpdateRequest model)
-        //{
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody]UserUpdateRequest model)
+        {
 
-        //    var user = _mapper.Map<AspNetUsers>(model);
-        //    user.Id = id;
-        //    try
-        //    {
-        //        _userService.Update(user, model.Password);
-        //        return Ok();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(new { message = e.Message });
-        //    }
-        //}
+            var user = _mapper.Map<AspNetUsers>(model);
+            user.Id = id;
+            try
+            {
+                _userService.Update(user, model.Password);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

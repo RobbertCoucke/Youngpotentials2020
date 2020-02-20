@@ -8,6 +8,7 @@
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,6 +22,10 @@
     <ProjectReference Include="..\Youngpotentials.DAO\Youngpotentials.DAO.csproj" />
     <ProjectReference Include="..\Youngpotentials.Domain\Youngpotentials.Domain.csproj" />
     <ProjectReference Include="..\Youngpotentials.Service\Youngpotentials.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\CVs\" />
   </ItemGroup>
 
 </Project>

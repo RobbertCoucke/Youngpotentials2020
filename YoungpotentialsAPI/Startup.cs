@@ -109,6 +109,8 @@ namespace YoungpotentialsAPI
                 app.UseDeveloperExceptionPage();
             }
 
+
+
             app.UseHttpsRedirection();
             app.UseRouting();
 
@@ -121,6 +123,14 @@ namespace YoungpotentialsAPI
             {
                 endpoints.MapControllers();
             });
+
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
+
         }
     }
 }
