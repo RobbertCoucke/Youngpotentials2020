@@ -15,6 +15,7 @@ using Youngpotentials.Service;
 using AutoMapper;
 using YoungpotentialsAPI.Helpers;
 using Youngpotentials.Domain.Entities;
+using Microsoft.AspNetCore.Cors;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -40,6 +41,8 @@ namespace YoungpotentialsAPI.Controllers
             _mapper = mapper;
             _roleService = roleService;
         }
+
+
 
         [AllowAnonymous]
         [HttpPost("authenticate")]

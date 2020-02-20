@@ -33,7 +33,12 @@ namespace YoungpotentialsAPI
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddCors();
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            } ));
+
+
             services.AddControllers();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -105,12 +110,13 @@ namespace YoungpotentialsAPI
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
+
+            app.UseCors("MyPolicy");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
