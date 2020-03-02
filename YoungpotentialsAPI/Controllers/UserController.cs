@@ -144,6 +144,15 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPost("password")]
+        public IActionResult ForgotPassword(string email)
+        {
+            var user = _userService.GetUserByEmail(email);
+            return Ok();
+
+
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {

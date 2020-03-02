@@ -15,6 +15,7 @@ namespace Youngpotentials.Service
         AspNetUsers Create(AspNetUsers user, string password);
         void Update(AspNetUsers user, string password = null);
         void Delete(int id);
+        AspNetUsers GetUserByEmail(string email);
     }
 
     public class UserService : IUserService
@@ -29,6 +30,11 @@ namespace Youngpotentials.Service
             _userDAO = userDAO;
             _studentDAO = studentDAO;
             _companyDAO = companyDAO;
+        }
+
+        public AspNetUsers GetUserByEmail(string email)
+        {
+            return _userDAO.GetUserByEmail(email);
         }
 
         public AspNetUsers Authenticate(string email, string password)
