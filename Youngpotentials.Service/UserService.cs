@@ -64,7 +64,6 @@ namespace Youngpotentials.Service
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            //todo change to create student or company
             _userDAO.CreateUser(user);
             return user;
         }

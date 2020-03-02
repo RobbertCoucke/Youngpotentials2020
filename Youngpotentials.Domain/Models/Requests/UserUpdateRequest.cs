@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace YoungpotentialsAPI.Models.Requests
+namespace Youngpotentials.Domain.Models.Requests
 {
     public class UserUpdateRequest
     {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Youngpotentials.Domain.Models.Responses;
 using Youngpotentials.Service;
 using YoungpotentialsAPI.Models.Requests;
 using YoungpotentialsAPI.Models.Responses;

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Youngpotentials.Domain.Entities;
 using Youngpotentials.Service;
 using YoungpotentialsAPI.Helpers;
+using Youngpotentials.Domain.Models.Responses;
 using YoungpotentialsAPI.Models.Responses;
 
 namespace YoungpotentialsAPI.Controllers
