@@ -18,18 +18,22 @@ namespace YoungpotentialsAPI.Controllers
 
         private IFavoritesService _favoritesService;
         private IMapper _mapper;
+        private IStudentService _studentService;
 
-        public FavoritesController(IFavoritesService favoritesService, IMapper mapper)
+        public FavoritesController(IFavoritesService favoritesService, IMapper mapper, IStudentService studentService)
         {
             _favoritesService = favoritesService;
             _mapper = mapper;
+            _studentService = studentService;
         }
 
         [Authorize(Roles = "User")]
         [HttpGet("user/{id}")]
         public IActionResult GetAllFavoritesFromUserId(int id)
         {
-            var favorites = _favoritesService.GetAllFavoritesFromUserId(id);
+
+            var student = _studentService.GetStudentByUserId(id);
+            var favorites = _favoritesService.GetAllFavoritesFromUserId(student.Id);
             var offers = new List<OfferResponse>();
             foreach(var f in favorites)
             {
@@ -38,11 +42,12 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(offers);
         }
 
-        [Authorize(Roles = "User")]
+        //TODO change to authorize with roles
         [HttpPost]
         public IActionResult AddFavorite([FromBody]FavoritesRequest model)
         {
-            var favorite = _favoritesService.AddFavorite(model.UserId, model.OfferId);
+            var student = _studentService.GetStudentByUserId(model.UserId);
+            var favorite = _favoritesService.AddFavorite(student.Id, model.OfferId);
             if (favorite != null)
                 return Ok(favorite);
             return BadRequest("failed to add Favorite");

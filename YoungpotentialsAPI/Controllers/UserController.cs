@@ -31,6 +31,7 @@ namespace YoungpotentialsAPI.Controllers
         private ICompanyService _companyService;
         private readonly AppSettings _appSettings;
         private IMapper _mapper;
+        private EmailService _mailService = new EmailService();
 
         public UserController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IStudentService studentService, ICompanyService companyService, IRoleService roleService)
         {
@@ -76,6 +77,7 @@ namespace YoungpotentialsAPI.Controllers
 
             return Ok(new AuthenticationResponse
             {
+                Id = user.Id,
                 Email = user.Email,
                 Role = user.Role.Name,
                 Token = tokenString
@@ -89,6 +91,28 @@ namespace YoungpotentialsAPI.Controllers
         {
             return Json("het werk woehoe!");
         }
+
+
+        //[HttpGet("password/{email}")]
+        //public async void ResetEmail(string email)
+        //{
+        //    var user = _userService.GetUserByEmail(email);
+        //    if (user != null)
+        //    {
+        //        var body = "klik op deze link om een nieuw passwoord in te stellen: Click <a href=\"http://myAngularSite/passwordReset?code= " + user.Code +"\>here</a>";
+        //        await _mailService.sendEmailAsync(email, "testEmail", "password reset", body);
+
+        //    }
+        //}
+
+        //[HttpPost("password")]
+        //public IActionResult PasswordReset([FromBody] string req)
+        //{
+        //    var user = _userService.GetByCode(req.code);
+        //    var result =_userService.ResetPassword(user, req.password);
+        //    return Ok();
+
+        //}
 
         [AllowAnonymous]
         [HttpPost("register")]
