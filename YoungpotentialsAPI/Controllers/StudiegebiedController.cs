@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Youngpotentials.Service;
 using YoungpotentialsAPI.Helpers;
-using YoungpotentialsAPI.Models.Responses;
+using Youngpotentials.Domain.Models.Responses;
 
 namespace YoungpotentialsAPI.Controllers
 {
