@@ -39,6 +39,7 @@ namespace Youngpotentials.DAO
             {
                 _db.Favorites.Remove(favorite);
             }
+            _db.SaveChanges();
         }
 
         public IEnumerable<Favorites> GetAllFavoritesFromUserId(int id)

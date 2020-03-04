@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Youngpotentials.Domain.Models.Responses;
 using Youngpotentials.Service;
 using YoungpotentialsAPI.Models.Requests;
 using YoungpotentialsAPI.Models.Responses;
@@ -34,15 +35,20 @@ namespace YoungpotentialsAPI.Controllers
 
             var student = _studentService.GetStudentByUserId(id);
             var favorites = _favoritesService.GetAllFavoritesFromUserId(student.Id);
-            var offers = new List<OfferResponse>();
+            var result = new List<FavoriteResponse>();
             foreach(var f in favorites)
             {
-                offers.Add(_mapper.Map<OfferResponse>(f.Offer));
+                result.Add(new FavoriteResponse
+                {
+                    Id = f.Id,
+                    Vacature = _mapper.Map<OfferResponse>(f.Offer)
+
+                }) ;
             }
-            return Ok(offers);
+            return Ok(result);
         }
 
-        //TODO change to authorize with roles
+        [Authorize(Roles = "User")]
         [HttpPost]
         public IActionResult AddFavorite([FromBody]FavoritesRequest model)
         {

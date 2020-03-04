@@ -85,7 +85,6 @@ namespace Youngpotentials.Service
             user.PasswordSalt = passwordSalt;
 
 
-
             _userDAO.CreateUser(user);
 
             //TODO uncomment

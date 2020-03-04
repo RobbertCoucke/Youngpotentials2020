@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace YoungpotentialsAPI.Models.Requests
+namespace Youngpotentials.Domain.Models.Requests
 {
-    public class UserRegistrationRequest
+    public class UserUpdateRequest
     {
-
         //USER
 
-        [Required]
         public string Email { get; set; }
-        [Required]
+       
         public string Password { get; set; }
 
         public string Telephone { get; set; }
@@ -35,11 +32,7 @@ namespace YoungpotentialsAPI.Models.Requests
         public string FirstName { get; set; }
         public string CvUrl { get; set; }
 
-        [Required]
         public bool IsStudent { get; set; }
-
-
-
 
     }
 }

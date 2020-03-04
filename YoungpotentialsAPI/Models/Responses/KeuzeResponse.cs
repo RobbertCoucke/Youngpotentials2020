@@ -7,6 +7,7 @@ namespace YoungpotentialsAPI.Models.Responses
 {
     public class KeuzeResponse
     {
+        public string Id { get; set; }
         public string Keuze1 { get; set; }
         public string AfstudeerrichtingId { get; set; }
     }

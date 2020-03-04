@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace YoungpotentialsAPI.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class UploadController : Controller
     {
         // GET: /<controller>/
@@ -26,7 +28,7 @@ namespace YoungpotentialsAPI.Controllers
             try
             {
                 var file = Request.Form.Files[0];
-                var folderName = Path.Combine("Resources", "CVs");
+                var folderName = System.IO.Path.Combine("Resources", "CVs");
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
                 if (file.Length > 0)
@@ -49,7 +51,7 @@ namespace YoungpotentialsAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, "Internal server error" + ex.Message);
             }
         }
 

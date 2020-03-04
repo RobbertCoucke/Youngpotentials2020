@@ -82,26 +82,48 @@ namespace YoungpotentialsAPI
                 };
             });
 
-            services.AddSingleton<IUserService, UserService>();
+            //User
             services.AddSingleton<IUserDAO, UserDAO>();
+            services.AddSingleton<IUserService, UserService>();
+            
+            //Student
             services.AddSingleton<IStudentDAO, StudentDAO>();
-            services.AddSingleton<ICompanyDAO, CompanyDAO>();
             services.AddSingleton<IStudentService, StudentService>();
+
+            //Company
+            services.AddSingleton<ICompanyDAO, CompanyDAO>();
             services.AddSingleton<ICompanyService, CompanyService>();
-            services.AddSingleton<IStudiegebiedService, StudiegebiedService>();
+
+            //Studiegebied
             services.AddSingleton<IStudiegebiedDAO, StudiegebiedDAO>();
-            services.AddSingleton<IOpleidingService, OpleidingService>();
+            services.AddSingleton<IStudiegebiedService, StudiegebiedService>();
+
+            //Opleiding
             services.AddSingleton<IOpleidingDAO, OpleidingDAO>();
-            services.AddSingleton<IAfstudeerrichtingService, AfstudeerrichtingService>();
+            services.AddSingleton<IOpleidingService, OpleidingService>();
+
+            //Afstudeerrichting
             services.AddSingleton<IAfstudeerrichtingDAO, AfstudeerrichtingDAO>();
-            services.AddSingleton<IKeuzeService, KeuzeService>();
+            services.AddSingleton<IAfstudeerrichtingService, AfstudeerrichtingService>();
+
+            //Keuze
             services.AddSingleton<IKeuzeDAO, KeuzeDAO>();
-            services.AddSingleton<IRoleService, RoleService>();
+            services.AddSingleton<IKeuzeService, KeuzeService>();
+
+            //Role
             services.AddSingleton<IRoleDAO, RoleDAO>();
+            services.AddSingleton<IRoleService, RoleService>();
+
+            //Offer
             services.AddSingleton<IOfferDAO, OfferDAO>();
             services.AddSingleton<IOfferService, OfferService>();
+
+            //Favorite
             services.AddSingleton<IFavoritesDAO, FavoritesDAO>();
             services.AddSingleton<IFavoritesService, FavoritesService>();
+            
+
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
