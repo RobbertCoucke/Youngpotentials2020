@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Youngpotentials.DAO;
 using Youngpotentials.Domain.Entities;
@@ -22,15 +23,20 @@ namespace Youngpotentials.Service
         IEnumerable<Offers> GetOffersByTypes(IList<Type> types);
         IEnumerable<Offers> GetOffersByTypesAndTags(IList<Type> types, IList<Studiegebied> ids);
         IEnumerable<Offers> GetOffersByType(Type type);
+        void AddTagsToOffer(IList<Studiegebied> tags, int offerId);
     }
     public class OfferService : IOfferService
     {
 
         private IOfferDAO _offerDAO;
+        private IStudiegebiedDAO _studiegebiedDAO;
+        private IOpleidingDAO _opleidingDAO;
         
-        public OfferService(IOfferDAO offerDAO)
+        public OfferService(IOfferDAO offerDAO, IStudiegebiedDAO studiegebiedDAO, IOpleidingDAO opleidingDAO)
         {
             _offerDAO = offerDAO;
+            _studiegebiedDAO = studiegebiedDAO;
+            _opleidingDAO = opleidingDAO;
         }
         public Offers CreateOffer(Offers offer)
         {
@@ -46,6 +52,35 @@ namespace Youngpotentials.Service
         {
             //Haalt de huidige vacature info op uit de database
             var oldOffer = GetOfferById(id);
+
+            //check if tags have to be added or removed
+            var list = new List<Studiegebied>();
+            foreach(var studiegebiedOffer in oldOffer.StudiegebiedOffer)
+            {
+                list.Add(new Studiegebied { Id = studiegebiedOffer.IdStudiegebied });
+            }
+
+            foreach(var opleidingOffer in oldOffer.OpleidingOffer)
+            {
+                var op = _opleidingDAO.GetById(opleidingOffer.IdOpleiding);
+                foreach(var s in list.Where(s => s.Id == op.IdStudiegebied))
+                {
+                    s.Opleiding.Add(op);
+                }
+            }
+
+            var toAdd = offer.Tags.Except(list).ToList();
+            var toDelete = list.Except(offer.Tags).ToList();
+            if(toAdd.Count > 0)
+            {
+                AddTagsToOffer(toAdd, id);
+            }
+            if(toDelete.Count > 0)
+            {
+                removeTagsFromOffer(toDelete, id);
+            }
+            
+
 
             /*Checkt indien de nieuwe vacature informatie leeg is, 
              *indien leeg moet de huidige vacature info in de nieuwe geplaatst worden.*/
@@ -213,8 +248,15 @@ namespace Youngpotentials.Service
         {
             HashSet<Offers> hashOffers = new HashSet<Offers>();
             hashOffers.UnionWith(GetOffersByTypes(types));
-            var test = GetOffersByTags(ids);
-            hashOffers.IntersectWith(GetOffersByTags(ids));
+            if(types != null)
+            {
+
+                hashOffers.IntersectWith(GetOffersByTags(ids));
+            }
+            else
+            {
+                hashOffers.UnionWith(GetOffersByTags(ids));
+            }
 
             return hashOffers;
         }
@@ -237,6 +279,35 @@ namespace Youngpotentials.Service
         {
 
             return _offerDAO.GetOffersByType(type);
+        }
+
+        public void AddTagsToOffer(IList<Studiegebied> tags, int offerId)
+        {
+            foreach(var studiegebied in tags)
+            {
+                var st = _studiegebiedDAO.GetById(studiegebied.Id);
+                _offerDAO.CreateOfferStudiegebied(new StudiegebiedOffer { IdStudiegebied = st.Id, IdOffer = offerId });
+                foreach(var opleiding in studiegebied.Opleiding)
+                {
+                    var op = _opleidingDAO.GetById(opleiding.Id);
+                    _offerDAO.CreateOfferOpleiding(new OpleidingOffer { IdOffer = offerId, IdOpleiding = op.Id });
+                }
+            }
+        }
+
+        public void removeTagsFromOffer(IList<Studiegebied> tags, int offerId)
+        {
+            foreach (var studiegebied in tags)
+            {
+
+                var st = _studiegebiedDAO.GetById(studiegebied.Id);
+                _offerDAO.DeleteOfferStudiegebied(new StudiegebiedOffer { IdStudiegebied = st.Id, IdOffer = offerId });
+                foreach (var opleiding in studiegebied.Opleiding)
+                {
+                    var op = _opleidingDAO.GetById(opleiding.Id);
+                    _offerDAO.DeleteOfferOpleiding(new OpleidingOffer { IdOffer = offerId, IdOpleiding = op.Id });
+                }
+            }
         }
     }
 }

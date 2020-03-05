@@ -23,6 +23,8 @@ namespace Youngpotentials.DAO
         IEnumerable<Offers> GetOffersByType(Type type);
         void CreateOfferStudiegebied(StudiegebiedOffer entity);
         void CreateOfferOpleiding(OpleidingOffer entity);
+        void DeleteOfferStudiegebied(StudiegebiedOffer entity);
+        void DeleteOfferOpleiding(OpleidingOffer entity);
     }
     public class OfferDAO : IOfferDAO
     {
@@ -61,7 +63,7 @@ namespace Youngpotentials.DAO
 
         public Offers GetOfferById(int id)
         {
-            return _db.Offers.Where(o => o.Id == id).FirstOrDefault();
+            return _db.Offers.Where(o => o.Id == id).Include(o => o.StudiegebiedOffer).Include(o => o.OpleidingOffer).FirstOrDefault();
         }
 
         public void UpdateOffer(Offers offer)
@@ -118,6 +120,7 @@ namespace Youngpotentials.DAO
 
         public void CreateOfferStudiegebied(StudiegebiedOffer entity)
         {
+           
             _db.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;
             _db.SaveChanges();
         }
@@ -125,6 +128,22 @@ namespace Youngpotentials.DAO
         public void CreateOfferOpleiding(OpleidingOffer entity)
         {
             _db.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+            _db.SaveChanges();
+        }
+
+        public void DeleteOfferStudiegebied(StudiegebiedOffer entity)
+        {
+            var os = _db.StudiegebiedOffer.Where(s => s.IdOffer == entity.IdOffer && s.IdStudiegebied == entity.IdStudiegebied).FirstOrDefault();
+            //var offer = _db.Offers.Where(o => o.Id == id).FirstOrDefault();
+            _db.StudiegebiedOffer.Remove(os);
+            _db.SaveChanges();
+        }
+
+        public void DeleteOfferOpleiding(OpleidingOffer entity)
+        {
+            var oo = _db.OpleidingOffer.Where(o => o.IdOffer == entity.IdOffer && o.IdOpleiding == entity.IdOpleiding).FirstOrDefault();
+            //var offer = _db.Offers.Where(o => o.Id == id).FirstOrDefault();
+            _db.OpleidingOffer.Remove(oo);
             _db.SaveChanges();
         }
     }

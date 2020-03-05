@@ -129,14 +129,14 @@ namespace YoungpotentialsAPI.Controllers
 
                 user = _userService.Create(user, model.Password);
 
-                
+
 
                 if (model.IsStudent)
                 {
                     var student = _mapper.Map<Students>(model);
                     student.UserId = user.Id;
                     _studentService.CreateStudent(student);
-                
+
                 }
                 else
                 {
@@ -145,8 +145,33 @@ namespace YoungpotentialsAPI.Controllers
                     _companyService.CreateCompany(company);
                 }
 
+                var role = user.Role.Name;
 
-                return Ok();
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var claims = new Claim(ClaimTypes.Role, "Admin");
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new System.Security.Claims.ClaimsIdentity(new Claim[] {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    //ipv "Admin" role ophalen van user
+                    new Claim(ClaimTypes.Role, role)
+                }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
+
+
+                return Ok(new AuthenticationResponse
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Role = user.Role.Name,
+                    Token = tokenString
+                });
 
 
             }

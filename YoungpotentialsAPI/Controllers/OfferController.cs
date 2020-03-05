@@ -36,6 +36,13 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult GetAllOffers()
         {
             var offers = _offerService.GetAllOffers();
+            foreach(var offer in offers)
+            {
+                offer.OpleidingOffer = new List<OpleidingOffer>();
+                offer.StudiegebiedOffer = new List<StudiegebiedOffer>();
+            }
+
+            //offersResponse.Add(_mapper.Map<OfferResponse>(offer));
 
             return Ok(offers);
         }
@@ -58,8 +65,12 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
         {
             var offer = _mapper.Map<Offers>(model);
-            _offerService.CreateOffer(offer);
-            return Ok();
+            var result = _offerService.CreateOffer(offer);
+            if(model.tags != null)
+            {
+                _offerService.AddTagsToOffer(model.tags, result.Id);
+            }
+            return Ok(result);
         }
 
         [HttpPut("{id}")]

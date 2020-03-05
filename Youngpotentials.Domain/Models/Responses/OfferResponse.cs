@@ -28,7 +28,7 @@ namespace Youngpotentials.Domain.Models.Responses
         public bool? Country { get; set; }
 
 
-        public virtual Companies Company { get; set; }
-        public virtual Type Type { get; set; }
+        public  Companies Company { get; set; }
+        public  Type Type { get; set; }
     }
 }
