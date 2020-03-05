@@ -200,7 +200,45 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult GetById(int id)
         {
             var user = _userService.GetById(id);
-            var model = _mapper.Map<UserResponse>(user);
+            UserResponse model = null;
+            if(user != null)
+            {
+               var userResponse = _mapper.Map<UserResponse>(user);
+               var roleId = user.RoleId;
+               //user is student
+               if(roleId == 2)
+                {
+                    var student = _studentService.GetStudentByUserId(user.Id);
+                    if(student != null)
+                    {
+                        
+                        
+                        model = _mapper.Map<StudentResponse>(student);
+                        model.Address = student.User.Email;
+                        model.Email = student.User.Email;
+                        model.City = student.User.City;
+                        model.Telephone = student.User.Telephone;
+                        model.ZipCode = student.User.ZipCode;
+                        model.IsStudent = true;
+                    }
+
+                }
+                else if( roleId == 3)
+                {
+                    var company = _companyService.GetCompanyByUserId(user.Id);
+                    if(company != null)
+                    {
+                        model = _mapper.Map<CompanyResponse>(company); 
+                        model.Address = company.User.Email;
+                        model.City = company.User.City;
+                        model.Telephone = company.User.Telephone;
+                        model.ZipCode = company.User.ZipCode;
+                        model.IsStudent = false;
+                    }
+
+                }
+            }
+
             return Ok(model);
         }
 

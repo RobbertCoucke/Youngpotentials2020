@@ -10,6 +10,7 @@ namespace Youngpotentials.Service
     {
         IEnumerable<Companies> GetAllCompanies();
         Companies GetCompanyById(int id);
+        Companies GetCompanyByUserId(int id);
         Companies CreateCompany(Companies company);
         void UpdateCompany(Companies company);
         void DeleteCompany(int id);
@@ -50,7 +51,10 @@ namespace Youngpotentials.Service
             return _companyDAO.GetCompanyById(id);
         }
 
-  
+        public Companies GetCompanyByUserId(int id)
+        {
+            return _companyDAO.GetCompanyByUserId(id);
+        }
 
         public void UpdateCompany(Companies company)
         {

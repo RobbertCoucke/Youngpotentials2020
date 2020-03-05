@@ -9,6 +9,6 @@ namespace YoungpotentialsAPI.Models.Responses
     {
         public string Id { get; set; }
         public string Keuze1 { get; set; }
-        public string Id { get; set; }
+        //public string Id { get; set; }
     }
 }

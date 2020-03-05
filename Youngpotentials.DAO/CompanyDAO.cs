@@ -11,6 +11,7 @@ namespace Youngpotentials.DAO
     {
         IEnumerable<Companies> GetAllCompanies();
         Companies GetCompanyById(int id);
+        Companies GetCompanyByUserId(int id);
         Companies CreateCompany(Companies company);
         void UpdateCompany(Companies company);
         void DeleteCompany(int id);
@@ -54,6 +55,11 @@ namespace Youngpotentials.DAO
         public Companies GetCompanyById(int id)
         {
             return _db.Companies.Where(c => c.Id == id).Include(c => c.User).FirstOrDefault();
+        }
+
+        public Companies GetCompanyByUserId(int id)
+        {
+            return _db.Companies.Where(c => c.UserId == id).Include(c => c.User).FirstOrDefault();
         }
 
         public void UpdateCompany(Companies company)
