@@ -9,12 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
-using YoungpotentialsAPI.Models.Responses;
-using YoungpotentialsAPI.Models.Requests;
+using Youngpotentials.Domain.Models.Responses;
+using Youngpotentials.Domain.Models.Requests;
 using Youngpotentials.Service;
 using AutoMapper;
 using YoungpotentialsAPI.Helpers;
 using Youngpotentials.Domain.Entities;
+using Microsoft.AspNetCore.Cors;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -30,6 +31,7 @@ namespace YoungpotentialsAPI.Controllers
         private ICompanyService _companyService;
         private readonly AppSettings _appSettings;
         private IMapper _mapper;
+        private EmailService _mailService = new EmailService();
 
         public UserController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IStudentService studentService, ICompanyService companyService, IRoleService roleService)
         {
@@ -40,6 +42,8 @@ namespace YoungpotentialsAPI.Controllers
             _mapper = mapper;
             _roleService = roleService;
         }
+
+
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
@@ -73,6 +77,7 @@ namespace YoungpotentialsAPI.Controllers
 
             return Ok(new AuthenticationResponse
             {
+                Id = user.Id,
                 Email = user.Email,
                 Role = user.Role.Name,
                 Token = tokenString
@@ -86,6 +91,28 @@ namespace YoungpotentialsAPI.Controllers
         {
             return Json("het werk woehoe!");
         }
+
+
+        //[HttpGet("password/{email}")]
+        //public async void ResetEmail(string email)
+        //{
+        //    var user = _userService.GetUserByEmail(email);
+        //    if (user != null)
+        //    {
+        //        var body = "klik op deze link om een nieuw passwoord in te stellen: Click <a href=\"http://myAngularSite/passwordReset?code= " + user.Code +"\>here</a>";
+        //        await _mailService.sendEmailAsync(email, "testEmail", "password reset", body);
+
+        //    }
+        //}
+
+        //[HttpPost("password")]
+        //public IActionResult PasswordReset([FromBody] string req)
+        //{
+        //    var user = _userService.GetByCode(req.code);
+        //    var result =_userService.ResetPassword(user, req.password);
+        //    return Ok();
+
+        //}
 
         [AllowAnonymous]
         [HttpPost("register")]
@@ -102,14 +129,14 @@ namespace YoungpotentialsAPI.Controllers
 
                 user = _userService.Create(user, model.Password);
 
-                
+
 
                 if (model.IsStudent)
                 {
                     var student = _mapper.Map<Students>(model);
                     student.UserId = user.Id;
                     _studentService.CreateStudent(student);
-                
+
                 }
                 else
                 {
@@ -118,8 +145,33 @@ namespace YoungpotentialsAPI.Controllers
                     _companyService.CreateCompany(company);
                 }
 
+                var role = user.Role.Name;
 
-                return Ok();
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+                var claims = new Claim(ClaimTypes.Role, "Admin");
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new System.Security.Claims.ClaimsIdentity(new Claim[] {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    //ipv "Admin" role ophalen van user
+                    new Claim(ClaimTypes.Role, role)
+                }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = tokenHandler.WriteToken(token);
+
+
+                return Ok(new AuthenticationResponse
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Role = user.Role.Name,
+                    Token = tokenString
+                });
 
 
             }
@@ -152,22 +204,22 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(model);
         }
 
-        //[HttpPut("{id}")]
-        //public IActionResult Update(int id, [FromBody]UserUpdateRequest model)
-        //{
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody]UserUpdateRequest model)
+        {
 
-        //    var user = _mapper.Map<AspNetUsers>(model);
-        //    user.Id = id;
-        //    try
-        //    {
-        //        _userService.Update(user, model.Password);
-        //        return Ok();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return BadRequest(new { message = e.Message });
-        //    }
-        //}
+            var user = _mapper.Map<AspNetUsers>(model);
+            user.Id = id;
+            try
+            {
+                _userService.Update(user, model.Password);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

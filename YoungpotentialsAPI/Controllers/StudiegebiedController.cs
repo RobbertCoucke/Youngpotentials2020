@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Youngpotentials.Domain.Entities;
 using Youngpotentials.Service;
 using YoungpotentialsAPI.Helpers;
+using Youngpotentials.Domain.Models.Responses;
 using YoungpotentialsAPI.Models.Responses;
 
 namespace YoungpotentialsAPI.Controllers
@@ -36,41 +37,12 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult GetAll()
         {
             var result = new List<StudiegebiedResponseDetail>();
-            var studiegebieds = _studiegebiedService.GetAll();
-            foreach(var s in studiegebieds)
+            var studiegebieden = _studiegebiedService.GetAll();
+            foreach(var s in studiegebieden)
             {
-                if(s.Opleiding.Count() != 0)
-                {
-                    foreach(var o in s.Opleiding)
-                    {
-                        var listVanAlleAfstudeerRichtingVanO = _opleidingService.GetById(o.Id).Afstudeerrichting;
-                        if(listVanAlleAfstudeerRichtingVanO.Count != 0)
-                        {
-                            foreach(var a in listVanAlleAfstudeerRichtingVanO)
-                            {
-                                if(a.Keuze.Count() != 0)
-                                {
-                                    var listOfAlleKeuzesVanAfr = _afstudeerrichtingService.GetById(a.Id).Keuze;
-                                    foreach(var k in listOfAlleKeuzesVanAfr)
-                                    {
-                                        var keuze = _keuzeService.GetById(k.Id);
-                                        a.Keuze.Add(keuze);
-                                    }
-
-                                }
-
-                                var afstudeerrichting = _afstudeerrichtingService.GetById(a.Id);
-                                o.Afstudeerrichting.Add(afstudeerrichting);
-                                
-                            }
-
-                        }
-                    }
-                }
-                var model = _mapper.Map<StudiegebiedResponseDetail>(s);
-                result.Add(model);
+                result.Add(_mapper.Map<StudiegebiedResponseDetail>(s));
             }
-
+             
             return Ok(result);
         }
 

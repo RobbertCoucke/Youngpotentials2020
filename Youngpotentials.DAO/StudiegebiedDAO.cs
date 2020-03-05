@@ -40,8 +40,7 @@ namespace Youngpotentials.DAO
 
         public IEnumerable<Studiegebied> GetAll()
         {
-            return _db.Studiegebied.Include(o => o.Opleiding)
-                                   .Include(f => f.StudiegebiedOffer).ToList();
+            return _db.Studiegebied.Include(o => o.Opleiding).ToList();
         }
 
         public Studiegebied GetById(string id)

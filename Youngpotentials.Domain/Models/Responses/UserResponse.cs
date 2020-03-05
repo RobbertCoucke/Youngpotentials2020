@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace YoungpotentialsAPI.Models.Responses
+namespace Youngpotentials.Domain.Models.Responses
 {
     public class UserResponse
     {

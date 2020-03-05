@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Youngpotentials.Domain.Models.Responses;
 using Youngpotentials.Service;
 using YoungpotentialsAPI.Models.Requests;
 using YoungpotentialsAPI.Models.Responses;
@@ -18,31 +19,41 @@ namespace YoungpotentialsAPI.Controllers
 
         private IFavoritesService _favoritesService;
         private IMapper _mapper;
+        private IStudentService _studentService;
 
-        public FavoritesController(IFavoritesService favoritesService, IMapper mapper)
+        public FavoritesController(IFavoritesService favoritesService, IMapper mapper, IStudentService studentService)
         {
             _favoritesService = favoritesService;
             _mapper = mapper;
+            _studentService = studentService;
         }
 
         [Authorize(Roles = "User")]
         [HttpGet("user/{id}")]
         public IActionResult GetAllFavoritesFromUserId(int id)
         {
-            var favorites = _favoritesService.GetAllFavoritesFromUserId(id);
-            var offers = new List<OfferResponse>();
+
+            var student = _studentService.GetStudentByUserId(id);
+            var favorites = _favoritesService.GetAllFavoritesFromUserId(student.Id);
+            var result = new List<FavoriteResponse>();
             foreach(var f in favorites)
             {
-                offers.Add(_mapper.Map<OfferResponse>(f.Offer));
+                result.Add(new FavoriteResponse
+                {
+                    Id = f.Id,
+                    Vacature = _mapper.Map<OfferResponse>(f.Offer)
+
+                }) ;
             }
-            return Ok(offers);
+            return Ok(result);
         }
 
         [Authorize(Roles = "User")]
         [HttpPost]
         public IActionResult AddFavorite([FromBody]FavoritesRequest model)
         {
-            var favorite = _favoritesService.AddFavorite(model.UserId, model.OfferId);
+            var student = _studentService.GetStudentByUserId(model.UserId);
+            var favorite = _favoritesService.AddFavorite(student.Id, model.OfferId);
             if (favorite != null)
                 return Ok(favorite);
             return BadRequest("failed to add Favorite");
