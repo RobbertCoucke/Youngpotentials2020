@@ -26,6 +26,7 @@ namespace YoungpotentialsAPI.Helpers
             CreateMap<Studiegebied, StudiegebiedResponseDetail>();
             CreateMap<Opleiding, OpleidingResponseDetail>();
             CreateMap<Afstudeerrichting, AfstudeerrichtingResponseDetail>();
+            CreateMap<AspNetUsers, UserResponse>();
 
             //Requests
             CreateMap<UserRegistrationRequest, AspNetUsers>();
