@@ -13,6 +13,7 @@ namespace Youngpotentials.Service
         Students CreateStudent(Students student);
         void UpdateStudent(Students student);
         void DeleteStudent(int id);
+        Students GetStudentByUserId(int id);
     }
     public class StudentService : IStudentService
     {
@@ -42,6 +43,11 @@ namespace Youngpotentials.Service
         public Students GetStudentById(int id)
         {
             return _studentDAO.GetStudentById(id);
+        }
+
+        public Students GetStudentByUserId(int id)
+        {
+            return _studentDAO.GetStudentByUserId(id);
         }
 
         public void UpdateStudent(Students student)

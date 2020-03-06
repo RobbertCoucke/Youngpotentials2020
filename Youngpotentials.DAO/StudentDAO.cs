@@ -14,6 +14,7 @@ namespace Youngpotentials.DAO
         Students CreateStudent(Students student);
         void UpdateStudent(Students student);
         void DeleteStudent(int id);
+        Students GetStudentByUserId(int id);
     }
 
     public class StudentDAO : IStudentDAO
@@ -32,6 +33,8 @@ namespace Youngpotentials.DAO
             return student;
         }
 
+
+
         public void DeleteStudent(int id)
         {
             var student = _db.Students.FirstOrDefault(x => x.Id == id);
@@ -47,6 +50,11 @@ namespace Youngpotentials.DAO
         public Students GetStudentById(int id)
         {
             return _db.Students.Where(s => s.Id == id).Include(s => s.User).FirstOrDefault();
+        }
+
+        public Students GetStudentByUserId(int id)
+        {
+            return _db.Students.Where(s => s.UserId == id).Include(s => s.User).FirstOrDefault();
         }
 
         public void UpdateStudent(Students student)

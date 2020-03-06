@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 using Youngpotentials.DAO;
 using Youngpotentials.Domain.Entities;
@@ -16,6 +17,7 @@ namespace Youngpotentials.Service
         void Update(AspNetUsers user, string password = null);
         void Delete(int id);
         AspNetUsers GetUserByEmail(string email);
+        AspNetUsers ResetPassword(AspNetUsers user, string password);
     }
 
     public class UserService : IUserService
@@ -52,6 +54,23 @@ namespace Youngpotentials.Service
             return user;
         }
 
+        public AspNetUsers ResetPassword(AspNetUsers user, string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new Exception("password is required");
+
+            }
+
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            _userDAO.UpdateUser(user);
+            return user;
+        }
+
         public AspNetUsers Create(AspNetUsers user, string password)
         {
             if (string.IsNullOrWhiteSpace(password))
@@ -70,8 +89,13 @@ namespace Youngpotentials.Service
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            //todo change to create student or company
+
             _userDAO.CreateUser(user);
+
+            //TODO uncomment
+            //string code = GetSHA1(user.Id.ToString()).Replace("/", "").Replace("+", "");
+            //user.Code = code;
+            //Update(user);
             return user;
         }
 
@@ -124,6 +148,18 @@ namespace Youngpotentials.Service
             }
 
             return true;
+        }
+
+      
+
+        private string GetSHA1(string input)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(input);
+            using (SHA1 shaM = new SHA1Managed())
+            {
+                byte[] result = shaM.ComputeHash(data);
+                return Convert.ToBase64String(result);
+            }
         }
     }
 }

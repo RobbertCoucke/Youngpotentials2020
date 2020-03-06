@@ -11,9 +11,11 @@ namespace Youngpotentials.DAO
     {
         IEnumerable<Companies> GetAllCompanies();
         Companies GetCompanyById(int id);
+        Companies GetCompanyByUserId(int id);
         Companies CreateCompany(Companies company);
         void UpdateCompany(Companies company);
         void DeleteCompany(int id);
+        IEnumerable<Companies> GetAllUnverified();
 
     }
     public class CompanyDAO : ICompanyDAO
@@ -44,9 +46,20 @@ namespace Youngpotentials.DAO
             return _db.Companies.Include(c => c.User).ToList();
         }
 
+        public IEnumerable<Companies> GetAllUnverified()
+        {
+            // return _db.Companies.Where(c => c.Verified == false).Include(c => c.Offers).ToList();
+            return null;
+        }
+
         public Companies GetCompanyById(int id)
         {
             return _db.Companies.Where(c => c.Id == id).Include(c => c.User).FirstOrDefault();
+        }
+
+        public Companies GetCompanyByUserId(int id)
+        {
+            return _db.Companies.Where(c => c.UserId == id).Include(c => c.User).FirstOrDefault();
         }
 
         public void UpdateCompany(Companies company)
