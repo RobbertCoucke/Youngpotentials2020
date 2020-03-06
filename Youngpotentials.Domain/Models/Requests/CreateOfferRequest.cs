@@ -19,7 +19,7 @@ namespace Youngpotentials.Domain.Models.Requests
         public string Address { get; set; }
         public DateTime? ExpirationDate { get; set; }
         [Required]
-        public int? CompanyId { get; set; }
+        public int CompanyId { get; set; }
         [Required]
         public int TypeId { get; set; }
         public string ZipCode { get; set; }

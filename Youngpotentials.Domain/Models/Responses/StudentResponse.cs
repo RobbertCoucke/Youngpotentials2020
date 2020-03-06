@@ -6,6 +6,7 @@ namespace Youngpotentials.Domain.Models.Responses
 {
     public class StudentResponse : UserResponse
     {
+        public int StudentId { get; set; }
         public string FirstName { get; set; }
         public string Name { get; set; }
         public string CvUrl { get; set; }

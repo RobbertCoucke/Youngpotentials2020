@@ -18,13 +18,15 @@ namespace YoungpotentialsAPI.Controllers
     {
         private IOfferService _offerService;
         private IUserService _userService;
+        private ICompanyService _companyService;
         private IMapper _mapper;
 
-        public OfferController(IOfferService offerService, IUserService userService, IMapper mapper)
+        public OfferController(IOfferService offerService, IUserService userService, IMapper mapper,ICompanyService companyService)
         {
             _offerService = offerService;
             _userService = userService;
             _mapper = mapper;
+            _companyService = companyService;
         }
 
         public IActionResult Index()
@@ -61,23 +63,40 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
-        {
-            var offer = _mapper.Map<Offers>(model);
-            var result = _offerService.CreateOffer(offer);
-            if(model.tags != null)
-            {
-                _offerService.AddTagsToOffer(model.tags, result.Id);
-            }
-            return Ok(result);
-        }
+        //[HttpPost]
+        //public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
+        //{
+        //    var offer = _mapper.Map<Offers>(model);
+        //    var company = _companyService.GetCompanyById(model.CompanyId);
+        //    if (company.Verified)
+        //    {
+        //        offer.Verified = true;
+        //    }
+        //    else
+        //    {
+        //        offer.Verified = false;
+        //    }
+
+        //    var result = _offerService.CreateOffer(offer);
+        //    if(model.tags != null)
+        //    {
+        //        _offerService.AddTagsToOffer(model.tags, result.Id);
+        //    }
+        //    return Ok(result);
+        //}
 
         [HttpPut("{id}")]
         public IActionResult UpdateOffer([FromBody]UpdateOfferRequest model, int id)
         {
             _offerService.UpdateOffer(model, id);
             return Ok();
+        }
+
+        [HttpGet("types")]
+        public IActionResult GetAllTypes()
+        {
+            var types =_offerService.GetAllTypes();
+            return Ok(types);
         }
 
         [HttpPost("filter")]

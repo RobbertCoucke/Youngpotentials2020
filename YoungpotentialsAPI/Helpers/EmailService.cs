@@ -27,7 +27,7 @@ namespace YoungpotentialsAPI.Helpers
                 {
                     smtp.Port = 587;
                     smtp.EnableSsl = true;
-                    smtp.Credentials = new NetworkCredential("email", "pass");
+                    smtp.Credentials = new NetworkCredential("george.desmet1998@gmail.com", "youngP0tentials*5");
                     await smtp.SendMailAsync(mail);
                 }
 

@@ -25,6 +25,7 @@ namespace Youngpotentials.DAO
         void CreateOfferOpleiding(OpleidingOffer entity);
         void DeleteOfferStudiegebied(StudiegebiedOffer entity);
         void DeleteOfferOpleiding(OpleidingOffer entity);
+        IEnumerable<Type> GetAllTypes();
     }
     public class OfferDAO : IOfferDAO
     {
@@ -52,7 +53,7 @@ namespace Youngpotentials.DAO
 
         public IEnumerable<Offers> GetAllOffers()
         {
-            // return _db.Offers.Where(o => o.Company.Verified == true).ToList();
+            // return _db.Offers.Where(o => o.Company.Verified == true && o.ExpirationDate < DateTime.Now).ToList();
             return _db.Offers.ToList();
         }
 
@@ -78,6 +79,10 @@ namespace Youngpotentials.DAO
             List<Offers> offers = new List<Offers>();
             foreach (var offer in studiegebiedOffer)
             {
+                //if (offer.IdOfferNavigation.Verified && offer.IdOfferNavigation.ExpirationDate < DateTime.Now)
+                //{
+                //    offers.Add(offer.IdOfferNavigation);
+                //}
                 offers.Add(offer.IdOfferNavigation);
             }
             return offers;
@@ -88,6 +93,10 @@ namespace Youngpotentials.DAO
             List<Offers> offers = new List<Offers>();
             foreach (var offer in opleidingOffer)
             {
+                //if (offer.IdOfferNavigation.Verified && offer.IdOfferNavigation.ExpirationDate < DateTime.Now)
+                //{
+                //    offers.Add(offer.IdOfferNavigation);
+                //}
                 offers.Add(offer.IdOfferNavigation);
             }
             return offers;
@@ -98,6 +107,10 @@ namespace Youngpotentials.DAO
             List<Offers> offers = new List<Offers>();
             foreach (var offer in afstudeerrichtingOffer)
             {
+                //if (offer.IdOfferNavigation.Verified && offer.IdOfferNavigation.ExpirationDate < DateTime.Now)
+                //{
+                //    offers.Add(offer.IdOfferNavigation);
+                //}
                 offers.Add(offer.IdOfferNavigation);
             }
             return offers;
@@ -108,6 +121,10 @@ namespace Youngpotentials.DAO
             List<Offers> offers = new List<Offers>();
             foreach (var offer in keuzeOffer)
             {
+                //if (offer.IdOfferNavigation.Verified && offer.IdOfferNavigation.ExpirationDate < DateTime.Now)
+                //{
+                //    offers.Add(offer.IdOfferNavigation);
+                //}
                 offers.Add(offer.IdOfferNavigation);
             }
             return offers;
@@ -145,6 +162,11 @@ namespace Youngpotentials.DAO
             //var offer = _db.Offers.Where(o => o.Id == id).FirstOrDefault();
             _db.OpleidingOffer.Remove(oo);
             _db.SaveChanges();
+        }
+
+        public IEnumerable<Type> GetAllTypes()
+        {
+            return _db.Type.ToList();
         }
     }
 }

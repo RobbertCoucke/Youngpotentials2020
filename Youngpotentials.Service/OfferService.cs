@@ -23,6 +23,7 @@ namespace Youngpotentials.Service
         IEnumerable<Offers> GetOffersByTypes(IList<Type> types);
         IEnumerable<Offers> GetOffersByTypesAndTags(IList<Type> types, IList<Studiegebied> ids);
         IEnumerable<Offers> GetOffersByType(Type type);
+        IEnumerable<Type> GetAllTypes();
         void AddTagsToOffer(IList<Studiegebied> tags, int offerId);
     }
     public class OfferService : IOfferService
@@ -308,6 +309,11 @@ namespace Youngpotentials.Service
                     _offerDAO.DeleteOfferOpleiding(new OpleidingOffer { IdOffer = offerId, IdOpleiding = op.Id });
                 }
             }
+        }
+
+        public IEnumerable<Type> GetAllTypes()
+        {
+            return _offerDAO.GetAllTypes();
         }
     }
 }
