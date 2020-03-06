@@ -41,6 +41,7 @@ namespace YoungpotentialsAPI.Helpers
             CreateMap<KeuzeRequest, Keuze>();
             CreateMap<CreateOfferRequest, Offers>();
             CreateMap<UpdateOfferRequest, Offers>();
+            
         }
     }
 }

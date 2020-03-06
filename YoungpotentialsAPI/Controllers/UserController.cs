@@ -246,17 +246,49 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult Update(int id, [FromBody]UserUpdateRequest model)
         {
 
-            var user = _mapper.Map<AspNetUsers>(model);
-            user.Id = id;
-            try
+            var u = _mapper.Map<AspNetUsers>(model);
+            u.Id = id;
+            var user = _userService.GetById(id);
+            if(user != null)
             {
-                _userService.Update(user, model.Password);
-                return Ok();
+                try
+                {
+                    if(user.RoleId == 2)
+                    {
+                        
+                        var student = _studentService.GetStudentByUserId(user.Id);
+                        var s = new Students();
+                        s.User = u;
+                        s.CvUrl = model.CvUrl;
+                        s.FirstName = model.FirstName;
+                        s.Name = model.Name;
+                        s.UserId = user.Id;
+                        _studentService.UpdateStudent(s);
+                        return Ok();
+
+                    }else if(user.RoleId == 3)
+                    {
+                        var company = _companyService.GetCompanyByUserId(user.Id);
+                        var c = new Companies();
+                        c.User = u;
+                        c.Description = model.Description;
+                        c.Url = model.Url;
+                        c.UserId = user.Id;
+                        c.CompanyName = model.CompanyName;
+                        return Ok();
+                    }
+                
+                    //_userService.Update(user, model.Password);
+                    //return Ok();
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(new { message = e.Message });
+                }
             }
-            catch (Exception e)
-            {
-                return BadRequest(new { message = e.Message });
-            }
+
+            return Ok();
+            
         }
 
         [HttpDelete("{id}")]
