@@ -27,11 +27,13 @@ namespace Youngpotentials.Domain.Entities
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
         public string Telephone { get; set; }
-        public int? ZipCode { get; set; }
+        public string ZipCode { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
         public byte[] PasswordSalt { get; set; }
         public int? RoleId { get; set; }
+        public string Email2 { get; set; }
+        public string Code { get; set; }
 
         public virtual AspNetRoles Role { get; set; }
         public virtual ICollection<Companies> Companies { get; set; }

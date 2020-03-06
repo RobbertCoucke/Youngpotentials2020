@@ -125,10 +125,6 @@ namespace Youngpotentials.Service
                 oldOffer.City = offer.City;
             }
 
-            if (offer.Country != null)
-            {
-                oldOffer.Country = offer.Country;
-            }
 
             //TODO: AttachementID toevoegen hier, UpdateOfferRequest en CreateOfferRequest
 
