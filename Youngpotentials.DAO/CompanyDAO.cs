@@ -63,8 +63,8 @@ namespace Youngpotentials.DAO
 
         public void UpdateCompany(Companies company)
         {
-            _db.Entry(company).State = EntityState.Modified;
-            _db.SaveChanges();
+            _db.Entry(company).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _db.SaveChanges(); 
         }
     }
 }

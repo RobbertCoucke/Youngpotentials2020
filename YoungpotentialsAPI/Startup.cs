@@ -83,7 +83,6 @@ namespace YoungpotentialsAPI
             });
 
 
-
             //User
             services.AddSingleton<IUserDAO, UserDAO>();
             services.AddSingleton<IUserService, UserService>();
