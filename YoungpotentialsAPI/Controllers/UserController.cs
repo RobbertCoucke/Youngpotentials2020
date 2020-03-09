@@ -57,7 +57,7 @@ namespace YoungpotentialsAPI.Controllers
             }
 
             var role = user.Role.Name;
-      
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var claims = new Claim(ClaimTypes.Role, "Admin");
@@ -70,7 +70,7 @@ namespace YoungpotentialsAPI.Controllers
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                
+
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
@@ -81,7 +81,7 @@ namespace YoungpotentialsAPI.Controllers
                 Email = user.Email,
                 Role = user.Role.Name,
                 Token = tokenString
-            }) ;
+            });
 
         }
 
@@ -99,7 +99,7 @@ namespace YoungpotentialsAPI.Controllers
         //    var user = _userService.GetUserByEmail(email);
         //    if (user != null)
         //    {
-        //        var body = "klik op deze link om een nieuw passwoord in te stellen: Click <a href=\"http://myAngularSite/passwordReset?code= " + user.Code +"\>here</a>";
+        //        var body = "klik op deze link om een nieuw passwoord in te stellen: Click <a href=\"http://myAngularSite/passwordReset?code= " + user.Code + "\>here</a>";
         //        await _mailService.sendEmailAsync(email, "testEmail", "password reset", body);
 
         //    }
@@ -109,7 +109,7 @@ namespace YoungpotentialsAPI.Controllers
         //public IActionResult PasswordReset([FromBody] string req)
         //{
         //    var user = _userService.GetByCode(req.code);
-        //    var result =_userService.ResetPassword(user, req.password);
+        //    var result = _userService.ResetPassword(user, req.password);
         //    return Ok();
 
         //}
@@ -181,18 +181,18 @@ namespace YoungpotentialsAPI.Controllers
             }
         }
 
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("getAll")]
         public IActionResult GetAll()
         {
             var result = new List<UserResponse>();
             var users = _userService.GetAll();
-            foreach(var user in users)
+            foreach (var user in users)
             {
                 var model = _mapper.Map<UserResponse>(user);
                 result.Add(model);
             }
-            
+
             return Ok(result);
         }
 
@@ -201,36 +201,40 @@ namespace YoungpotentialsAPI.Controllers
         {
             var user = _userService.GetById(id);
             UserResponse model = null;
-            if(user != null)
+            if (user != null)
             {
-               var userResponse = _mapper.Map<UserResponse>(user);
-               var roleId = user.RoleId;
-               //user is student
-               if(roleId == 2)
+                var userResponse = _mapper.Map<UserResponse>(user);
+                var roleId = user.RoleId;
+                //user is student
+                if (roleId == 2)
                 {
+
                     var student = _studentService.GetStudentByUserId(user.Id);
-                    if(student != null)
+                    if (student != null)
                     {
-                        
-                        
+
                         model = _mapper.Map<StudentResponse>(student);
-                        model.Address = student.User.Email;
+
                         model.Email = student.User.Email;
+                        model.Address = student.User.Address;
                         model.City = student.User.City;
                         model.Telephone = student.User.Telephone;
                         model.ZipCode = student.User.ZipCode;
+                        model.UserId = student.User.Id;
                         model.IsStudent = true;
                     }
 
                 }
-                else if( roleId == 3)
+                else if (roleId == 3)
                 {
                     var company = _companyService.GetCompanyByUserId(user.Id);
-                    if(company != null)
+                    if (company != null)
                     {
-                        model = _mapper.Map<CompanyResponse>(company); 
-                        model.Address = company.User.Email;
+                        model = _mapper.Map<CompanyResponse>(company);
+                        model.UserId = company.User.Id;
+                        model.Email = company.User.Email;
                         model.City = company.User.City;
+                        model.Address = company.User.Address;
                         model.Telephone = company.User.Telephone;
                         model.ZipCode = company.User.ZipCode;
                         model.IsStudent = false;
@@ -249,47 +253,56 @@ namespace YoungpotentialsAPI.Controllers
             var u = _mapper.Map<AspNetUsers>(model);
             u.Id = id;
             var user = _userService.GetById(id);
-            if(user != null)
+            if (user != null)
             {
                 try
                 {
-                    if(user.RoleId == 2)
+                    if (user.RoleId == 2)
                     {
-                        
+
                         var student = _studentService.GetStudentByUserId(user.Id);
-                        var s = new Students();
-                        s.User = u;
-                        s.CvUrl = model.CvUrl;
-                        s.FirstName = model.FirstName;
-                        s.Name = model.Name;
-                        s.UserId = user.Id;
-                        _studentService.UpdateStudent(s);
+                        student.User.Address = u.Address;
+                        student.User.City = u.City;
+                        student.User.Email = u.Email;
+                        student.User.Telephone = u.Telephone;
+                        student.User.ZipCode = u.ZipCode;
+                        student.FirstName = model.FirstName;
+                        student.Name = model.Name;
+                        student.UserId = u.Id;
+                        _studentService.UpdateStudent(student);
                         return Ok();
 
-                    }else if(user.RoleId == 3)
+                    }
+                    else if (user.RoleId == 3)
                     {
                         var company = _companyService.GetCompanyByUserId(user.Id);
-                        var c = new Companies();
-                        c.User = u;
-                        c.Description = model.Description;
-                        c.Url = model.Url;
-                        c.UserId = user.Id;
-                        c.CompanyName = model.CompanyName;
+                        company.User.Address = u.Address;
+                        company.User.City = u.City;
+                        company.User.Email = u.Email;
+                        company.User.Telephone = u.Telephone;
+                        company.User.ZipCode = u.ZipCode;
+                        company.Description = model.Description;
+                        company.Url = model.Url;
+                        company.UserId = u.Id;
+                        company.CompanyName = model.CompanyName;
+                        //_userService.Update(u, "");
+                        _companyService.UpdateCompany(company);
+                        //var sf = _companyService.GetCompanyByUserId(u.Id);
                         return Ok();
                     }
-                
-                    //_userService.Update(user, model.Password);
-                    //return Ok();
                 }
-                catch (Exception e)
+                catch(Exception e)
                 {
                     return BadRequest(new { message = e.Message });
                 }
-            }
 
+            }
             return Ok();
+    }
             
-        }
+
+            
+            
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

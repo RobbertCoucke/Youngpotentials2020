@@ -11,13 +11,12 @@ namespace Youngpotentials.Domain.Models.Requests
 
         public string Email { get; set; }
        
-        //public string Password { get; set; }
 
         public string Telephone { get; set; }
 
 
         public string City { get; set; }
-        public int ZipCode { get; set; }
+        public string ZipCode { get; set; }
         public string Address { get; set; }
 
 

@@ -28,6 +28,8 @@ namespace Youngpotentials.Service
         }
         public Companies CreateCompany(Companies company)
         {
+            //set company as unverified
+            company.Verified = false;
             return _companyDAO.CreateCompany(company);
         }
 

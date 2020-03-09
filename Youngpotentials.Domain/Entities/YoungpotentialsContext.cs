@@ -41,8 +41,8 @@ namespace Youngpotentials.Domain.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=youngpotentials.database.windows.net;Database=Youngpotentials;Trusted_Connection=False;Encrypt=True;;User ID=beheerder;Password=Vives2020*");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=youngpotentials.database.windows.net;Database=YoungpotentialsV1;Trusted_Connection=False;Encrypt=True;;User ID=beheerder;Password=Vives2020*");
             }
         }
 
@@ -199,9 +199,15 @@ namespace Youngpotentials.Domain.Entities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Code).HasColumnName("code");
+
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(256);
+
+                entity.Property(e => e.Email2)
+                    .HasColumnName("email2")
+                    .IsUnicode(false);
 
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
@@ -234,6 +240,8 @@ namespace Youngpotentials.Domain.Entities
                 entity.Property(e => e.Url).IsRequired();
 
                 entity.Property(e => e.UserId).HasColumnName("userId");
+
+                entity.Property(e => e.Verified).HasColumnName("verified");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Companies)
@@ -320,7 +328,6 @@ namespace Youngpotentials.Domain.Entities
                 entity.Property(e => e.AttachmentId).HasColumnName("AttachmentID");
 
                 entity.Property(e => e.Code)
-                    .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
 

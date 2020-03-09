@@ -15,6 +15,7 @@ namespace Youngpotentials.Domain.Entities
         public string Url { get; set; }
         public string CompanyName { get; set; }
         public int? UserId { get; set; }
+        public bool? Verified { get; set; }
 
         public virtual AspNetUsers User { get; set; }
         public virtual ICollection<Offers> Offers { get; set; }
