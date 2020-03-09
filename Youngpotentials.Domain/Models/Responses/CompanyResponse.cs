@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Youngpotentials.Domain.Entities;
 
 namespace Youngpotentials.Domain.Models.Responses
 {
@@ -11,5 +12,7 @@ namespace Youngpotentials.Domain.Models.Responses
         public string Url { get; set; }
         public string CompanyName { get; set; }
         public Boolean Verified { get; set; }
+
+        public IEnumerable<Offers> Offers { get; set; }
     }
 }

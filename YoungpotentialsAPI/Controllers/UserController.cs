@@ -143,6 +143,8 @@ namespace YoungpotentialsAPI.Controllers
                     var company = _mapper.Map<Companies>(model);
                     company.UserId = user.Id;
                     _companyService.CreateCompany(company);
+
+                    //TODO send mail to admin that new company has registered and has yet to be verified
                 }
 
                 var role = user.Role.Name;
@@ -154,7 +156,6 @@ namespace YoungpotentialsAPI.Controllers
                 {
                     Subject = new System.Security.Claims.ClaimsIdentity(new Claim[] {
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    //ipv "Admin" role ophalen van user
                     new Claim(ClaimTypes.Role, role)
                 }),
                     Expires = DateTime.UtcNow.AddDays(7),

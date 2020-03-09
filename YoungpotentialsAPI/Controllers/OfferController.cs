@@ -124,6 +124,10 @@ namespace YoungpotentialsAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            //TODO first delete favorites and connections with studiegebied
+            // _favoritesService.DeleteAllFromOfferId(id);
+            // _offerService.DeleteAllStudieConnectionsFromOfferId(id);
+
             _offerService.DeleteOffer(id);
             return Ok();
         }

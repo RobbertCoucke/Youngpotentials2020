@@ -38,6 +38,7 @@ namespace YoungpotentialsAPI.Controllers
                 model.City = company.User.City;
                 model.Telephone = company.User.Telephone;
                 model.ZipCode = company.User.ZipCode;
+                model.Offers = company.Offers;
                 model.IsStudent = false;
                 result.Add(model);
             }
@@ -47,8 +48,8 @@ namespace YoungpotentialsAPI.Controllers
             
         }
 
-        [HttpPut("verify")]
-        public IActionResult VerifyCompany([FromBody] int companyId)
+        [HttpGet("verify/{companyId}")]
+        public IActionResult VerifyCompany(int companyId)
         {
             var company = _companyService.GetCompanyById(companyId);
             company.Verified = true;
@@ -56,8 +57,8 @@ namespace YoungpotentialsAPI.Controllers
             return Ok();
         }
 
-        [HttpPut("unverify")]
-        public IActionResult UnVerifyCompany([FromBody] int companyId)
+        [HttpGet("unverify/{companyId}")]
+        public IActionResult UnVerifyCompany( int companyId)
         {
             var company = _companyService.GetCompanyById(companyId);
             company.Verified = false;
