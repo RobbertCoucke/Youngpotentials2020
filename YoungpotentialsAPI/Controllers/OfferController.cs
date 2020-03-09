@@ -8,6 +8,7 @@ using Youngpotentials.Domain.Entities;
 using Youngpotentials.Service;
 using Youngpotentials.Domain.Models.Requests;
 using Youngpotentials.Domain.Models.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -63,27 +64,27 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-        //[HttpPost]
-        //public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
-        //{
-        //    var offer = _mapper.Map<Offers>(model);
-        //    var company = _companyService.GetCompanyById(model.CompanyId);
-        //    if (company.Verified)
-        //    {
-        //        offer.Verified = true;
-        //    }
-        //    else
-        //    {
-        //        offer.Verified = false;
-        //    }
+        [HttpPost]
+        public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
+        {
+            var offer = _mapper.Map<Offers>(model);
+            var company = _companyService.GetCompanyById(model.CompanyId);
+            if (company.Verified != null)
+            {
+                offer.Verified = (bool) company.Verified;
+            }
+            
+           
 
-        //    var result = _offerService.CreateOffer(offer);
-        //    if(model.tags != null)
-        //    {
-        //        _offerService.AddTagsToOffer(model.tags, result.Id);
-        //    }
-        //    return Ok(result);
-        //}
+
+            var result = _offerService.CreateOffer(offer);
+            if (model.Tags != null)
+            {
+                _offerService.AddTagsToOffer(model.Tags, result.Id);
+            }
+            //return Ok(_mapper.Map<OfferResponse>(result));
+            return Ok();
+        }
 
         [HttpPut("{id}")]
         public IActionResult UpdateOffer([FromBody]UpdateOfferRequest model, int id)

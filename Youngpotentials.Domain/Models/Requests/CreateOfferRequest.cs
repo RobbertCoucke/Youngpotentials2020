@@ -26,6 +26,6 @@ namespace Youngpotentials.Domain.Models.Requests
         public string City { get; set; }
         public bool? Country { get; set; }
 
-        public IList<Studiegebied> tags {get; set;}
+        public IList<Studiegebied> Tags {get; set;}
     }
 }

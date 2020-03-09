@@ -108,6 +108,18 @@ namespace YoungpotentialsAPI.Controllers
                     var fullPath = Path.Combine(pathToSave, fileName);
                     var dbPath = Path.Combine(filePath, fileName);
 
+                    //user or vacature can only have 1 file associated so we delete all files and folders in the userId/vacatureId folder.
+                    System.IO.DirectoryInfo di = new DirectoryInfo(pathToSave);
+
+                    foreach (FileInfo f in di.GetFiles())
+                    {
+                        f.Delete();
+                    }
+                    foreach (DirectoryInfo dir in di.GetDirectories())
+                    {
+                        dir.Delete(true);
+                    }
+
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
