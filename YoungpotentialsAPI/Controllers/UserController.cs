@@ -16,6 +16,7 @@ using AutoMapper;
 using YoungpotentialsAPI.Helpers;
 using Youngpotentials.Domain.Entities;
 using Microsoft.AspNetCore.Cors;
+using YoungpotentialsAPI.Models.Requests;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -104,15 +105,54 @@ namespace YoungpotentialsAPI.Controllers
 
         //    }
         //}
+        [AllowAnonymous]
+        [HttpPost("password")]
+        public async Task<IActionResult> PasswordResetAsync([FromBody] EmailRequest e)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            //var claims = new Claim(ClaimTypes.Role, "Admin");
 
-        //[HttpPost("password")]
-        //public IActionResult PasswordReset([FromBody] string req)
-        //{
-        //    var user = _userService.GetByCode(req.code);
-        //    var result = _userService.ResetPassword(user, req.password);
-        //    return Ok();
+            var user = _userService.GetUserByEmail(e.Email); 
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new System.Security.Claims.ClaimsIdentity(new Claim[] {
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    //ipv "Admin" role ophalen van user
+                    
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
 
-        //}
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+            if (user != null)
+            {
+                var href = $"<a href='http://localhost:4200/wachtwoord-reseten?email={user.Email}&token={tokenString}>";
+                var message = "klik op deze link om een nieuw passwoord in te stellen: Click" + href;
+                var emailService = new EmailService();
+                await emailService.sendEmailAsync("ibrahemhajkasem@gmail.com", "george.desmet1998@gmail.com", "reset password", message);
+            }
+            //var result = _userService.ResetPassword(user, req.password);
+            return Ok(tokenString);
+
+        }
+
+        [HttpPost("password/reset")]
+        [Authorize]
+        public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
+        {
+            var user = _userService.GetUserByEmail(passwordResetRequest.email);
+            if(user != null & passwordResetRequest.token != null)
+            {
+                _userService.ResetPassword(user, passwordResetRequest.newPassword);
+                return Ok();
+            }
+
+            return Ok();
+  
+        }
 
         [AllowAnonymous]
         [HttpPost("register")]
