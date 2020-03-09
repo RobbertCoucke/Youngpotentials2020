@@ -53,8 +53,14 @@ namespace Youngpotentials.DAO
 
         public IEnumerable<Offers> GetAllOffers()
         {
-             return _db.Offers.Where(o => o.Company.Verified == true && o.ExpirationDate > DateTime.Now).ToList();
-            
+            var test = DateTime.Now;
+             var result = _db.Offers.Where(o => o.Company.Verified == true && o.ExpirationDate > DateTime.Now).ToList();
+            var test2 = result.First();
+            var test3 = test2.ExpirationDate;
+            var test4 = test - test3;
+            var test5 = test3 - test;
+            var test6 = (test3 > test);
+            return result;
         }
 
         public IEnumerable<Offers> GetAllOffersByCompany(int id)

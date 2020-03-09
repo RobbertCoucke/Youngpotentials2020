@@ -140,7 +140,6 @@ namespace YoungpotentialsAPI.Controllers
         }
 
         [HttpPost("password/reset")]
-        [Authorize]
         public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
         {
             var user = _userService.GetUserByEmail(passwordResetRequest.email);

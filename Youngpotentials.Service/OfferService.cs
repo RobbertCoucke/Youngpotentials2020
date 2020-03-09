@@ -126,7 +126,7 @@ namespace Youngpotentials.Service
             }
 
 
-            //TODO: AttachementID toevoegen hier, UpdateOfferRequest en CreateOfferRequest
+            
 
             _offerDAO.UpdateOffer(oldOffer);
         }
@@ -200,46 +200,79 @@ namespace Youngpotentials.Service
 
             return hashOffers;         
         }
+
+
         public IList<string> GetStudiegebiedToTags(IList<Studiegebied> studiegebied)
         {
             List<string> ids = new List<string>();
             foreach (var s in studiegebied)
             {
-                if (s.Opleiding.Count == 0)
-                {
+
                     ids.Add(s.Id);
-                }
-                else
-                {
+
                     foreach (var o in s.Opleiding)
                     {
-                        if (o.Afstudeerrichting.Count == 0)
-                        {
+
                             ids.Add(o.Id);
-                        }
-                        else
-                        {
+  
                             foreach (var a in o.Afstudeerrichting)
                             {
-                                if (a.Keuze.Count == 0)
-                                {
+
                                     ids.Add(a.Id);
-                                }
-                                else
-                                {
+                     
                                     foreach (var k in a.Keuze)
                                     {
                                         ids.Add(k.Id);
                                     }
-                                }
+                                
 
                             }
-                        }
+                        
                     }
-                }
+                
             }
             return ids;
         }
+        //public IList<string> GetStudiegebiedToTags(IList<Studiegebied> studiegebied)
+        //{
+        //    List<string> ids = new List<string>();
+        //    foreach (var s in studiegebied)
+        //    {
+        //        if (s.Opleiding.Count == 0)
+        //        {
+        //            ids.Add(s.Id);
+        //        }
+        //        else
+        //        {
+        //            foreach (var o in s.Opleiding)
+        //            {
+        //                if (o.Afstudeerrichting.Count == 0)
+        //                {
+        //                    ids.Add(o.Id);
+        //                }
+        //                else
+        //                {
+        //                    foreach (var a in o.Afstudeerrichting)
+        //                    {
+        //                        if (a.Keuze.Count == 0)
+        //                        {
+        //                            ids.Add(a.Id);
+        //                        }
+        //                        else
+        //                        {
+        //                            foreach (var k in a.Keuze)
+        //                            {
+        //                                ids.Add(k.Id);
+        //                            }
+        //                        }
+
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return ids;
+        //}
 
         public IEnumerable<Offers> GetOffersByTypesAndTags(IList<Type> types, IList<Studiegebied> ids)
         {

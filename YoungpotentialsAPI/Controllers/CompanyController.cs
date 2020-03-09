@@ -17,10 +17,12 @@ namespace YoungpotentialsAPI.Controllers
 
         private ICompanyService _companyService;
         private IMapper _mapper;
-        public CompanyController(ICompanyService companyService, IMapper mapper)
+        private IOfferService _offerService;
+        public CompanyController(ICompanyService companyService, IMapper mapper, IOfferService offerService)
         {
             _companyService = companyService;
             _mapper = mapper;
+            _offerService = offerService;
         }
 
         [HttpGet("companies")]
@@ -38,7 +40,6 @@ namespace YoungpotentialsAPI.Controllers
                 model.City = company.User.City;
                 model.Telephone = company.User.Telephone;
                 model.ZipCode = company.User.ZipCode;
-                model.Offers = company.Offers;
                 model.IsStudent = false;
                 result.Add(model);
             }
@@ -54,6 +55,7 @@ namespace YoungpotentialsAPI.Controllers
             var company = _companyService.GetCompanyById(companyId);
             company.Verified = true;
             _companyService.UpdateCompany(company);
+            
             return Ok();
         }
 

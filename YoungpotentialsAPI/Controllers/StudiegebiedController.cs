@@ -40,6 +40,7 @@ namespace YoungpotentialsAPI.Controllers
             var studiegebieden = _studiegebiedService.GetAll();
             foreach(var s in studiegebieden)
             {
+                
                 if (s.IsGraduate != null)
                 {
                     if((bool)s.IsGraduate)

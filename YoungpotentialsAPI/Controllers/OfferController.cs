@@ -43,6 +43,7 @@ namespace YoungpotentialsAPI.Controllers
             {
                 offer.OpleidingOffer = new List<OpleidingOffer>();
                 offer.StudiegebiedOffer = new List<StudiegebiedOffer>();
+                offer.Type = null;
             }
 
             //offersResponse.Add(_mapper.Map<OfferResponse>(offer));
@@ -59,31 +60,46 @@ namespace YoungpotentialsAPI.Controllers
             {
                 var offerResponse = _mapper.Map<OfferResponse>(offer);
                 offerResponses.Add(offerResponse);
+                offer.Type = null;
+                offer.StudiegebiedOffer = new List<StudiegebiedOffer>();
+                offer.OpleidingOffer = new List<OpleidingOffer>();
             }
             return Ok(offerResponses);
         }
 
+        [HttpGet("create/test")]
+        public IActionResult TestCreate()
+        {
+            return Ok();
+        }
 
-        [HttpPost]
+
+        [HttpPost("create")]
         public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
         {
-            var offer = _mapper.Map<Offers>(model);
-            var company = _companyService.GetCompanyById(model.CompanyId);
-            if (company.Verified != null)
+            try
             {
-                offer.Verified = (bool) company.Verified;
+                var offer = _mapper.Map<Offers>(model);
+                var company = _companyService.GetCompanyById(model.CompanyId);
+                if (company.Verified != null)
+                {
+                    offer.Verified = (bool)company.Verified;
+                }
+                offer.CompanyName = company.CompanyName;
+                offer.Created = DateTime.Now;
+                var types = _offerService.GetAllTypes();
+                offer.Type = types.Where(t => t.Id == offer.TypeId).FirstOrDefault();
+                var result = _offerService.CreateOffer(offer);
+                if (model.Tags != null)
+                {
+                    _offerService.AddTagsToOffer(model.Tags, result.Id);
+                }
+                return Ok(_mapper.Map<OfferResponse>(result));
             }
-            
-           
-
-
-            var result = _offerService.CreateOffer(offer);
-            if (model.Tags != null)
+            catch(Exception e)
             {
-                _offerService.AddTagsToOffer(model.Tags, result.Id);
+                return BadRequest(e.Message);
             }
-            //return Ok(_mapper.Map<OfferResponse>(result));
-            return Ok();
         }
 
         [HttpPut("{id}")]
@@ -97,7 +113,12 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult GetAllTypes()
         {
             var types =_offerService.GetAllTypes();
-            return Ok(types);
+            var result = new List<TypeResponse>();
+            foreach(var type in types)
+            {
+                result.Add(_mapper.Map<TypeResponse>(type));
+            }
+            return Ok(result);
         }
 
         [HttpPost("filter")]
