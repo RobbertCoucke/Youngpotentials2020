@@ -41,7 +41,7 @@ namespace YoungpotentialsAPI
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             }));
 
-
+            
             services.AddControllers();
             services.AddMvcCore().AddApiExplorer();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

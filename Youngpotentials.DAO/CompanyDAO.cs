@@ -48,8 +48,7 @@ namespace Youngpotentials.DAO
 
         public IEnumerable<Companies> GetAllUnverified()
         {
-            // return _db.Companies.Where(c => c.Verified == false).Include(c => c.Offers).ToList();
-            return null;
+             return _db.Companies.Where(c => c.Verified == false).Include(c => c.Offers).Include(c => c.User).ToList();
         }
 
         public Companies GetCompanyById(int id)

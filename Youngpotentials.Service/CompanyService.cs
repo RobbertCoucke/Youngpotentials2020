@@ -21,10 +21,12 @@ namespace Youngpotentials.Service
     {
 
         private ICompanyDAO _companyDAO;
+        private IOfferDAO _offerDAO;
 
-        public CompanyService(ICompanyDAO companyDAO)
+        public CompanyService(ICompanyDAO companyDAO, IOfferDAO offerDAO)
         {
             _companyDAO = companyDAO;
+            _offerDAO = offerDAO;
         }
         public Companies CreateCompany(Companies company)
         {
@@ -60,7 +62,20 @@ namespace Youngpotentials.Service
 
         public void UpdateCompany(Companies company)
         {
-            _companyDAO.UpdateCompany(company);
+            try
+            {
+                _companyDAO.UpdateCompany(company);
+                var offers = _offerDAO.GetAllOffersByCompany(company.Id);
+                foreach (var offer in offers)
+                {
+                    offer.Verified = true;
+                    _offerDAO.UpdateOffer(offer);
+                }
+            }
+            catch(Exception e)
+            {
+                var exception = e.Message;
+            }
         }
 
         public void Verify(int id)

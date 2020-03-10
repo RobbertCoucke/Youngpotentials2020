@@ -8,6 +8,7 @@ using Youngpotentials.Domain.Entities;
 using Youngpotentials.Service;
 using Youngpotentials.Domain.Models.Requests;
 using Youngpotentials.Domain.Models.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -42,6 +43,7 @@ namespace YoungpotentialsAPI.Controllers
             {
                 offer.OpleidingOffer = new List<OpleidingOffer>();
                 offer.StudiegebiedOffer = new List<StudiegebiedOffer>();
+                offer.Type = null;
             }
 
             //offersResponse.Add(_mapper.Map<OfferResponse>(offer));
@@ -58,32 +60,47 @@ namespace YoungpotentialsAPI.Controllers
             {
                 var offerResponse = _mapper.Map<OfferResponse>(offer);
                 offerResponses.Add(offerResponse);
+                offer.Type = null;
+                offer.StudiegebiedOffer = new List<StudiegebiedOffer>();
+                offer.OpleidingOffer = new List<OpleidingOffer>();
             }
             return Ok(offerResponses);
         }
 
+        [HttpGet("create/test")]
+        public IActionResult TestCreate()
+        {
+            return Ok();
+        }
 
-        //[HttpPost]
-        //public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
-        //{
-        //    var offer = _mapper.Map<Offers>(model);
-        //    var company = _companyService.GetCompanyById(model.CompanyId);
-        //    if (company.Verified)
-        //    {
-        //        offer.Verified = true;
-        //    }
-        //    else
-        //    {
-        //        offer.Verified = false;
-        //    }
 
-        //    var result = _offerService.CreateOffer(offer);
-        //    if(model.tags != null)
-        //    {
-        //        _offerService.AddTagsToOffer(model.tags, result.Id);
-        //    }
-        //    return Ok(result);
-        //}
+        [HttpPost("create")]
+        public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
+        {
+            try
+            {
+                var offer = _mapper.Map<Offers>(model);
+                var company = _companyService.GetCompanyById(model.CompanyId);
+                if (company.Verified != null)
+                {
+                    offer.Verified = (bool)company.Verified;
+                }
+                offer.CompanyName = company.CompanyName;
+                offer.Created = DateTime.Now;
+                var types = _offerService.GetAllTypes();
+                offer.Type = types.Where(t => t.Id == offer.TypeId).FirstOrDefault();
+                var result = _offerService.CreateOffer(offer);
+                if (model.Tags != null)
+                {
+                    _offerService.AddTagsToOffer(model.Tags, result.Id);
+                }
+                return Ok(_mapper.Map<OfferResponse>(result));
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         [HttpPut("{id}")]
         public IActionResult UpdateOffer([FromBody]UpdateOfferRequest model, int id)
@@ -96,7 +113,12 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult GetAllTypes()
         {
             var types =_offerService.GetAllTypes();
-            return Ok(types);
+            var result = new List<TypeResponse>();
+            foreach(var type in types)
+            {
+                result.Add(_mapper.Map<TypeResponse>(type));
+            }
+            return Ok(result);
         }
 
         [HttpPost("filter")]
@@ -124,6 +146,10 @@ namespace YoungpotentialsAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+            //TODO first delete favorites and connections with studiegebied
+            // _favoritesService.DeleteAllFromOfferId(id);
+            // _offerService.DeleteAllStudieConnectionsFromOfferId(id);
+
             _offerService.DeleteOffer(id);
             return Ok();
         }

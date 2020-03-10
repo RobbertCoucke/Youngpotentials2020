@@ -17,10 +17,12 @@ namespace YoungpotentialsAPI.Controllers
 
         private ICompanyService _companyService;
         private IMapper _mapper;
-        public CompanyController(ICompanyService companyService, IMapper mapper)
+        private IOfferService _offerService;
+        public CompanyController(ICompanyService companyService, IMapper mapper, IOfferService offerService)
         {
             _companyService = companyService;
             _mapper = mapper;
+            _offerService = offerService;
         }
 
         [HttpGet("companies")]
@@ -47,17 +49,18 @@ namespace YoungpotentialsAPI.Controllers
             
         }
 
-        [HttpPut("verify")]
-        public IActionResult VerifyCompany([FromBody] int companyId)
+        [HttpGet("verify/{companyId}")]
+        public IActionResult VerifyCompany(int companyId)
         {
             var company = _companyService.GetCompanyById(companyId);
             company.Verified = true;
             _companyService.UpdateCompany(company);
+            
             return Ok();
         }
 
-        [HttpPut("unverify")]
-        public IActionResult UnVerifyCompany([FromBody] int companyId)
+        [HttpGet("unverify/{companyId}")]
+        public IActionResult UnVerifyCompany( int companyId)
         {
             var company = _companyService.GetCompanyById(companyId);
             company.Verified = false;
