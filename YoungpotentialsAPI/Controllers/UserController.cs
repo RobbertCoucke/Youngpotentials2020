@@ -109,6 +109,7 @@ namespace YoungpotentialsAPI.Controllers
         [HttpPost("password")]
         public async Task<IActionResult> PasswordResetAsync([FromBody] EmailRequest e)
         {
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             //var claims = new Claim(ClaimTypes.Role, "Admin");
@@ -121,6 +122,7 @@ namespace YoungpotentialsAPI.Controllers
                     //ipv "Admin" role ophalen van user
                     
                 }),
+                Issuer = user.Id.ToString(),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
 
@@ -134,24 +136,57 @@ namespace YoungpotentialsAPI.Controllers
                 var emailService = new EmailService();
                 await emailService.sendEmailAsync("ibrahemhajkasem@gmail.com", "george.desmet1998@gmail.com", "reset password", message);
             }
+            else
+            {
+                return BadRequest("Incorrect email");
+            }
+
             //var result = _userService.ResetPassword(user, req.password);
             return Ok(tokenString);
 
         }
 
-        [HttpPost("password/reset")]
-        [Authorize]
+
+        [HttpPut("password/reset")]
+        [AllowAnonymous]
+        //[Authorize]
         public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
         {
-            var user = _userService.GetUserByEmail(passwordResetRequest.email);
-            if(user != null & passwordResetRequest.token != null)
+            IEnumerable<string> headerValues = Request.Headers["Authorization"];
+            var isuue = headerValues.FirstOrDefault().Substring(7);
+            var userId = ReadToken(isuue);
+            if(userId != null)
             {
-                _userService.ResetPassword(user, passwordResetRequest.newPassword);
-                return Ok();
+                var user = _userService.GetById(Convert.ToInt32(userId));
+                if (user != null && user.Email == passwordResetRequest.email)
+                {
+                    _userService.ResetPassword(user, passwordResetRequest.newPassword);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Invalid gegevens");
+                }
             }
 
             return Ok();
-  
+        }
+
+        public string ReadToken(string token)
+        {
+            var id = "";
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var securityToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+                id = securityToken.Issuer;
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Invalid gegevens");
+            }
+
+            return id;
         }
 
         [AllowAnonymous]

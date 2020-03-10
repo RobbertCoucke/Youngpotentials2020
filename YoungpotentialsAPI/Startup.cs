@@ -43,6 +43,7 @@ namespace YoungpotentialsAPI
 
 
             services.AddControllers();
+            services.AddMvcCore().AddApiExplorer();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
