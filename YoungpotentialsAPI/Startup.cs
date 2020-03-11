@@ -36,10 +36,7 @@ namespace YoungpotentialsAPI
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-            }));
+            
 
             
             services.AddControllers();
@@ -81,6 +78,12 @@ namespace YoungpotentialsAPI
                     ValidateAudience = false
                 };
             });
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            }));
+            services.AddMvc();
 
 
             //User
@@ -144,6 +147,7 @@ namespace YoungpotentialsAPI
             app.UseAuthorization();
 
             app.UseCors("MyPolicy");
+            //app.UseMvc();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

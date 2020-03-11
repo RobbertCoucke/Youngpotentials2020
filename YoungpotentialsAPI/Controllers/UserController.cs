@@ -134,11 +134,16 @@ namespace YoungpotentialsAPI.Controllers
                 var emailService = new EmailService();
                 await emailService.sendEmailAsync("ibrahemhajkasem@gmail.com", "george.desmet1998@gmail.com", "reset password", message);
             }
+            else
+            {
+                return BadRequest("Incorrect Email");
+            }
             //var result = _userService.ResetPassword(user, req.password);
             return Ok(tokenString);
 
         }
 
+        [AllowAnonymous]
         [HttpPost("password/reset")]
         public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
         {
@@ -147,6 +152,10 @@ namespace YoungpotentialsAPI.Controllers
             {
                 _userService.ResetPassword(user, passwordResetRequest.newPassword);
                 return Ok();
+            }
+            else
+            {
+                return BadRequest("Invalid gegevens");
             }
 
             return Ok();

@@ -29,7 +29,7 @@ namespace Youngpotentials.Domain.Entities
         public DateTime? ExpirationDate { get; set; }
         public string Code { get; set; }
         public int? CompanyId { get; set; }
-        public int TypeId { get; set; }
+        public int? TypeId { get; set; }
         public string ZipCode { get; set; }
         public string City { get; set; }
 

@@ -11,6 +11,7 @@ namespace Youngpotentials.Service
         IEnumerable<Favorites> GetAllFavoritesFromUserId(int id);
         Favorites AddFavorite(int userId, int offerId);
         void DeleteFavorite(int id);
+        void DeleteAllFavoritesFromOfferId(int id);
     }
     public class FavoritesService : IFavoritesService
     {
@@ -25,6 +26,15 @@ namespace Youngpotentials.Service
         public Favorites AddFavorite(int userId, int offerId)
         {
             return _favoritesDAO.AddFavorite(userId, offerId);
+        }
+
+        public void DeleteAllFavoritesFromOfferId(int id)
+        {
+            var favorites = _favoritesDAO.GetAllFavoritesFromOfferId(id);
+            foreach(var f in favorites)
+            {
+                _favoritesDAO.DeleteFavorite(f.Id);
+            }
         }
 
         public void DeleteFavorite(int id)

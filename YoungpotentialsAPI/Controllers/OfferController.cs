@@ -20,14 +20,16 @@ namespace YoungpotentialsAPI.Controllers
         private IOfferService _offerService;
         private IUserService _userService;
         private ICompanyService _companyService;
+        private IFavoritesService _favoritesService;
         private IMapper _mapper;
 
-        public OfferController(IOfferService offerService, IUserService userService, IMapper mapper,ICompanyService companyService)
+        public OfferController(IOfferService offerService, IUserService userService, IMapper mapper,ICompanyService companyService, IFavoritesService favoritesService)
         {
             _offerService = offerService;
             _userService = userService;
             _mapper = mapper;
             _companyService = companyService;
+            _favoritesService = favoritesService;
         }
 
         public IActionResult Index()
@@ -81,20 +83,19 @@ namespace YoungpotentialsAPI.Controllers
             {
                 var offer = _mapper.Map<Offers>(model);
                 var company = _companyService.GetCompanyById(model.CompanyId);
-                if (company.Verified != null)
-                {
-                    offer.Verified = (bool)company.Verified;
-                }
+               
+                offer.Verified = company.Verified;
                 offer.CompanyName = company.CompanyName;
                 offer.Created = DateTime.Now;
-                var types = _offerService.GetAllTypes();
-                offer.Type = types.Where(t => t.Id == offer.TypeId).FirstOrDefault();
-                var result = _offerService.CreateOffer(offer);
+                //var types = _offerService.GetAllTypes();
+                //offer.Type = types.Where(t => t.Id == offer.TypeId).FirstOrDefault();
+                var createdOffer = _offerService.CreateOffer(offer);
                 if (model.Tags != null)
                 {
-                    _offerService.AddTagsToOffer(model.Tags, result.Id);
+                    _offerService.AddTagsToOffer(model.Tags, createdOffer.Id);
                 }
-                return Ok(_mapper.Map<OfferResponse>(result));
+                var result = _mapper.Map<OfferResponse>(createdOffer);
+                return Ok(result);
             }
             catch(Exception e)
             {
@@ -112,13 +113,20 @@ namespace YoungpotentialsAPI.Controllers
         [HttpGet("types")]
         public IActionResult GetAllTypes()
         {
-            var types =_offerService.GetAllTypes();
-            var result = new List<TypeResponse>();
-            foreach(var type in types)
+            try
             {
-                result.Add(_mapper.Map<TypeResponse>(type));
+                var types = _offerService.GetAllTypes();
+                //var result = new List<TypeResponse>();
+                //foreach (var type in types)
+                //{
+                //    result.Add(_mapper.Map<TypeResponse>(type));
+                //}
+                return Ok(types);
             }
-            return Ok(result);
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost("filter")]
@@ -150,6 +158,9 @@ namespace YoungpotentialsAPI.Controllers
             // _favoritesService.DeleteAllFromOfferId(id);
             // _offerService.DeleteAllStudieConnectionsFromOfferId(id);
 
+            _favoritesService.DeleteAllFavoritesFromOfferId(id);
+
+            _offerService.DeleteAllStudieConnectionsFromOfferId(id);
             _offerService.DeleteOffer(id);
             return Ok();
         }

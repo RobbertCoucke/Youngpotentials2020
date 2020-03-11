@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Youngpotentials.Domain.Entities;
+using Youngpotentials.Domain.Models.Responses;
 using Type = Youngpotentials.Domain.Entities.Type;
 
 namespace Youngpotentials.DAO
@@ -25,16 +26,20 @@ namespace Youngpotentials.DAO
         void CreateOfferOpleiding(OpleidingOffer entity);
         void DeleteOfferStudiegebied(StudiegebiedOffer entity);
         void DeleteOfferOpleiding(OpleidingOffer entity);
-        IEnumerable<Type> GetAllTypes();
+        IEnumerable<TypeResponse> GetAllTypes();
+        IEnumerable<StudiegebiedOffer> GetStudiegebiedOffersFromOfferId(int id);
+        IEnumerable<OpleidingOffer> GetOpleidingOffersFromOfferId(int id);
     }
     public class OfferDAO : IOfferDAO
     {
 
         private YoungpotentialsContext _db;
+        private ICompanyDAO _companyDAO;
 
-        public OfferDAO()
+        public OfferDAO(ICompanyDAO companyDAO)
         {
             _db = new YoungpotentialsContext();
+            _companyDAO = companyDAO;
         }
 
         public Offers CreateOffer(Offers offer)
@@ -82,10 +87,12 @@ namespace Youngpotentials.DAO
         public IEnumerable<Offers> GetOffersByStudiegebiedId(string id)
         {
             var studiegebiedOffer = _db.StudiegebiedOffer.Where(o => o.IdStudiegebied == id).Include(o => o.IdOfferNavigation).ToList();
+            
             List<Offers> offers = new List<Offers>();
             foreach (var offer in studiegebiedOffer)
             {
-                if (offer.IdOfferNavigation.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
+                var company = _companyDAO.GetCompanyById((int)offer.IdOfferNavigation.CompanyId);
+                if (company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
                 {
                     offers.Add(offer.IdOfferNavigation);
                 }
@@ -98,20 +105,23 @@ namespace Youngpotentials.DAO
             List<Offers> offers = new List<Offers>();
             foreach (var offer in opleidingOffer)
             {
-                if (offer.IdOfferNavigation.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
+                var company = _companyDAO.GetCompanyById((int)offer.IdOfferNavigation.CompanyId);
+                if (company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
                 {
                     offers.Add(offer.IdOfferNavigation);
                 }
             }
             return offers;
         }
+
         public IEnumerable<Offers> GetOffersByAfstudeerrichtingId(string id)
         {
             var afstudeerrichtingOffer = _db.AfstudeerrichtingOffer.Where(o => o.IdAfstudeerrichting == id).Include(o => o.IdOfferNavigation).ToList();
             List<Offers> offers = new List<Offers>();
             foreach (var offer in afstudeerrichtingOffer)
             {
-                if (offer.IdOfferNavigation.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
+                var company = _companyDAO.GetCompanyById((int)offer.IdOfferNavigation.CompanyId);
+                if (company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
                 {
                     offers.Add(offer.IdOfferNavigation);
                 }
@@ -124,7 +134,8 @@ namespace Youngpotentials.DAO
             List<Offers> offers = new List<Offers>();
             foreach (var offer in keuzeOffer)
             {
-                if (offer.IdOfferNavigation.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
+                var company = _companyDAO.GetCompanyById((int)offer.IdOfferNavigation.CompanyId);
+                if (company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
                 {
                     offers.Add(offer.IdOfferNavigation);
                 }
@@ -166,9 +177,23 @@ namespace Youngpotentials.DAO
             _db.SaveChanges();
         }
 
-        public IEnumerable<Type> GetAllTypes()
+        public IEnumerable<TypeResponse> GetAllTypes()
         {
-            return _db.Type.ToList();
+            //return _db.Type.Select( t=> t).ToList();
+            //return from t in _db.Type select t;
+            //return _db.Type.ToList();
+            var test = _db.Type.Select(p => new TypeResponse { Id = p.Id, Name = p.Name }).ToList();
+            return test;
+        }
+
+        public IEnumerable<StudiegebiedOffer> GetStudiegebiedOffersFromOfferId(int id)
+        {
+            return _db.StudiegebiedOffer.Where(s => s.IdOffer == id).ToList();
+        }
+
+        public IEnumerable<OpleidingOffer> GetOpleidingOffersFromOfferId(int id)
+        {
+            return _db.OpleidingOffer.Where(o => o.IdOffer == id).ToList();
         }
     }
 }
