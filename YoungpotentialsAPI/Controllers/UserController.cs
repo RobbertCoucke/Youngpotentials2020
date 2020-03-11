@@ -123,7 +123,7 @@ namespace YoungpotentialsAPI.Controllers
                     
                 }),
                 Issuer = user.Id.ToString(),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
 
             };
@@ -146,13 +146,13 @@ namespace YoungpotentialsAPI.Controllers
 
         }
 
-        [HttpPost("password/reset")]
-        [Authorize]
+        [HttpPut("password/reset")]
+        [AllowAnonymous]
         public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
         {
             IEnumerable<string> headerValues = Request.Headers["Authorization"];
-            var isuue = headerValues.FirstOrDefault().Substring(7);
-            var userId = ReadToken(isuue);
+            var accessToken = headerValues.FirstOrDefault().Substring(7);
+            var userId = ReadToken(accessToken);
             if(userId != null)
             {
                 var user = _userService.GetById(Convert.ToInt32(userId));
@@ -170,20 +170,36 @@ namespace YoungpotentialsAPI.Controllers
             return Ok();
         }
 
-        public string ReadToken(string token)
+        public string ReadToken(string accessToken)
         {
             var id = "";
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var validationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = false,
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+            };
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var securityToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-                id = securityToken.Issuer;
-            }
-            catch(Exception e)
-            {
-                throw new Exception("Invalid gegevens");
+                SecurityToken validatedToken;
+                var principal = tokenHandler.ValidateToken(accessToken, validationParameters, out validatedToken);
+                var validJwt = validatedToken as JwtSecurityToken;
+                if (validJwt == null)
+                {
+                    throw new ArgumentException("Invalid JWT");
+                }
+                id = validJwt.Issuer;
             }
 
+            catch (Exception e)
+            {
+                throw new Exception("Invalid key");
+            }
+            
             return id;
         }
 
