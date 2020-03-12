@@ -68,10 +68,13 @@ namespace Youngpotentials.DAO
             return result;
         }
 
+
+        //gets all offers by companyId
         public IEnumerable<Offers> GetAllOffersByCompany(int id)
         {
             return _db.Offers.Where(o => o.CompanyId == id).ToList();
         }
+
 
         public Offers GetOfferById(int id)
         {
@@ -84,6 +87,7 @@ namespace Youngpotentials.DAO
             _db.SaveChanges();
         }
 
+        //gets all offers by studiegebiedId   (gets all offers with tag of studiegebied)
         public IEnumerable<Offers> GetOffersByStudiegebiedId(string id)
         {
             var studiegebiedOffer = _db.StudiegebiedOffer.Where(o => o.IdStudiegebied == id).Include(o => o.IdOfferNavigation).ToList();
@@ -99,6 +103,9 @@ namespace Youngpotentials.DAO
             }
             return offers;
         }
+
+
+        //gets all offers by opleidingId   (gets all offers with tag of opleiding)
         public IEnumerable<Offers> GetOffersByOpleidingId(string id)
         {
             var opleidingOffer = _db.OpleidingOffer.Where(o => o.IdOpleiding == id).Include(o => o.IdOfferNavigation).ToList();
@@ -114,6 +121,8 @@ namespace Youngpotentials.DAO
             return offers;
         }
 
+
+        //gets all offers by afstudeerrichtingId   (gets all offers with tag of afstudeerrichting)
         public IEnumerable<Offers> GetOffersByAfstudeerrichtingId(string id)
         {
             var afstudeerrichtingOffer = _db.AfstudeerrichtingOffer.Where(o => o.IdAfstudeerrichting == id).Include(o => o.IdOfferNavigation).ToList();
@@ -128,6 +137,9 @@ namespace Youngpotentials.DAO
             }
             return offers;
         }
+
+
+        //gets all offers by keuzeId   (gets all offers with tag of keuze)
         public IEnumerable<Offers> GetOffersByKeuzeId(string id)
         {
             var keuzeOffer = _db.KeuzeOffer.Where(o => o.IdKeuze == id).Include(o => o.IdOfferNavigation).ToList();
@@ -143,6 +155,7 @@ namespace Youngpotentials.DAO
             return offers;
         }
 
+        //gets all offers by type
         public IEnumerable<Offers> GetOffersByType(Type type)
         {
             return _db.Offers.Where(o => o.Type == type).ToList();
@@ -177,6 +190,8 @@ namespace Youngpotentials.DAO
             _db.SaveChanges();
         }
 
+
+        //returns all types
         public IEnumerable<TypeResponse> GetAllTypes()
         {
             //return _db.Type.Select( t=> t).ToList();
@@ -186,11 +201,13 @@ namespace Youngpotentials.DAO
             return test;
         }
 
+        //gets al StudiegebiedOffers from offerId
         public IEnumerable<StudiegebiedOffer> GetStudiegebiedOffersFromOfferId(int id)
         {
             return _db.StudiegebiedOffer.Where(s => s.IdOffer == id).ToList();
         }
 
+        //gets al opleidingsOffers from offerId
         public IEnumerable<OpleidingOffer> GetOpleidingOffersFromOfferId(int id)
         {
             return _db.OpleidingOffer.Where(o => o.IdOffer == id).ToList();

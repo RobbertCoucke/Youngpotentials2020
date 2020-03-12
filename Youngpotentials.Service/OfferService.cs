@@ -144,6 +144,8 @@ namespace Youngpotentials.Service
         {
             return _offerDAO.GetOfferById(id);
         }
+
+        //gets all offers from studiegebiedId/opleidingId/afstudeerrichtingId/keuzeId
         public IEnumerable<Offers> GetOffersByTagId(string id)
         {
             //Misschien substring van (0,1)
@@ -183,6 +185,8 @@ namespace Youngpotentials.Service
         {
             return _offerDAO.GetOffersByKeuzeId(id);
         }
+
+        //gets all offers with corresponding tags (studiegebied, opleiding, afstudeerrichting, keuze)
         public IEnumerable<Offers> GetOffersByTags(IList<Studiegebied> studiegebied)
         {
             HashSet<Offers> hashOffers = new HashSet<Offers>();
@@ -204,6 +208,7 @@ namespace Youngpotentials.Service
         }
 
 
+        //converts studiegebiedArray to idArray
         public IList<string> GetStudiegebiedToTags(IList<Studiegebied> studiegebied)
         {
             List<string> ids = new List<string>();
@@ -276,6 +281,8 @@ namespace Youngpotentials.Service
         //    return ids;
         //}
 
+
+            //gets all offers with corresponding type and tags
         public IEnumerable<Offers> GetOffersByTypesAndTags(IList<Type> types, IList<Studiegebied> ids)
         {
             try
@@ -300,6 +307,7 @@ namespace Youngpotentials.Service
             }
         }
 
+        //gets all offers with corresponding types
         public IEnumerable<Offers> GetOffersByTypes(IList<Type> types)
         {
             HashSet<Offers> hashOffers = new HashSet<Offers>();
@@ -320,6 +328,7 @@ namespace Youngpotentials.Service
             return _offerDAO.GetOffersByType(type);
         }
 
+        //couples studiegebied and opleidingtags to offer
         public void AddTagsToOffer(IList<Studiegebied> tags, int offerId)
         {
             foreach(var studiegebied in tags)
@@ -334,6 +343,7 @@ namespace Youngpotentials.Service
             }
         }
 
+        //decouples studiegebied and opleidingtags from offer
         public void removeTagsFromOffer(IList<Studiegebied> tags, int offerId)
         {
             foreach (var studiegebied in tags)
@@ -354,6 +364,8 @@ namespace Youngpotentials.Service
             return _offerDAO.GetAllTypes();
         }
 
+
+        //decouples all tags from offer
         public void DeleteAllStudieConnectionsFromOfferId(int id)
         {
             var studiegebieden = _offerDAO.GetStudiegebiedOffersFromOfferId(id);

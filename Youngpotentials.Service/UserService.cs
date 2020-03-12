@@ -34,15 +34,19 @@ namespace Youngpotentials.Service
             _companyDAO = companyDAO;
         }
 
+        //authenticates login
         public AspNetUsers Authenticate(string email, string password)
         {
+            //check input
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
 
+            //check if user exists
             var user = _userDAO.GetUserByEmail(email);
             if (user == null)
                 return null;
 
+            //verify password
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;
 
@@ -68,16 +72,19 @@ namespace Youngpotentials.Service
 
         public AspNetUsers Create(AspNetUsers user, string password)
         {
+            //check input
             if (string.IsNullOrWhiteSpace(password))
             {
                 throw new Exception("password is required");
             }
 
+            //check if email already exists
             if(_userDAO.GetUserByEmail(user.Email) != null)
             {
                 throw new Exception("email is already taken");
             }
 
+            //hash password
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
 

@@ -28,6 +28,8 @@ namespace Youngpotentials.DAO
             _db = new YoungpotentialsV1Context();
         }
 
+
+        //gets all verified companies
         public IEnumerable<Companies> GetAllVerified()
         {
             return _db.Companies.Where(c => c.Verified != false).Include(c => c.Offers).Include(c => c.User).Include(c => c.Sector).ToList();
@@ -52,16 +54,20 @@ namespace Youngpotentials.DAO
             return _db.Companies.Include(c => c.User).ToList();
         }
 
+        //gets all unverified companies
         public IEnumerable<Companies> GetAllUnverified()
         {
              return _db.Companies.Where(c => c.Verified == false).Include(c => c.Offers).Include(c => c.User).Include(c => c.Sector).ToList();
         }
 
+        //gets company by companyId (primary key)
         public Companies GetCompanyById(int id)
         {
             return _db.Companies.Where(c => c.Id == id).Include(c => c.User).Include(c => c.Sector).FirstOrDefault();
         }
 
+
+        //gets company by userId (foreign key)
         public Companies GetCompanyByUserId(int id)
         {
             return _db.Companies.Where(c => c.UserId == id).Include(c => c.User).Include(c => c.Sector).FirstOrDefault();
