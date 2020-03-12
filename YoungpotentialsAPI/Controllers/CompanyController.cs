@@ -35,11 +35,14 @@ namespace YoungpotentialsAPI.Controllers
             {
                 
                 var model = _mapper.Map<CompanyResponse>(company);
-                model.Address = company.User.Email;
+                model.Email = company.User.Email;
+                model.Address = company.User.Address;
+                model.Sector = company.Sector;
                 model.City = company.User.City;
                 model.Telephone = company.User.Telephone;
                 model.ZipCode = company.User.ZipCode;
                 model.IsStudent = false;
+                //fix circle issue
                 if(model.Sector != null)
                     model.Sector.Companies = null;
                 result.Add(model);
@@ -61,11 +64,14 @@ namespace YoungpotentialsAPI.Controllers
             {
 
                 var model = _mapper.Map<CompanyResponse>(company);
-                model.Address = company.User.Email;
+                model.Address = company.User.Address;
+                model.Email = company.User.Email;
+                model.Sector = company.Sector;
                 model.City = company.User.City;
                 model.Telephone = company.User.Telephone;
                 model.ZipCode = company.User.ZipCode;
                 model.IsStudent = false;
+                //fix circle issue
                 if (model.Sector != null)
                     model.Sector.Companies = null;
                 result.Add(model);

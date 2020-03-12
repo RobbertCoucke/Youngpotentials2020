@@ -18,6 +18,7 @@ namespace Youngpotentials.Service
         void Delete(int id);
         AspNetUsers GetUserByEmail(string email);
         AspNetUsers ResetPassword(AspNetUsers user, string password);
+        IEnumerable<AspNetUsers> GetAdmins();
     }
 
     public class UserService : IUserService
@@ -121,6 +122,7 @@ namespace Youngpotentials.Service
             _userDAO.UpdateUser(user);
         }
 
+
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
@@ -165,6 +167,11 @@ namespace Youngpotentials.Service
                 byte[] result = shaM.ComputeHash(data);
                 return Convert.ToBase64String(result);
             }
+        }
+
+        public IEnumerable<AspNetUsers> GetAdmins()
+        {
+            return _userDAO.GetAdmins();
         }
     }
 }

@@ -238,7 +238,7 @@ namespace Youngpotentials.Domain.Entities
 
                 entity.Property(e => e.CompanyName).IsRequired();
 
-                entity.Property(e => e.Description).IsRequired();
+                entity.Property(e => e.SectorId).HasColumnName("sectorId");
 
                 entity.Property(e => e.UserId).HasColumnName("userId");
 
@@ -247,7 +247,7 @@ namespace Youngpotentials.Domain.Entities
                 entity.HasOne(d => d.Sector)
                     .WithMany(p => p.Companies)
                     .HasForeignKey(d => d.SectorId)
-                    .HasConstraintName("FK_Companies_Sector");
+                    .HasConstraintName("FK_Companies_Sector1");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Companies)

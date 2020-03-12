@@ -17,6 +17,7 @@ namespace Youngpotentials.DAO
         IEnumerable<AspNetUsers> GetAllUsers();
         void DeleteUser(int id);
         AspNetUsers GetUserById(int id);
+        IEnumerable<AspNetUsers> GetAdmins();
        
     }
     public class UserDAO : IUserDAO
@@ -41,6 +42,11 @@ namespace Youngpotentials.DAO
             var record = _db.AspNetUsers.FirstOrDefault(x => x.Id == id);
             _db.AspNetUsers.Remove(record);
             _db.SaveChanges();
+        }
+
+        public IEnumerable<AspNetUsers> GetAdmins()
+        {
+            return _db.AspNetUsers.Where(u => u.Role.Name == "Admin").ToList();
         }
 
         public IEnumerable<AspNetUsers> GetAllUsers()
