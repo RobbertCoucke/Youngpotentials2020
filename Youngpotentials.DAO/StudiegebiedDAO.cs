@@ -17,11 +17,11 @@ namespace Youngpotentials.DAO
     }
     public class StudiegebiedDAO : IStudiegebiedDAO
     {
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
 
         public StudiegebiedDAO()
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
         }
 
         public Studiegebied CreateStudiegebied(Studiegebied studiegebied)

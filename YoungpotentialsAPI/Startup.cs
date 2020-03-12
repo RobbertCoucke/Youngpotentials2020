@@ -32,6 +32,8 @@ namespace YoungpotentialsAPI
 
         public IConfiguration Configuration { get; }
 
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -40,6 +42,7 @@ namespace YoungpotentialsAPI
 
             
             services.AddControllers();
+            services.AddMvcCore().AddApiExplorer();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -125,6 +128,12 @@ namespace YoungpotentialsAPI
             //Favorite
             services.AddSingleton<IFavoritesDAO, FavoritesDAO>();
             services.AddSingleton<IFavoritesService, FavoritesService>();
+
+            //Sector
+            services.AddSingleton<ISectorDAO, SectorDAO>();
+            services.AddSingleton<ISectorService, SectorService>();
+
+
             
 
           
@@ -138,9 +147,9 @@ namespace YoungpotentialsAPI
                 app.UseDeveloperExceptionPage();
             }
 
+            
 
-
-            app.UseHttpsRedirection();
+                    app.UseHttpsRedirection();
             app.UseRouting();
 
             app.UseAuthentication();

@@ -22,11 +22,11 @@ namespace Youngpotentials.DAO
     public class UserDAO : IUserDAO
     {
 
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
 
         public UserDAO()
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
         }
 
         public AspNetUsers CreateUser(AspNetUsers user)

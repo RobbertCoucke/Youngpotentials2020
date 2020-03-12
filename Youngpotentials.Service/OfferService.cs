@@ -282,7 +282,7 @@ namespace Youngpotentials.Service
             {
                 HashSet<Offers> hashOffers = new HashSet<Offers>();
                 hashOffers.UnionWith(GetOffersByTypes(types));
-                if (types.Count > 0)
+                if (types.Count > 0 && ids.Count > 0)
                 {
 
                     hashOffers.IntersectWith(GetOffersByTags(ids));

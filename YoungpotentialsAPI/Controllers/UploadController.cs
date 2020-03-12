@@ -51,6 +51,7 @@ namespace YoungpotentialsAPI.Controllers
                 var filename = Directory.GetFiles(fullPath).First().Split('\\').Last();
 
 
+
                 return Ok(new UploadResponse { path = filename });
             }
             catch(Exception e)

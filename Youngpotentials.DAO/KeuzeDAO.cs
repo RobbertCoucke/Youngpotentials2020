@@ -17,11 +17,11 @@ namespace Youngpotentials.DAO
     }
     public class KeuzeDAO : IKeuzeDAO
     {
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
 
         public KeuzeDAO()
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
         }
 
         public Keuze CreateKeuze(Keuze keuze)

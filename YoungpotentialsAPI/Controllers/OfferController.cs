@@ -9,6 +9,7 @@ using Youngpotentials.Service;
 using Youngpotentials.Domain.Models.Requests;
 using Youngpotentials.Domain.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
+using YoungpotentialsAPI.Helpers;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -84,7 +85,7 @@ namespace YoungpotentialsAPI.Controllers
                 var offer = _mapper.Map<Offers>(model);
                 var company = _companyService.GetCompanyById(model.CompanyId);
                
-                offer.Verified = company.Verified;
+                offer.Verified = (bool)company.Verified;
                 offer.CompanyName = company.CompanyName;
                 offer.Created = DateTime.Now;
                 //var types = _offerService.GetAllTypes();
@@ -164,5 +165,31 @@ namespace YoungpotentialsAPI.Controllers
             _offerService.DeleteOffer(id);
             return Ok();
         }
+
+        [HttpPost("apply")]
+        public async void Apply()
+        {
+            try
+            {
+                var files = Request.Form.Files;
+
+                var emailTo = Request.Form["emailTo"];
+                var emailFrom = Request.Form["emailFrom"];
+                var subject = Request.Form["subject"];
+                var message = Request.Form["message"];
+
+                //var href = $"<a href='http://localhost:4200/wachtwoord-reseten?email={user.Email}&token={tokenString}>";
+                //var message = "klik op deze link om een nieuw passwoord in te stellen: Click" + href;
+                var emailService = new EmailService();
+                await emailService.sendEmailWithAttachementAsync(emailTo, emailFrom, subject, message, files);
+
+                
+
+            }
+            catch(Exception e)
+            {
+                
+            }
+         }
     }
 }

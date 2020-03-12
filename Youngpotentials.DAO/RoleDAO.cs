@@ -16,11 +16,11 @@ namespace Youngpotentials.DAO
     }
     public class RoleDAO : IRoleDAO
     {
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
 
         public RoleDAO()
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
         }
 
         public IEnumerable<AspNetRoles> GetAllRoles()

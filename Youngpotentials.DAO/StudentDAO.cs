@@ -19,11 +19,11 @@ namespace Youngpotentials.DAO
 
     public class StudentDAO : IStudentDAO
     {
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
 
         public StudentDAO()
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
         }
 
         public Students CreateStudent(Students student)

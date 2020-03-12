@@ -109,6 +109,7 @@ namespace YoungpotentialsAPI.Controllers
         [HttpPost("password")]
         public async Task<IActionResult> PasswordResetAsync([FromBody] EmailRequest e)
         {
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             //var claims = new Claim(ClaimTypes.Role, "Admin");
@@ -121,7 +122,8 @@ namespace YoungpotentialsAPI.Controllers
                     //ipv "Admin" role ophalen van user
                     
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Issuer = user.Id.ToString(),
+                Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
 
             };
@@ -132,34 +134,78 @@ namespace YoungpotentialsAPI.Controllers
                 var href = $"<a href='http://localhost:4200/wachtwoord-reseten?email={user.Email}&token={tokenString}>";
                 var message = "klik op deze link om een nieuw passwoord in te stellen: Click" + href;
                 var emailService = new EmailService();
-                await emailService.sendEmailAsync("ibrahemhajkasem@gmail.com", "george.desmet1998@gmail.com", "reset password", message);
+                await emailService.sendEmailAsync(user.Email, "george.desmet1998@gmail.com", "reset password", message);
             }
             else
             {
                 return BadRequest("Incorrect Email");
             }
+
             //var result = _userService.ResetPassword(user, req.password);
-            return Ok(tokenString);
+            return Ok();
 
         }
 
+
+        [HttpPut("password/reset")]
         [AllowAnonymous]
-        [HttpPost("password/reset")]
         public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
         {
-            var user = _userService.GetUserByEmail(passwordResetRequest.email);
-            if(user != null & passwordResetRequest.token != null)
+            IEnumerable<string> headerValues = Request.Headers["Authorization"];
+            var accessToken = headerValues.FirstOrDefault();
+            var userId = ReadToken(accessToken);
+            if(userId != null)
             {
-                _userService.ResetPassword(user, passwordResetRequest.newPassword);
-                return Ok();
+                var user = _userService.GetById(Convert.ToInt32(userId));
+                if (user != null && user.Email == passwordResetRequest.email)
+                {
+                    _userService.ResetPassword(user, passwordResetRequest.newPassword);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest("Invalid gegevens");
+                }
             }
             else
             {
                 return BadRequest("Invalid gegevens");
             }
 
-            return Ok();
-  
+            
+        }
+
+        public string ReadToken(string accessToken)
+        {
+            var id = "";
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var validationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = false,
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+            };
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                SecurityToken validatedToken;
+                var principal = tokenHandler.ValidateToken(accessToken, validationParameters, out validatedToken);
+                var validJwt = validatedToken as JwtSecurityToken;
+                if (validJwt == null)
+                {
+                    throw new ArgumentException("Invalid JWT");
+                }
+                id = validJwt.Issuer;
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception("Invalid key");
+            }
+            
+            return id;
         }
 
         [AllowAnonymous]
@@ -171,9 +217,15 @@ namespace YoungpotentialsAPI.Controllers
             try {
 
                 if (model.IsStudent)
-                    user.RoleId = _roleService.GetRoleByName("User").Id;
+                {
+                    user.Role = _roleService.GetRoleByName("User");
+                    user.RoleId = user.Role.Id;
+                }
                 else
-                    user.RoleId = _roleService.GetRoleByName("Company").Id;
+                {
+                    user.Role = _roleService.GetRoleByName("Company");
+                    user.RoleId = user.Role.Id;
+                }
 
                 user = _userService.Create(user, model.Password);
 
@@ -190,6 +242,7 @@ namespace YoungpotentialsAPI.Controllers
                 {
                     var company = _mapper.Map<Companies>(model);
                     company.UserId = user.Id;
+                    company.Id = null;
                     _companyService.CreateCompany(company);
 
                     //TODO send mail to admin that new company has registered and has yet to be verified
@@ -226,7 +279,8 @@ namespace YoungpotentialsAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { message = e.Message });
+                //_userService.Delete(user.Id);
+                return BadRequest();
             }
         }
 

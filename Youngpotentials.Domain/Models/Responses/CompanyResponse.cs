@@ -13,6 +13,8 @@ namespace Youngpotentials.Domain.Models.Responses
         public string CompanyName { get; set; }
         public Boolean Verified { get; set; }
 
+        public Sector Sector { get; set; }
+
         //public IEnumerable<Offers> Offers { get; set; }
     }
 }

@@ -33,12 +33,12 @@ namespace Youngpotentials.DAO
     public class OfferDAO : IOfferDAO
     {
 
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
         private ICompanyDAO _companyDAO;
 
         public OfferDAO(ICompanyDAO companyDAO)
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
             _companyDAO = companyDAO;
         }
 
@@ -92,7 +92,7 @@ namespace Youngpotentials.DAO
             foreach (var offer in studiegebiedOffer)
             {
                 var company = _companyDAO.GetCompanyById((int)offer.IdOfferNavigation.CompanyId);
-                if (company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
+                if ((bool) company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
                 {
                     offers.Add(offer.IdOfferNavigation);
                 }
@@ -106,7 +106,7 @@ namespace Youngpotentials.DAO
             foreach (var offer in opleidingOffer)
             {
                 var company = _companyDAO.GetCompanyById((int)offer.IdOfferNavigation.CompanyId);
-                if (company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
+                if ((bool)company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
                 {
                     offers.Add(offer.IdOfferNavigation);
                 }
@@ -121,7 +121,7 @@ namespace Youngpotentials.DAO
             foreach (var offer in afstudeerrichtingOffer)
             {
                 var company = _companyDAO.GetCompanyById((int)offer.IdOfferNavigation.CompanyId);
-                if (company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
+                if ((bool)company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
                 {
                     offers.Add(offer.IdOfferNavigation);
                 }
@@ -135,7 +135,7 @@ namespace Youngpotentials.DAO
             foreach (var offer in keuzeOffer)
             {
                 var company = _companyDAO.GetCompanyById((int)offer.IdOfferNavigation.CompanyId);
-                if (company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
+                if ((bool)company.Verified && offer.IdOfferNavigation.ExpirationDate > DateTime.Now)
                 {
                     offers.Add(offer.IdOfferNavigation);
                 }

@@ -25,11 +25,10 @@ namespace YoungpotentialsAPI.Controllers
             _offerService = offerService;
         }
 
-        [HttpGet("companies")]
+        [HttpGet("unverified")]
         public IActionResult GetAllUnverifiedCompanies()
         {
 
-            //getAllunverified is commented in DAO
             var companies = _companyService.GetAllUnverified();
             var result = new List<CompanyResponse>();
             foreach(var company in companies)
@@ -41,6 +40,8 @@ namespace YoungpotentialsAPI.Controllers
                 model.Telephone = company.User.Telephone;
                 model.ZipCode = company.User.ZipCode;
                 model.IsStudent = false;
+                if(model.Sector != null)
+                    model.Sector.Companies = null;
                 result.Add(model);
             }
 
@@ -48,6 +49,34 @@ namespace YoungpotentialsAPI.Controllers
 
             
         }
+
+        [HttpGet("verified")]
+        public IActionResult GetAllVerifiedCompanies()
+        {
+
+         
+            var companies = _companyService.GetAllVerified();
+            var result = new List<CompanyResponse>();
+            foreach (var company in companies)
+            {
+
+                var model = _mapper.Map<CompanyResponse>(company);
+                model.Address = company.User.Email;
+                model.City = company.User.City;
+                model.Telephone = company.User.Telephone;
+                model.ZipCode = company.User.ZipCode;
+                model.IsStudent = false;
+                if (model.Sector != null)
+                    model.Sector.Companies = null;
+                result.Add(model);
+            }
+
+            return Ok(result);
+
+
+        }
+
+
 
         [HttpGet("verify/{companyId}")]
         public IActionResult VerifyCompany(int companyId)

@@ -17,11 +17,11 @@ namespace Youngpotentials.DAO
     public class FavoritesDAO : IFavoritesDAO
     {
 
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
 
         public FavoritesDAO()
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
         }
         public Favorites AddFavorite(int userId, int offerId)
         {

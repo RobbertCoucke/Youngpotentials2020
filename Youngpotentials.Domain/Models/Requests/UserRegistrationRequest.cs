@@ -28,6 +28,7 @@ namespace Youngpotentials.Domain.Models.Requests
         public string Description { get; set; }
         public string Url { get; set; }
         public string CompanyName { get; set; }
+        public int SectorId { get; set; }
 
         //STUDENT
 

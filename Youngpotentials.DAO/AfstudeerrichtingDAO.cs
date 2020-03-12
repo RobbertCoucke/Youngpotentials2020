@@ -18,11 +18,11 @@ namespace Youngpotentials.DAO
     }
     public class AfstudeerrichtingDAO : IAfstudeerrichtingDAO
     {
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
 
         public AfstudeerrichtingDAO()
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
         }
         public Afstudeerrichting CreateAfstudeerrichting(Afstudeerrichting afstudeerrichting)
         {
