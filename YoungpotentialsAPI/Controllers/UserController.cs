@@ -29,16 +29,20 @@ namespace YoungpotentialsAPI.Controllers
         private IUserService _userService;
         private IStudentService _studentService;
         private IRoleService _roleService;
+        private IUserRoleService _userRoleService;
         private ICompanyService _companyService;
         private readonly AppSettings _appSettings;
         private IMapper _mapper;
         private EmailService _mailService = new EmailService();
 
-        public UserController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IStudentService studentService, ICompanyService companyService, IRoleService roleService)
+        public UserController(IUserService userService, IMapper mapper,
+            IOptions<AppSettings> appSettings, IStudentService studentService,
+            ICompanyService companyService, IRoleService roleService, IUserRoleService userRoleService)
         {
             _userService = userService;
             _companyService = companyService;
             _studentService = studentService;
+            _userRoleService = userRoleService;
             _appSettings = appSettings.Value;
             _mapper = mapper;
             _roleService = roleService;
@@ -151,7 +155,7 @@ namespace YoungpotentialsAPI.Controllers
         public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
         {
             IEnumerable<string> headerValues = Request.Headers["Authorization"];
-            var accessToken = headerValues.FirstOrDefault().Substring(7);
+            var accessToken = headerValues.FirstOrDefault();
             var userId = ReadToken(accessToken);
             if(userId != null)
             {
@@ -197,7 +201,7 @@ namespace YoungpotentialsAPI.Controllers
 
             catch (Exception e)
             {
-                throw new Exception("Invalid key");
+                   throw new Exception("Invalid key");
             }
             
             return id;
@@ -212,11 +216,16 @@ namespace YoungpotentialsAPI.Controllers
             try {
 
                 if (model.IsStudent)
+                {
                     user.RoleId = _roleService.GetRoleByName("User").Id;
+                }
                 else
+                {
                     user.RoleId = _roleService.GetRoleByName("Company").Id;
+                }
 
                 user = _userService.Create(user, model.Password);
+                
 
 
 
@@ -269,7 +278,7 @@ namespace YoungpotentialsAPI.Controllers
             {
                 return BadRequest(new { message = e.Message });
             }
-        }
+         }
 
         [Authorize(Roles = "Admin")]
         [HttpGet("getAll")]

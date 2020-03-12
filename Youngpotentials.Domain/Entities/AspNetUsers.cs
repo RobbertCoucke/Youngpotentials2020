@@ -31,7 +31,7 @@ namespace Youngpotentials.Domain.Entities
         public string City { get; set; }
         public string Address { get; set; }
         public byte[] PasswordSalt { get; set; }
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         public string Email2 { get; set; }
         public string Code { get; set; }
 
