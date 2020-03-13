@@ -138,17 +138,18 @@ namespace YoungpotentialsAPI.Controllers
                 var href = $"<a href='http://localhost:4200/wachtwoord-reseten?email={user.Email}&token={tokenString}>";
                 var message = "klik op deze link om een nieuw passwoord in te stellen: Click" + href;
                 var emailService = new EmailService();
-                await emailService.sendEmailAsync("ibrahemhajkasem@gmail.com", "george.desmet1998@gmail.com", "reset password", message);
+                await emailService.sendEmailAsync(user.Email, "george.desmet1998@gmail.com", "reset password", message);
             }
             else
             {
-                return BadRequest("Incorrect email");
+                return BadRequest("Incorrect Email");
             }
 
             //var result = _userService.ResetPassword(user, req.password);
-            return Ok(tokenString);
+            return Ok();
 
         }
+
 
         [HttpPut("password/reset")]
         [AllowAnonymous]
@@ -170,8 +171,12 @@ namespace YoungpotentialsAPI.Controllers
                     return BadRequest("Invalid gegevens");
                 }
             }
+            else
+            {
+                return BadRequest("Invalid gegevens");
+            }
 
-            return Ok();
+            
         }
 
         public string ReadToken(string accessToken)
@@ -216,13 +221,9 @@ namespace YoungpotentialsAPI.Controllers
             try {
 
                 if (model.IsStudent)
-                {
                     user.RoleId = _roleService.GetRoleByName("User").Id;
-                }
                 else
-                {
                     user.RoleId = _roleService.GetRoleByName("Company").Id;
-                }
 
                 user = _userService.Create(user, model.Password);
                 
@@ -240,6 +241,7 @@ namespace YoungpotentialsAPI.Controllers
                 {
                     var company = _mapper.Map<Companies>(model);
                     company.UserId = user.Id;
+                    company.Id = null;
                     _companyService.CreateCompany(company);
 
                     //TODO send mail to admin that new company has registered and has yet to be verified
@@ -276,7 +278,8 @@ namespace YoungpotentialsAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { message = e.Message });
+                //_userService.Delete(user.Id);
+                return BadRequest();
             }
          }
 

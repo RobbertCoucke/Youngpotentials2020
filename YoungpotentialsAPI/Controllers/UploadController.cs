@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Youngpotentials.Domain.Models.Responses;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -27,26 +28,36 @@ namespace YoungpotentialsAPI.Controllers
         [HttpGet("file/{isUser}/{id}")]
         public IActionResult GetFile(bool isUser, int id)
         {
-            var folderPath = System.IO.Path.Combine("Resources", (isUser ? "users" : "offers"));
-            var filePath = System.IO.Path.Combine(folderPath, id.ToString());
-            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
-            if (!System.IO.Directory.Exists(fullPath))
+
+            try
             {
-                return Ok(null);
+                var folderPath = System.IO.Path.Combine("Resources", (isUser ? "users" : "offers"));
+                var filePath = System.IO.Path.Combine(folderPath, id.ToString());
+                var fullPath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                if (!System.IO.Directory.Exists(fullPath))
+                {
+                    return Ok(null);
+                }
+
+                //var memory = new MemoryStream();
+                //using (var stream = new FileStream(fullPath, FileMode.Open))
+                //{
+                //    stream.CopyTo(memory);
+                //}
+                //memory.Position = 0;
+
+                var filename = Directory.GetFiles(fullPath).First().Split('\\').Last();
+
+
+
+                return Ok(new UploadResponse { path = filename });
             }
-
-            //var memory = new MemoryStream();
-            //using (var stream = new FileStream(fullPath, FileMode.Open))
-            //{
-            //    stream.CopyTo(memory);
-            //}
-            //memory.Position = 0;
-
-            var fullFilePath = System.IO.Path.Combine(fullPath,Directory.GetFiles(fullPath).First());
-
-
-            return Ok(fullFilePath);
+            catch(Exception e)
+            {
+                return BadRequest();
+            }
 
         }
 
@@ -81,8 +92,35 @@ namespace YoungpotentialsAPI.Controllers
             return file;
 
         }
- 
-	
+
+        [HttpDelete("delete/{isUser}/{id}")]
+        public IActionResult delete(bool isUser, int id)
+        {
+
+            var folderPath = System.IO.Path.Combine("Resources", (isUser ? "users" : "offers"));
+            var filePath = System.IO.Path.Combine(folderPath, id.ToString());
+            //var fileFullPath = Path.Combine(filePath, fileName);
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+
+
+            System.IO.DirectoryInfo di = new DirectoryInfo(fullPath);
+
+            foreach (FileInfo f in di.GetFiles())
+            {
+                f.Delete();
+            }
+            foreach (DirectoryInfo dir in di.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+
+            return Ok();
+
+        }
+
+
+
         [HttpPost, DisableRequestSizeLimit]
         public IActionResult Upload( )
         {
@@ -125,7 +163,7 @@ namespace YoungpotentialsAPI.Controllers
                         file.CopyTo(stream);
                     }
 
-                    return Ok(dbPath);
+                    return Ok();
                 }
                 else
                 {

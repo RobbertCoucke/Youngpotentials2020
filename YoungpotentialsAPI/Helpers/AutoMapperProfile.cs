@@ -30,6 +30,8 @@ namespace YoungpotentialsAPI.Helpers
             CreateMap<Students, StudentResponse>();
             CreateMap<Companies, CompanyResponse>();
             CreateMap<Youngpotentials.Domain.Entities.Type, TypeResponse>();
+            CreateMap<Sector, SectorResponse>();
+
 
             //Requests
             CreateMap<UserRegistrationRequest, AspNetUsers>();

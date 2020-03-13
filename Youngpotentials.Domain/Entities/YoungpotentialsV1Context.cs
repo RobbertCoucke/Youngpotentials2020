@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Youngpotentials.Domain.Entities
 {
-    public partial class YoungpotentialsContext : DbContext
+    public partial class YoungpotentialsV1Context : DbContext
     {
-        public YoungpotentialsContext()
+        public YoungpotentialsV1Context()
         {
         }
 
-        public YoungpotentialsContext(DbContextOptions<YoungpotentialsContext> options)
+        public YoungpotentialsV1Context(DbContextOptions<YoungpotentialsV1Context> options)
             : base(options)
         {
         }
@@ -32,6 +32,7 @@ namespace Youngpotentials.Domain.Entities
         public virtual DbSet<Offers> Offers { get; set; }
         public virtual DbSet<Opleiding> Opleiding { get; set; }
         public virtual DbSet<OpleidingOffer> OpleidingOffer { get; set; }
+        public virtual DbSet<Sector> Sector { get; set; }
         public virtual DbSet<Students> Students { get; set; }
         public virtual DbSet<Studiegebied> Studiegebied { get; set; }
         public virtual DbSet<StudiegebiedOffer> StudiegebiedOffer { get; set; }
@@ -42,7 +43,7 @@ namespace Youngpotentials.Domain.Entities
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=youngpotentials.database.windows.net;Database=YoungpotentialsV1;Trusted_Connection=False;Encrypt=True;;User ID=beheerder;Password=Vives2020*");
+                optionsBuilder.UseSqlServer("Server=youngpotentials.database.windows.net;Database=YoungpotentialsV1;Database=YoungpotentialsV1;Trusted_Connection=false;Encrypt=True;;User ID=beheerder;Password=Vives2020*");
             }
         }
 
@@ -223,6 +224,8 @@ namespace Youngpotentials.Domain.Entities
 
                 entity.Property(e => e.UserName).HasMaxLength(256);
 
+                entity.Property(e => e.ZipCode).HasMaxLength(50);
+
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetUsers)
                     .HasForeignKey(d => d.RoleId)
@@ -237,11 +240,14 @@ namespace Youngpotentials.Domain.Entities
 
                 entity.Property(e => e.Description).IsRequired();
 
-                entity.Property(e => e.Url).IsRequired();
-
                 entity.Property(e => e.UserId).HasColumnName("userId");
 
                 entity.Property(e => e.Verified).HasColumnName("verified");
+
+                entity.HasOne(d => d.Sector)
+                    .WithMany(p => p.Companies)
+                    .HasForeignKey(d => d.SectorId)
+                    .HasConstraintName("FK_Companies_Sector");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Companies)
@@ -357,7 +363,6 @@ namespace Youngpotentials.Domain.Entities
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.Offers)
                     .HasForeignKey(d => d.TypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Type_Offers");
             });
 
@@ -409,6 +414,14 @@ namespace Youngpotentials.Domain.Entities
                     .HasForeignKey(d => d.IdOpleiding)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Opleiding_Offer_Opleiding");
+            });
+
+            modelBuilder.Entity<Sector>(entity =>
+            {
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Students>(entity =>

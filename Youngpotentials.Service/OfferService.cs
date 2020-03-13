@@ -5,6 +5,7 @@ using System.Text;
 using Youngpotentials.DAO;
 using Youngpotentials.Domain.Entities;
 using Youngpotentials.Domain.Models.Requests;
+using Youngpotentials.Domain.Models.Responses;
 using Type = Youngpotentials.Domain.Entities.Type;
 
 namespace Youngpotentials.Service
@@ -23,7 +24,8 @@ namespace Youngpotentials.Service
         IEnumerable<Offers> GetOffersByTypes(IList<Type> types);
         IEnumerable<Offers> GetOffersByTypesAndTags(IList<Type> types, IList<Studiegebied> ids);
         IEnumerable<Offers> GetOffersByType(Type type);
-        IEnumerable<Type> GetAllTypes();
+        IEnumerable<TypeResponse> GetAllTypes();
+        void DeleteAllStudieConnectionsFromOfferId(int id);
         void AddTagsToOffer(IList<Studiegebied> tags, int offerId);
     }
     public class OfferService : IOfferService
@@ -276,19 +278,26 @@ namespace Youngpotentials.Service
 
         public IEnumerable<Offers> GetOffersByTypesAndTags(IList<Type> types, IList<Studiegebied> ids)
         {
-            HashSet<Offers> hashOffers = new HashSet<Offers>();
-            hashOffers.UnionWith(GetOffersByTypes(types));
-            if(types != null)
+            try
             {
+                HashSet<Offers> hashOffers = new HashSet<Offers>();
+                hashOffers.UnionWith(GetOffersByTypes(types));
+                if (types.Count > 0 && ids.Count > 0)
+                {
 
-                hashOffers.IntersectWith(GetOffersByTags(ids));
+                    hashOffers.IntersectWith(GetOffersByTags(ids));
+                }
+                else
+                {
+                    hashOffers.UnionWith(GetOffersByTags(ids));
+                }
+
+                return hashOffers;
             }
-            else
+            catch(Exception e)
             {
-                hashOffers.UnionWith(GetOffersByTags(ids));
+                return null;
             }
-
-            return hashOffers;
         }
 
         public IEnumerable<Offers> GetOffersByTypes(IList<Type> types)
@@ -340,9 +349,25 @@ namespace Youngpotentials.Service
             }
         }
 
-        public IEnumerable<Type> GetAllTypes()
+        public IEnumerable<TypeResponse> GetAllTypes()
         {
             return _offerDAO.GetAllTypes();
+        }
+
+        public void DeleteAllStudieConnectionsFromOfferId(int id)
+        {
+            var studiegebieden = _offerDAO.GetStudiegebiedOffersFromOfferId(id);
+            var opleidingen = _offerDAO.GetOpleidingOffersFromOfferId(id);
+
+            foreach(var s in studiegebieden)
+            {
+                _offerDAO.DeleteOfferStudiegebied(s);
+            }
+
+            foreach(var o in opleidingen)
+            {
+                _offerDAO.DeleteOfferOpleiding(o);
+            }
         }
     }
 }

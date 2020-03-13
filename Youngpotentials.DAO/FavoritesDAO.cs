@@ -12,15 +12,16 @@ namespace Youngpotentials.DAO
         IEnumerable<Favorites> GetAllFavoritesFromUserId(int id);
         Favorites AddFavorite(int userId, int offerId);
         void DeleteFavorite(int id);
+        IEnumerable<Favorites> GetAllFavoritesFromOfferId(int id);
     }
     public class FavoritesDAO : IFavoritesDAO
     {
 
-        private YoungpotentialsContext _db;
+        private YoungpotentialsV1Context _db;
 
         public FavoritesDAO()
         {
-            _db = new YoungpotentialsContext();
+            _db = new YoungpotentialsV1Context();
         }
         public Favorites AddFavorite(int userId, int offerId)
         {
@@ -40,6 +41,11 @@ namespace Youngpotentials.DAO
                 _db.Favorites.Remove(favorite);
             }
             _db.SaveChanges();
+        }
+
+        public IEnumerable<Favorites> GetAllFavoritesFromOfferId(int id)
+        {
+            return _db.Favorites.Where(f => f.OfferId == id).ToList();
         }
 
         public IEnumerable<Favorites> GetAllFavoritesFromUserId(int id)
