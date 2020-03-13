@@ -6,6 +6,7 @@ namespace Youngpotentials.Domain.Entities
 {
     public partial class YoungpotentialsV1Context : DbContext
     {
+        
         public YoungpotentialsV1Context()
         {
         }

@@ -35,9 +35,7 @@ namespace YoungpotentialsAPI.Controllers
         private IMapper _mapper;
         private EmailService _mailService = new EmailService();
 
-        public UserController(IUserService userService, IMapper mapper,
-            IOptions<AppSettings> appSettings, IStudentService studentService,
-            ICompanyService companyService, IRoleService roleService)
+        public UserController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, IStudentService studentService, ICompanyService companyService, IRoleService roleService)
         {
             _userService = userService;
             _companyService = companyService;
@@ -192,7 +190,7 @@ namespace YoungpotentialsAPI.Controllers
 
             catch (Exception e)
             {
-                   throw new Exception("Invalid key");
+                throw new Exception("Invalid key");
             }
             
             return id;
@@ -208,12 +206,17 @@ namespace YoungpotentialsAPI.Controllers
             try {
 
                 if (model.IsStudent)
-                    user.RoleId = _roleService.GetRoleByName("User").Id;
+                {
+                    user.Role = _roleService.GetRoleByName("User");
+                    user.RoleId = user.Role.Id;
+                }
                 else
-                    user.RoleId = _roleService.GetRoleByName("Company").Id;
+                {
+                    user.Role = _roleService.GetRoleByName("Company");
+                    user.RoleId = user.Role.Id;
+                }
 
                 user = _userService.Create(user, model.Password);
-                
 
 
 
@@ -279,7 +282,7 @@ namespace YoungpotentialsAPI.Controllers
                 //_userService.Delete(user.Id);
                 return BadRequest();
             }
-         }
+        }
 
         //get all users
         [Authorize(Roles = "Admin")]
