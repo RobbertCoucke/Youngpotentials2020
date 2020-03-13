@@ -29,7 +29,6 @@ namespace YoungpotentialsAPI.Controllers
         private IUserService _userService;
         private IStudentService _studentService;
         private IRoleService _roleService;
-        private IUserRoleService _userRoleService;
         private ICompanyService _companyService;
         private readonly AppSettings _appSettings;
         private IMapper _mapper;
@@ -37,12 +36,11 @@ namespace YoungpotentialsAPI.Controllers
 
         public UserController(IUserService userService, IMapper mapper,
             IOptions<AppSettings> appSettings, IStudentService studentService,
-            ICompanyService companyService, IRoleService roleService, IUserRoleService userRoleService)
+            ICompanyService companyService, IRoleService roleService)
         {
             _userService = userService;
             _companyService = companyService;
             _studentService = studentService;
-            _userRoleService = userRoleService;
             _appSettings = appSettings.Value;
             _mapper = mapper;
             _roleService = roleService;
