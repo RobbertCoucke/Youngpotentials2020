@@ -158,7 +158,7 @@ namespace Youngpotentials.DAO
         //gets all offers by type
         public IEnumerable<Offers> GetOffersByType(Type type)
         {
-            return _db.Offers.Where(o => o.Type == type).ToList();
+            return _db.Offers.Where(o => o.Type == type && (bool) o.Company.Verified && o.ExpirationDate > DateTime.Now).ToList();
         }
 
         public void CreateOfferStudiegebied(StudiegebiedOffer entity)
