@@ -48,7 +48,7 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         [HttpPost]
         public IActionResult AddFavorite([FromBody]FavoritesRequest model)
         {

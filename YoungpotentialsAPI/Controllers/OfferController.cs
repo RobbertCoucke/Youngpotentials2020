@@ -33,11 +33,8 @@ namespace YoungpotentialsAPI.Controllers
             _favoritesService = favoritesService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
+        //get all verified offers that didn't exceed their expiration date
         [HttpGet("getAll")]
         public IActionResult GetAllOffers()
         {
@@ -68,12 +65,6 @@ namespace YoungpotentialsAPI.Controllers
                 offer.OpleidingOffer = new List<OpleidingOffer>();
             }
             return Ok(offerResponses);
-        }
-
-        [HttpGet("create/test")]
-        public IActionResult TestCreate()
-        {
-            return Ok();
         }
 
 
@@ -166,6 +157,8 @@ namespace YoungpotentialsAPI.Controllers
             return Ok();
         }
 
+
+        //apply for an offer with cv & extra attachement
         [HttpPost("apply")]
         public async void Apply()
         {

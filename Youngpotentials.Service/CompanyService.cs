@@ -16,7 +16,6 @@ namespace Youngpotentials.Service
         void DeleteCompany(int id);
         IEnumerable<Companies> GetAllUnverified();
         IEnumerable<Companies> GetAllVerified();
-        void Verify(int id);
     }
     public class CompanyService : ICompanyService
     {
@@ -46,11 +45,13 @@ namespace Youngpotentials.Service
             return _companyDAO.GetAllCompanies();
         }
 
+        //gets all unverified companies
         public IEnumerable<Companies> GetAllUnverified()
         {
             return _companyDAO.GetAllUnverified();
         }
 
+        //gets al verified companies
         public IEnumerable<Companies> GetAllVerified()
         {
             return _companyDAO.GetAllVerified();
@@ -84,12 +85,5 @@ namespace Youngpotentials.Service
             }
         }
 
-        public void Verify(int id)
-        {
-
-            var company = GetCompanyById(id);
-            //company.Verified = true;
-            //TODO verify every single offer of that company
-        }
     }
 }

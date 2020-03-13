@@ -43,11 +43,15 @@ namespace Youngpotentials.DAO
             _db.SaveChanges();
         }
 
+
+        //gets all favorites from offerId
         public IEnumerable<Favorites> GetAllFavoritesFromOfferId(int id)
         {
             return _db.Favorites.Where(f => f.OfferId == id).ToList();
         }
 
+
+        //gets all favorites from userId
         public IEnumerable<Favorites> GetAllFavoritesFromUserId(int id)
         {
             return _db.Favorites.Where(f => f.StudentId == id).Include(f => f.Offer).ToList();

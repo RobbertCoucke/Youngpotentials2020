@@ -25,6 +25,7 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
+        //check if user/offer has a file attached and return the path of the file
         [HttpGet("file/{isUser}/{id}")]
         public IActionResult GetFile(bool isUser, int id)
         {
@@ -61,6 +62,7 @@ namespace YoungpotentialsAPI.Controllers
 
         }
 
+        //get the attached file of an user/offer
         [HttpGet("download/{isUser}/{id}")]
         public IActionResult Download(bool isUser, int id)
         {
@@ -93,6 +95,8 @@ namespace YoungpotentialsAPI.Controllers
 
         }
 
+        
+        //delete the attached file of an user/offer
         [HttpDelete("delete/{isUser}/{id}")]
         public IActionResult delete(bool isUser, int id)
         {
@@ -120,7 +124,7 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-
+        //attach a file to an user/offer
         [HttpPost, DisableRequestSizeLimit]
         public IActionResult Upload( )
         {

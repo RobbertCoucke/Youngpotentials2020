@@ -18,6 +18,7 @@ namespace Youngpotentials.Service
         void Delete(int id);
         AspNetUsers GetUserByEmail(string email);
         AspNetUsers ResetPassword(AspNetUsers user, string password);
+        IEnumerable<AspNetUsers> GetAdmins();
     }
 
     public class UserService : IUserService
@@ -34,15 +35,19 @@ namespace Youngpotentials.Service
             _companyDAO = companyDAO;
         }
 
+        //authenticates login
         public AspNetUsers Authenticate(string email, string password)
         {
+            //check input
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
 
+            //check if user exists
             var user = _userDAO.GetUserByEmail(email);
             if (user == null)
                 return null;
 
+            //verify password
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;
 
@@ -68,16 +73,19 @@ namespace Youngpotentials.Service
 
         public AspNetUsers Create(AspNetUsers user, string password)
         {
+            //check input
             if (string.IsNullOrWhiteSpace(password))
             {
                 throw new Exception("password is required");
             }
 
+            //check if email already exists
             if(_userDAO.GetUserByEmail(user.Email) != null)
             {
                 throw new Exception("email is already taken");
             }
 
+            //hash password
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
@@ -113,6 +121,7 @@ namespace Youngpotentials.Service
         {
             _userDAO.UpdateUser(user);
         }
+
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -158,6 +167,11 @@ namespace Youngpotentials.Service
                 byte[] result = shaM.ComputeHash(data);
                 return Convert.ToBase64String(result);
             }
+        }
+
+        public IEnumerable<AspNetUsers> GetAdmins()
+        {
+            return _userDAO.GetAdmins();
         }
     }
 }

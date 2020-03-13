@@ -17,6 +17,7 @@ using YoungpotentialsAPI.Helpers;
 using Youngpotentials.Domain.Entities;
 using Microsoft.AspNetCore.Cors;
 using YoungpotentialsAPI.Models.Requests;
+using Microsoft.AspNetCore.Http;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -48,6 +49,7 @@ namespace YoungpotentialsAPI.Controllers
 
 
 
+        //authenticate user and return token
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
@@ -88,25 +90,8 @@ namespace YoungpotentialsAPI.Controllers
 
         }
 
-        [Authorize(Roles = "User")]
-        [HttpGet("test")]
-        public JsonResult Test()
-        {
-            return Json("het werk woehoe!");
-        }
 
-
-        //[HttpGet("password/{email}")]
-        //public async void ResetEmail(string email)
-        //{
-        //    var user = _userService.GetUserByEmail(email);
-        //    if (user != null)
-        //    {
-        //        var body = "klik op deze link om een nieuw passwoord in te stellen: Click <a href=\"http://myAngularSite/passwordReset?code= " + user.Code + "\>here</a>";
-        //        await _mailService.sendEmailAsync(email, "testEmail", "password reset", body);
-
-        //    }
-        //}
+        //send email with link and token to reset password
         [AllowAnonymous]
         [HttpPost("password")]
         public async Task<IActionResult> PasswordResetAsync([FromBody] EmailRequest e)
@@ -149,6 +134,7 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
+        //reset password of user
         [HttpPut("password/reset")]
         [AllowAnonymous]
         public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
@@ -177,6 +163,8 @@ namespace YoungpotentialsAPI.Controllers
             
         }
 
+
+        //validate token
         public string ReadToken(string accessToken)
         {
             var id = "";
@@ -210,9 +198,10 @@ namespace YoungpotentialsAPI.Controllers
             return id;
         }
 
+        //register user or company
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody]UserRegistrationRequest model)
+        public async Task<IActionResult> Register([FromBody]UserRegistrationRequest model)
         {
             var user = _mapper.Map<AspNetUsers>(model);
 
@@ -243,6 +232,17 @@ namespace YoungpotentialsAPI.Controllers
                     _companyService.CreateCompany(company);
 
                     //TODO send mail to admin that new company has registered and has yet to be verified
+                    var body = "a new company has been registered on youngpotentials: " + company.CompanyName + ". You can verify this company when you login on the youngpotentials website.";
+                    var subject = "company added";
+                    var emailFrom = "robbert.coucke@student.vives.be";
+                    var admins = _userService.GetAdmins();
+                    foreach(var admin in admins)
+                    {
+                        var emailTo = admin.Email;
+                        //_mailService.sendEmailAsync(emailTo, emailFrom, subject, body);
+                         await _mailService.sendEmailWithAttachementAsync("robbert.coucke@hotmail.be", emailFrom, subject, body,new FormFileCollection());
+
+                    }
                 }
 
                 var role = user.Role.Name;
@@ -281,6 +281,7 @@ namespace YoungpotentialsAPI.Controllers
             }
          }
 
+        //get all users
         [Authorize(Roles = "Admin")]
         [HttpGet("getAll")]
         public IActionResult GetAll()
