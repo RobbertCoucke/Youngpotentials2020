@@ -10,6 +10,8 @@ using Youngpotentials.Domain.Models.Requests;
 using Youngpotentials.Domain.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using YoungpotentialsAPI.Helpers;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace YoungpotentialsAPI.Controllers
 {
@@ -164,17 +166,22 @@ namespace YoungpotentialsAPI.Controllers
         {
             try
             {
-                var files = Request.Form.Files;
+                var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
 
                 var emailTo = Request.Form["emailTo"];
                 var emailFrom = Request.Form["emailFrom"];
                 var subject = Request.Form["subject"];
                 var message = Request.Form["message"];
-
+                int? userId = null;
+                if (Request.Form["userId"] != "")
+                {
+                    userId = Int32.Parse( Request.Form["userId"]);
+                }
+                
                 //var href = $"<a href='http://localhost:4200/wachtwoord-reseten?email={user.Email}&token={tokenString}>";
                 //var message = "klik op deze link om een nieuw passwoord in te stellen: Click" + href;
                 var emailService = new EmailService();
-                await emailService.sendEmailWithAttachementAsync(emailTo, emailFrom, subject, message, files);
+                await emailService.sendEmailWithAttachementAsync(emailTo, emailFrom, subject, message, files, userId);
 
                 
 

@@ -18,11 +18,13 @@ namespace YoungpotentialsAPI.Controllers
         private ICompanyService _companyService;
         private IMapper _mapper;
         private IOfferService _offerService;
-        public CompanyController(ICompanyService companyService, IMapper mapper, IOfferService offerService)
+        private IFavoritesService _favoritesService;
+        public CompanyController(ICompanyService companyService, IMapper mapper, IOfferService offerService, IFavoritesService favoritesService)
         {
             _companyService = companyService;
             _mapper = mapper;
             _offerService = offerService;
+            _favoritesService = favoritesService;
         }
 
         [HttpGet("unverified")]
@@ -94,12 +96,20 @@ namespace YoungpotentialsAPI.Controllers
             return Ok();
         }
 
-        [HttpGet("unverify/{companyId}")]
-        public IActionResult UnVerifyCompany( int companyId)
+        [HttpDelete("delete/{companyId}")]
+        public IActionResult DeleteCompany( int companyId)
         {
-            var company = _companyService.GetCompanyById(companyId);
-            company.Verified = false;
-            _companyService.UpdateCompany(company);
+
+            var offers = _offerService.GetAllOffersByCompany(companyId);
+
+            foreach(var offer in offers)
+            {
+                 _favoritesService.DeleteAllFavoritesFromOfferId(offer.Id);
+                _offerService.DeleteAllStudieConnectionsFromOfferId(offer.Id);
+                _offerService.DeleteOffer(offer.Id);
+            }
+
+            _companyService.DeleteCompany(companyId);
             return Ok();
         }
 

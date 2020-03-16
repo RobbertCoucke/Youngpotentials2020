@@ -40,7 +40,7 @@ namespace YoungpotentialsAPI.Helpers
             }
         }
 
-        public async Task sendEmailWithAttachementAsync(string emailTo, string emailFrom, string subject, string message, IFormFileCollection files)
+        public async Task sendEmailWithAttachementAsync(string emailTo, string emailFrom, string subject, string message, IFormFileCollection files, int? userId = null)
         {
             var mail = new MailMessage();
 
@@ -60,6 +60,33 @@ namespace YoungpotentialsAPI.Helpers
                         Attachment att = new Attachment(new MemoryStream(fileBytes), file.FileName);
                         mail.Attachments.Add(att);
                     }
+                }
+            }
+
+            if(userId != null)
+            {
+                using(var ms = new MemoryStream())
+                {
+                    var folderPath = System.IO.Path.Combine("Resources", "users" );
+                    var filePath = System.IO.Path.Combine(folderPath, userId.ToString());
+                    //var fileFullPath = Path.Combine(filePath, fileName);
+                    var fullPath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                    var fileName = Directory.GetFiles(fullPath).First();
+
+                    var fullFilePath = System.IO.Path.Combine(fullPath, fileName);
+
+
+                    var memory = new MemoryStream();
+                    using (var stream = new FileStream(fullFilePath, FileMode.Open))
+                    {
+
+                        stream.CopyTo(memory);
+                        var fileBytes = memory.ToArray();
+                        Attachment att = new Attachment(new MemoryStream(fileBytes), fileName);
+                        mail.Attachments.Add(att);
+                    }
+                   
                 }
             }
             
