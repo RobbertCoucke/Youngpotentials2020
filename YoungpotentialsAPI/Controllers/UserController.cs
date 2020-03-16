@@ -245,7 +245,7 @@ namespace YoungpotentialsAPI.Controllers
                     }
                 }
 
-                var role = user.Role.Name;
+                var role = _roleService.GetRoleById(user.RoleId).Name;
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -268,7 +268,7 @@ namespace YoungpotentialsAPI.Controllers
                 {
                     Id = user.Id,
                     Email = user.Email,
-                    Role = user.Role.Name,
+                    Role = role,
                     Token = tokenString
                 });
 
