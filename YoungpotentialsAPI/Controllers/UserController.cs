@@ -271,7 +271,7 @@ namespace YoungpotentialsAPI.Controllers
                 {
                     Id = user.Id,
                     Email = user.Email,
-                    Role = user.Role.Name,
+                    Role = role,
                     Token = tokenString
                 });
 
