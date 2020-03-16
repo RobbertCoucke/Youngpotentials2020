@@ -16,7 +16,7 @@ namespace Youngpotentials.Domain.Entities
         public string Kleur { get; set; }
         public bool? IsGraduate { get; set; }
 
-        public virtual ICollection<Opleiding> Opleiding { get; set; }
-        public virtual ICollection<StudiegebiedOffer> StudiegebiedOffer { get; set; }
+        public ICollection<Opleiding> Opleiding { get; set; }
+        public ICollection<StudiegebiedOffer> StudiegebiedOffer { get; set; }
     }
 }

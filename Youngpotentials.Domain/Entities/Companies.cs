@@ -18,8 +18,8 @@ namespace Youngpotentials.Domain.Entities
         public bool? Verified { get; set; }
         public int? SectorId { get; set; }
 
-        public virtual Sector Sector { get; set; }
-        public virtual AspNetUsers User { get; set; }
-        public virtual ICollection<Offers> Offers { get; set; }
+        public Sector Sector { get; set; }
+        public AspNetUsers User { get; set; }
+        public ICollection<Offers> Offers { get; set; }
     }
 }

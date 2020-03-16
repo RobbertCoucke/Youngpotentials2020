@@ -248,7 +248,7 @@ namespace YoungpotentialsAPI.Controllers
                     }
                 }
 
-                var role = user.Role.Name;
+                var role = _roleService.GetRoleById(user.RoleId).Name;
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -280,7 +280,7 @@ namespace YoungpotentialsAPI.Controllers
             catch (Exception e)
             {
                 //_userService.Delete(user.Id);
-                return BadRequest();
+                return BadRequest(e.InnerException.Message);
             }
         }
 

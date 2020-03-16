@@ -17,6 +17,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Serialization;
 using Youngpotentials.DAO;
 using Youngpotentials.Service;
 using YoungpotentialsAPI.Helpers;
@@ -37,10 +38,10 @@ namespace YoungpotentialsAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            
 
-            
+
+
+
             services.AddControllers();
             services.AddMvcCore().AddApiExplorer();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -86,8 +87,9 @@ namespace YoungpotentialsAPI
             {
                 builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             }));
-            services.AddMvc();
 
+            services.AddMvc();
+            
 
             //User
             services.AddSingleton<IUserDAO, UserDAO>();
