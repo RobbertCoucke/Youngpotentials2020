@@ -10,6 +10,6 @@ namespace Youngpotentials.Domain.Entities
         public string ClaimType { get; set; }
         public string ClaimValue { get; set; }
 
-        public virtual AspNetRoles Role { get; set; }
+        public AspNetRoles Role { get; set; }
     }
 }
