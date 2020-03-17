@@ -13,6 +13,6 @@ namespace Youngpotentials.Domain.Entities
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<Companies> Companies { get; set; }
+        public virtual ICollection<Companies> Companies { get; set; }
     }
 }

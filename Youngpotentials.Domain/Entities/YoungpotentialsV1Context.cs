@@ -16,28 +16,28 @@ namespace Youngpotentials.Domain.Entities
         {
         }
 
-        public DbSet<Afstudeerrichting> Afstudeerrichting { get; set; }
-        public DbSet<AfstudeerrichtingOffer> AfstudeerrichtingOffer { get; set; }
-        public DbSet<Applications> Applications { get; set; }
-        public DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-        public DbSet<AspNetRoles> AspNetRoles { get; set; }
-        public DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
-        public DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
-        public DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
-        public DbSet<AspNetUsers> AspNetUsers { get; set; }
-        public DbSet<Companies> Companies { get; set; }
-        public DbSet<Favorites> Favorites { get; set; }
-        public DbSet<Keuze> Keuze { get; set; }
-        public DbSet<KeuzeOffer> KeuzeOffer { get; set; }
-        public DbSet<Offers> Offers { get; set; }
-        public DbSet<Opleiding> Opleiding { get; set; }
-        public DbSet<OpleidingOffer> OpleidingOffer { get; set; }
-        public DbSet<Sector> Sector { get; set; }
-        public DbSet<Students> Students { get; set; }
-        public DbSet<Studiegebied> Studiegebied { get; set; }
-        public DbSet<StudiegebiedOffer> StudiegebiedOffer { get; set; }
-        public DbSet<Type> Type { get; set; }
+        public virtual DbSet<Afstudeerrichting> Afstudeerrichting { get; set; }
+        public virtual DbSet<AfstudeerrichtingOffer> AfstudeerrichtingOffer { get; set; }
+        public virtual DbSet<Applications> Applications { get; set; }
+        public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
+        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
+        public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+        public virtual DbSet<Companies> Companies { get; set; }
+        public virtual DbSet<Favorites> Favorites { get; set; }
+        public virtual DbSet<Keuze> Keuze { get; set; }
+        public virtual DbSet<KeuzeOffer> KeuzeOffer { get; set; }
+        public virtual DbSet<Offers> Offers { get; set; }
+        public virtual DbSet<Opleiding> Opleiding { get; set; }
+        public virtual DbSet<OpleidingOffer> OpleidingOffer { get; set; }
+        public virtual DbSet<Sector> Sector { get; set; }
+        public virtual DbSet<Students> Students { get; set; }
+        public virtual DbSet<Studiegebied> Studiegebied { get; set; }
+        public virtual DbSet<StudiegebiedOffer> StudiegebiedOffer { get; set; }
+        public virtual DbSet<Type> Type { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

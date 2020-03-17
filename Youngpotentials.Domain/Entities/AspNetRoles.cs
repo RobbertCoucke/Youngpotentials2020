@@ -17,8 +17,8 @@ namespace Youngpotentials.Domain.Entities
         public string NormalizedName { get; set; }
         public string ConcurrencyStamp { get; set; }
 
-        public ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
-        public ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public ICollection<AspNetUsers> AspNetUsers { get; set; }
+        public virtual ICollection<AspNetRoleClaims> AspNetRoleClaims { get; set; }
+        public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
+        public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
     }
 }

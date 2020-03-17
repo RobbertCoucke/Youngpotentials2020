@@ -15,8 +15,8 @@ namespace Youngpotentials.Domain.Entities
         public string AfstudeerrichtingNaam { get; set; }
         public string OpleidingId { get; set; }
 
-        public Opleiding Opleiding { get; set; }
-        public ICollection<AfstudeerrichtingOffer> AfstudeerrichtingOffer { get; set; }
-        public ICollection<Keuze> Keuze { get; set; }
+        public virtual Opleiding Opleiding { get; set; }
+        public virtual ICollection<AfstudeerrichtingOffer> AfstudeerrichtingOffer { get; set; }
+        public virtual ICollection<Keuze> Keuze { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace Youngpotentials.Domain.Entities
         public int UserId { get; set; }
         public int RoleId { get; set; }
 
-        public AspNetRoles Role { get; set; }
+        public virtual AspNetRoles Role { get; set; }
     }
 }

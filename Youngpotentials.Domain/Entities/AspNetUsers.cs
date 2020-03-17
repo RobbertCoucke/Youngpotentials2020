@@ -35,8 +35,8 @@ namespace Youngpotentials.Domain.Entities
         public string Email2 { get; set; }
         public string Code { get; set; }
 
-        public AspNetRoles Role { get; set; }
-        public ICollection<Companies> Companies { get; set; }
-        public ICollection<Students> Students { get; set; }
+        public virtual AspNetRoles Role { get; set; }
+        public virtual ICollection<Companies> Companies { get; set; }
+        public virtual ICollection<Students> Students { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace Youngpotentials.Domain.Entities
         public int OfferId { get; set; }
         public int StudentId { get; set; }
 
-        public Offers Offer { get; set; }
-        public Students Student { get; set; }
+        public virtual Offers Offer { get; set; }
+        public virtual Students Student { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Youngpotentials.Domain.Entities
         public string IdStudiegebied { get; set; }
         public int IdOffer { get; set; }
 
-        public Offers IdOfferNavigation { get; set; }
-        public Studiegebied IdStudiegebiedNavigation { get; set; }
+        public virtual Offers IdOfferNavigation { get; set; }
+        public virtual Studiegebied IdStudiegebiedNavigation { get; set; }
     }
 }
