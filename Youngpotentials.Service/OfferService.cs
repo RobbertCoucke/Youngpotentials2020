@@ -215,25 +215,28 @@ namespace Youngpotentials.Service
             foreach (var s in studiegebied)
             {
 
+               if(s.Opleiding.Count == 0)
+                {
                     ids.Add(s.Id);
-
+                }
+                    
                     foreach (var o in s.Opleiding)
                     {
 
                             ids.Add(o.Id);
   
-                            foreach (var a in o.Afstudeerrichting)
-                            {
+                            //foreach (var a in o.Afstudeerrichting)
+                            //{
 
-                                    ids.Add(a.Id);
+                            //        ids.Add(a.Id);
                      
-                                    foreach (var k in a.Keuze)
-                                    {
-                                        ids.Add(k.Id);
-                                    }
+                            //        foreach (var k in a.Keuze)
+                            //        {
+                            //            ids.Add(k.Id);
+                            //        }
                                 
 
-                            }
+                            //}
                         
                     }
                 

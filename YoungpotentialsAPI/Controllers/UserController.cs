@@ -231,6 +231,7 @@ namespace YoungpotentialsAPI.Controllers
                 {
                     var company = _mapper.Map<Companies>(model);
                     company.UserId = user.Id;
+                    company.SectorId = model.SectorId;
                     company.Id = null;
                     _companyService.CreateCompany(company);
 
