@@ -23,12 +23,27 @@ namespace Youngpotentials.DAO
 
         public IEnumerable<Sector> GetAll()
         {
-            return _db.Sector.ToList();
+            try
+            {
+                return _db.Sector.ToList();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public Sector GetById(int id)
         {
-            return _db.Sector.Where(s => s.Id == id).FirstOrDefault();
+            try
+            {
+                return _db.Sector.Where(s => s.Id == id).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }
