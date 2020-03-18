@@ -128,7 +128,6 @@ namespace YoungpotentialsAPI.Controllers
         [HttpPost, DisableRequestSizeLimit]
         public IActionResult Upload( )
         {
-            //TODO make sure only one file can be uploaded per UserId/offerId
 
             try
             {

@@ -97,6 +97,7 @@ namespace YoungpotentialsAPI.Controllers
             }
         }
 
+
         [HttpPut("{id}")]
         public IActionResult UpdateOffer([FromBody]UpdateOfferRequest model, int id)
         {

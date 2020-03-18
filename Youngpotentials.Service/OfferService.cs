@@ -58,20 +58,22 @@ namespace Youngpotentials.Service
 
             //check if tags have to be added or removed
             var list = new List<Studiegebied>();
-            foreach(var studiegebiedOffer in oldOffer.StudiegebiedOffer)
+            foreach (var studiegebiedOffer in oldOffer.StudiegebiedOffer)
             {
                 list.Add(new Studiegebied { Id = studiegebiedOffer.IdStudiegebied });
             }
 
-            foreach(var opleidingOffer in oldOffer.OpleidingOffer)
+            foreach (var opleidingOffer in oldOffer.OpleidingOffer)
             {
                 var op = _opleidingDAO.GetById(opleidingOffer.IdOpleiding);
-                foreach(var s in list.Where(s => s.Id == op.IdStudiegebied))
+                foreach (var s in list.Where(s => s.Id == op.IdStudiegebied))
                 {
                     s.Opleiding.Add(op);
                 }
             }
 
+
+            //voegt toe of verwijdert tags volgens updatemodel
             var toAdd = offer.Tags.Except(list).ToList();
             var toDelete = list.Except(offer.Tags).ToList();
             if (toAdd.Count > 0)
@@ -114,7 +116,7 @@ namespace Youngpotentials.Service
 
             if (offer.TypeId != null)
             {
-                oldOffer.TypeId = (int) offer.TypeId;
+                oldOffer.TypeId = (int)offer.TypeId;
             }
 
             if (offer.ZipCode != null)
@@ -128,7 +130,7 @@ namespace Youngpotentials.Service
             }
 
 
-            
+
 
             _offerDAO.UpdateOffer(oldOffer);
         }
