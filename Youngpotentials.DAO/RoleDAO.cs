@@ -25,17 +25,39 @@ namespace Youngpotentials.DAO
 
         public IEnumerable<AspNetRoles> GetAllRoles()
         {
-            return _db.AspNetRoles.ToList();
+            try
+            {
+                return _db.AspNetRoles.ToList();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public AspNetRoles GetRoleById(int id)
         {
-            return _db.AspNetRoles.Where(r => r.Id == id).FirstOrDefault();
+            try
+            {
+                return _db.AspNetRoles.Where(r => r.Id == id).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            
         }
 
         public AspNetRoles GetRoleByName(string name)
         {
-            return _db.AspNetRoles.Where(r => r.Name == name).FirstOrDefault();
+            try
+            {
+                return _db.AspNetRoles.Where(r => r.Name == name).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

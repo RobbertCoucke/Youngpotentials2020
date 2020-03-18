@@ -28,39 +28,85 @@ namespace Youngpotentials.DAO
 
         public Students CreateStudent(Students student)
         {
-            _db.Entry(student).State = EntityState.Added;
-            _db.SaveChanges();
-            return student;
+            try
+            {
+               _db.Entry(student).State = EntityState.Added;
+                _db.SaveChanges();
+                return student;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+ 
         }
 
 
 
         public void DeleteStudent(int id)
         {
-            var student = _db.Students.FirstOrDefault(x => x.Id == id);
-            _db.Students.Remove(student);
-            _db.SaveChanges();
+            try
+            {
+                var student = _db.Students.FirstOrDefault(x => x.Id == id);
+                _db.Students.Remove(student);
+                _db.SaveChanges();
+            }catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public IEnumerable<Students> GetAllStudents()
         {
-            return _db.Students.Include(s => s.User).ToList();
+            try
+            {
+                return _db.Students.Include(s => s.User).ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public Students GetStudentById(int id)
         {
-            return _db.Students.Where(s => s.Id == id).Include(s => s.User).FirstOrDefault();
+            try
+            {
+                return _db.Students.Where(s => s.Id == id).Include(s => s.User).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public Students GetStudentByUserId(int id)
         {
-            return _db.Students.Where(s => s.UserId == id).Include(s => s.User).FirstOrDefault();
+            try
+            {
+                return _db.Students.Where(s => s.UserId == id).Include(s => s.User).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public void UpdateStudent(Students student)
         {
-            _db.Entry(student).State = EntityState.Modified;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(student).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }
