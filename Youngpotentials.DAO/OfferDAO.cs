@@ -46,6 +46,7 @@ namespace Youngpotentials.DAO
         {
             _db.Entry(offer).State = Microsoft.EntityFrameworkCore.EntityState.Added;
             _db.SaveChanges();
+            _db.DetachAllEntities();
             return offer;
         }
 

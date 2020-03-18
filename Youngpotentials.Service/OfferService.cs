@@ -74,15 +74,15 @@ namespace Youngpotentials.Service
 
             var toAdd = offer.Tags.Except(list).ToList();
             var toDelete = list.Except(offer.Tags).ToList();
-            if(toAdd.Count > 0)
+            if (toAdd.Count > 0)
             {
                 AddTagsToOffer(toAdd, id);
             }
-            if(toDelete.Count > 0)
+            else
             {
                 removeTagsFromOffer(toDelete, id);
             }
-            
+
 
 
             /*Checkt indien de nieuwe vacature informatie leeg is, 

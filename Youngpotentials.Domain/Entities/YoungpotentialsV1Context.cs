@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -46,6 +47,18 @@ namespace Youngpotentials.Domain.Entities
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=youngpotentials.database.windows.net;Database=YoungpotentialsV1;Database=YoungpotentialsV1;Trusted_Connection=false;Encrypt=True;;User ID=beheerder;Password=Vives2020*");
             }
+        }
+
+        public void DetachAllEntities()
+        {
+            var changedEntriesCopy = this.ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added ||
+                            e.State == EntityState.Modified ||
+                            e.State == EntityState.Deleted)
+                .ToList();
+
+            foreach (var entry in changedEntriesCopy)
+                entry.State = EntityState.Detached;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
