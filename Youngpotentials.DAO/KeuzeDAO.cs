@@ -26,40 +26,88 @@ namespace Youngpotentials.DAO
 
         public Keuze CreateKeuze(Keuze keuze)
         {
-            _db.Entry(keuze).State = EntityState.Added;
-            _db.SaveChanges();
-            return keuze;
+            try
+            {
+                _db.Entry(keuze).State = EntityState.Added;
+                _db.SaveChanges();
+                return keuze;
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public void DeleteById(string id)
         {
-            var keuze = _db.Keuze.FirstOrDefault(k => k.Id == id);
-            _db.Keuze.Remove(keuze);
-            _db.SaveChanges();
+            try
+            {
+                var keuze = _db.Keuze.FirstOrDefault(k => k.Id == id);
+                _db.Keuze.Remove(keuze);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public IEnumerable<Keuze> GetAll()
         {
-            return _db.Keuze.Include(a => a.Afstudeerrichting)
-                            .Include(k => k.KeuzeOffer).ToList();
+            try
+            {
+                return _db.Keuze.Include(a => a.Afstudeerrichting)
+                                .Include(k => k.KeuzeOffer).ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public IEnumerable<Keuze> GetAllByAfstudeerrichting(string id)
         {
-            return _db.Keuze.Where(k => k.AfstudeerrichtingId == id).Include(a => a.Afstudeerrichting)
-                .Include(k => k.KeuzeOffer).ToList();
+            try
+            {
+                return _db.Keuze.Where(k => k.AfstudeerrichtingId == id).Include(a => a.Afstudeerrichting)
+                    .Include(k => k.KeuzeOffer).ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public Keuze GetById(string id)
         {
-            return _db.Keuze.Where(k => k.Id == id).Include(a => a.Afstudeerrichting)
-                            .Include(k => k.KeuzeOffer).FirstOrDefault();
+            try
+            {
+                return _db.Keuze.Where(k => k.Id == id).Include(a => a.Afstudeerrichting)
+                                .Include(k => k.KeuzeOffer).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public void Update(Keuze keuze)
         {
-            _db.Entry(keuze).State = EntityState.Modified;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(keuze).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
     }
 }

@@ -35,8 +35,10 @@ namespace YoungpotentialsAPI.Controllers
             _favoritesService = favoritesService;
         }
 
-
-        //get all verified offers that didn't exceed their expiration date
+        /// <summary>
+        /// Get all verified offers that didn't exceed their expiration date
+        /// </summary>
+        /// <returns>All offers</returns>
         [HttpGet("getAll")]
         public IActionResult GetAllOffers()
         {
@@ -53,6 +55,11 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(offers);
         }
 
+        /// <summary>
+        /// Get all verified offers of specific company that didn't exceed their expiration date
+        /// </summary>
+        /// <param name="id">CompanyId</param>
+        /// <returns></returns>
         [HttpGet("getAllCompany/{id}")]
         public IActionResult GetAllOffersByCompany(int id)
         {
@@ -69,7 +76,11 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(offerResponses);
         }
 
-
+        /// <summary>
+        /// Creates an offer
+        /// </summary>
+        /// <param name="model">The request with the information about the offer</param>
+        /// <returns>The offer that is created</returns>
         [HttpPost("create")]
         public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
         {
@@ -98,6 +109,12 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
+        /// <summary>
+        /// Updates an offer
+        /// </summary>
+        /// <param name="model">The info that got changed from the offer</param>
+        /// <param name="id">The offerId that needs to be updated</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public IActionResult UpdateOffer([FromBody]UpdateOfferRequest model, int id)
         {
@@ -105,17 +122,16 @@ namespace YoungpotentialsAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Get all types
+        /// </summary>
+        /// <returns>Alle types</returns>
         [HttpGet("types")]
         public IActionResult GetAllTypes()
         {
             try
             {
                 var types = _offerService.GetAllTypes();
-                //var result = new List<TypeResponse>();
-                //foreach (var type in types)
-                //{
-                //    result.Add(_mapper.Map<TypeResponse>(type));
-                //}
                 return Ok(types);
             }
             catch(Exception e)
@@ -123,7 +139,11 @@ namespace YoungpotentialsAPI.Controllers
                 return BadRequest();
             }
         }
-
+        /// <summary>
+        /// Get all offers with the corresponding type and/or tag
+        /// </summary>
+        /// <param name="model">A list with all types and tags that are selected</param>
+        /// <returns>All offers that has 1 or more corresponding types and tags</returns>
         [HttpPost("filter")]
         public IActionResult GetOffersByTypesAndTags([FromBody]GetOffersByTypesAndTagsRequest model)
         {
@@ -138,30 +158,39 @@ namespace YoungpotentialsAPI.Controllers
             return Ok(offersResponse);
         }
 
+        /// <summary>
+        /// Get an offer by id
+        /// </summary>
+        /// <param name="id">offerId</param>
+        /// <returns>An OfferResponse</returns>
         [HttpGet("{id}")]
-    public IActionResult GetOfferById(int id)
-    {
+        public IActionResult GetOfferById(int id)
+        {
             var offer = _offerService.GetOfferById(id);
             var offerResponse = _mapper.Map<OfferResponse>(offer);
             return Ok(offerResponse);
-    }
+        }
 
+        /// <summary>
+        /// Delete an offer by id
+        /// </summary>
+        /// <param name="id">offerId</param>
+        /// <returns>An OK response</returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            //TODO first delete favorites and connections with studiegebied
-            // _favoritesService.DeleteAllFromOfferId(id);
-            // _offerService.DeleteAllStudieConnectionsFromOfferId(id);
-
+            /// Delete all the reference before deleting an Offer
             _favoritesService.DeleteAllFavoritesFromOfferId(id);
-
             _offerService.DeleteAllStudieConnectionsFromOfferId(id);
+            
+            /// Delete the offer
             _offerService.DeleteOffer(id);
             return Ok();
         }
 
-
-        //apply for an offer with cv & extra attachement
+        /// <summary>
+        /// apply for an offer with cv & extra attachement
+        /// </summary>
         [HttpPost("apply")]
         public async void Apply()
         {
@@ -179,13 +208,8 @@ namespace YoungpotentialsAPI.Controllers
                     userId = Int32.Parse( Request.Form["userId"]);
                 }
                 
-                //var href = $"<a href='http://localhost:4200/wachtwoord-reseten?email={user.Email}&token={tokenString}>";
-                //var message = "klik op deze link om een nieuw passwoord in te stellen: Click" + href;
                 var emailService = new EmailService();
                 await emailService.sendEmailWithAttachementAsync(emailTo, emailFrom, subject, message, files, userId);
-
-                
-
             }
             catch(Exception e)
             {
