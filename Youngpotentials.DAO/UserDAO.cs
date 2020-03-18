@@ -35,13 +35,14 @@ namespace Youngpotentials.DAO
             try
             {
                 _db.Entry(user).State = EntityState.Added;
-                _db.SaveChanges();
+                _db.SaveChanges(); 
+                return user;
             }
             catch(Exception e)
             {
                 throw new Exception(e.Message);
             }
-            return user;
+
         }
 
         public void DeleteUser(int id)

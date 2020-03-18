@@ -26,34 +26,72 @@ namespace Youngpotentials.DAO
 
         public Studiegebied CreateStudiegebied(Studiegebied studiegebied)
         {
-            _db.Entry(studiegebied).State = EntityState.Added;
-            _db.SaveChanges();
-            return studiegebied;
+            try
+            {
+                _db.Entry(studiegebied).State = EntityState.Added;
+                _db.SaveChanges();
+                return studiegebied;
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public void DeleteStudieGebied(string id)
         {
-            var studiegebied = _db.Studiegebied.FirstOrDefault(s => s.Id == id);
-            _db.Studiegebied.Remove(studiegebied);
-            _db.SaveChanges();
+            try
+            {
+                var studiegebied = _db.Studiegebied.FirstOrDefault(s => s.Id == id);
+                _db.Studiegebied.Remove(studiegebied);
+                _db.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public IEnumerable<Studiegebied> GetAll()
         {
-            return _db.Studiegebied.Include(o => o.Opleiding).ToList();
+            try
+            {
+                return _db.Studiegebied.Include(o => o.Opleiding).ToList();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public Studiegebied GetById(string id)
         {
-            return _db.Studiegebied.Where(s => s.Id == id)
-                                   .Include(o => o.Opleiding)
-                                   .Include(f => f.StudiegebiedOffer).FirstOrDefault();
+            try
+            {
+                return _db.Studiegebied.Where(s => s.Id == id)
+                                       .Include(o => o.Opleiding)
+                                       .Include(f => f.StudiegebiedOffer).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public void UpdateStudegebied(Studiegebied studiegebied)
         {
-            _db.Entry(studiegebied).State = EntityState.Modified;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(studiegebied).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
     }
 }
