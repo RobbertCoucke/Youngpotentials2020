@@ -14,12 +14,18 @@ namespace YoungpotentialsAPI.Controllers
     public class ContactController : ControllerBase
     {
         
+
+        /// <summary>
+        /// sends a mail
+        /// </summary>
+        /// <param name="contact"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SendMailAsync([FromBody]  Contact contact)
         {
-
+            
             var emailService = new EmailService();
-            //TODO TO 
+            //TODO change emailAdress!
             await emailService.sendEmailAsync("ibrahemhajkasem@gmail.com", contact.Email, contact.Subject, contact.Message);
             return Ok();
         }

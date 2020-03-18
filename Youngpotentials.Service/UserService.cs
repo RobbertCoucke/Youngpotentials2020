@@ -35,7 +35,12 @@ namespace Youngpotentials.Service
             _companyDAO = companyDAO;
         }
 
-        //authenticates login
+        /// <summary>
+        /// authenticates login
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public AspNetUsers Authenticate(string email, string password)
         {
             //check input
@@ -123,6 +128,12 @@ namespace Youngpotentials.Service
         }
 
 
+        /// <summary>
+        /// hash a password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <param name="passwordSalt"></param>
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
@@ -135,6 +146,14 @@ namespace Youngpotentials.Service
             }
         }
 
+
+        /// <summary>
+        /// verify a password
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="storedHash"></param>
+        /// <param name="storedSalt"></param>
+        /// <returns></returns>
         private static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
         {
             if (password == null) throw new ArgumentNullException("password");

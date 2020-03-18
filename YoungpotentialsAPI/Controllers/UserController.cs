@@ -47,11 +47,16 @@ namespace YoungpotentialsAPI.Controllers
 
 
 
-        //authenticate user and return token
+        /// <summary>
+        /// authenticate user and return token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
+            //gets user
             var user = _userService.Authenticate(model.Email, model.Password);
 
             if (user == null)
@@ -61,6 +66,7 @@ namespace YoungpotentialsAPI.Controllers
 
             var role = user.Role.Name;
 
+            //create and write token with role claim
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var claims = new Claim(ClaimTypes.Role, "Admin");
@@ -89,22 +95,25 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-        //send email with link and token to reset password
+        /// <summary>
+        /// send email with link and token to reset password
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("password")]
         public async Task<IActionResult> PasswordResetAsync([FromBody] EmailRequest e)
         {
-            
+            //tokenhandler en key ophalen
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            //var claims = new Claim(ClaimTypes.Role, "Admin");
 
+            //user ophalen
             var user = _userService.GetUserByEmail(e.Email); 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new System.Security.Claims.ClaimsIdentity(new Claim[] {
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
-                    //ipv "Admin" role ophalen van user
                     
                 }),
                 Issuer = user.Id.ToString(),
@@ -119,6 +128,7 @@ namespace YoungpotentialsAPI.Controllers
                 var href = $"<a href='http://localhost:4200/wachtwoord-reseten?email={user.Email}&token={tokenString}>";
                 var message = "klik op deze link om een nieuw passwoord in te stellen: Click" + href;
                 var emailService = new EmailService();
+                //TODO change mail
                 await emailService.sendEmailAsync(user.Email, "george.desmet1998@gmail.com", "reset password", message);
             }
             else
@@ -132,7 +142,11 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-        //reset password of user
+        /// <summary>
+        /// reset password of user
+        /// </summary>
+        /// <param name="passwordResetRequest"></param>
+        /// <returns></returns>
         [HttpPut("password/reset")]
         [AllowAnonymous]
         public IActionResult ResetPassword([FromBody] PasswordResetRequest passwordResetRequest)
@@ -162,7 +176,11 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-        //validate token
+        /// <summary>
+        /// validate token
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <returns></returns>
         public string ReadToken(string accessToken)
         {
             var id = "";
@@ -196,7 +214,11 @@ namespace YoungpotentialsAPI.Controllers
             return id;
         }
 
-        //register user or company
+        /// <summary>
+        /// register user or company
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]UserRegistrationRequest model)
@@ -205,6 +227,7 @@ namespace YoungpotentialsAPI.Controllers
 
             try {
 
+                //create roles for student/company
                 if (model.IsStudent)
                 {
                     user.Role = _roleService.GetRoleByName("User");
@@ -219,7 +242,7 @@ namespace YoungpotentialsAPI.Controllers
                 user = _userService.Create(user, model.Password);
 
 
-
+                //create student/company, if its company send mail to admins that a company has been made
                 if (model.IsStudent)
                 {
                     var student = _mapper.Map<Students>(model);
@@ -235,7 +258,6 @@ namespace YoungpotentialsAPI.Controllers
                     company.Id = null;
                     _companyService.CreateCompany(company);
 
-                    //TODO send mail to admin that new company has registered and has yet to be verified
                     var body = "a new company has been registered on youngpotentials: " + company.CompanyName + ". You can verify this company when you login on the youngpotentials website.";
                     var subject = "company added";
                     var emailFrom = "robbert.coucke@student.vives.be";
@@ -243,7 +265,7 @@ namespace YoungpotentialsAPI.Controllers
                     foreach(var admin in admins)
                     {
                         var emailTo = admin.Email;
-                        //_mailService.sendEmailAsync(emailTo, emailFrom, subject, body);
+                        //TODO change mail
                          await _mailService.sendEmailWithAttachementAsync("robbert.coucke@hotmail.be", emailFrom, subject, body,new FormFileCollection());
 
                     }
@@ -285,7 +307,10 @@ namespace YoungpotentialsAPI.Controllers
             }
         }
 
-        //get all users
+        /// <summary>
+        /// get all users
+        /// </summary>
+        /// <returns></returns>
         [Authorize(Roles = "Admin")]
         [HttpGet("getAll")]
         public IActionResult GetAll()

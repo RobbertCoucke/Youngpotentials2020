@@ -23,6 +23,10 @@ namespace YoungpotentialsAPI.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// get all afstudeerrichtingen
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Index()
         {

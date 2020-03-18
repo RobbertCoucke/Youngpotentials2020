@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -13,6 +14,7 @@ using Youngpotentials.Domain.Models.Responses;
 
 namespace YoungpotentialsAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UploadController : Controller
@@ -25,7 +27,9 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-        //check if user/offer has a file attached and return the path of the file
+        /// <summary>
+        /// check if user/offer has a file attached and return the path of the file
+        /// </summary>
         [HttpGet("file/{isUser}/{id}")]
         public IActionResult GetFile(bool isUser, int id)
         {
@@ -42,13 +46,6 @@ namespace YoungpotentialsAPI.Controllers
                     return Ok(null);
                 }
 
-                //var memory = new MemoryStream();
-                //using (var stream = new FileStream(fullPath, FileMode.Open))
-                //{
-                //    stream.CopyTo(memory);
-                //}
-                //memory.Position = 0;
-
                 var filename = Directory.GetFiles(fullPath).First().Split('\\').Last();
 
 
@@ -62,7 +59,12 @@ namespace YoungpotentialsAPI.Controllers
 
         }
 
-        //get the attached file of an user/offer
+        /// <summary>
+        /// //get the attached file of an user/offer
+        /// </summary>
+        /// <param name="isUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("download/{isUser}/{id}")]
         public IActionResult Download(bool isUser, int id)
         {
@@ -95,8 +97,13 @@ namespace YoungpotentialsAPI.Controllers
 
         }
 
-        
-        //delete the attached file of an user/offer
+
+        /// <summary>
+        /// delete the attached file of an user/offer
+        /// </summary>
+        /// <param name="isUser"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("delete/{isUser}/{id}")]
         public IActionResult delete(bool isUser, int id)
         {
@@ -124,7 +131,10 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-        //attach a file to an user/offer
+        /// <summary>
+        /// attach a file to an user/offer
+        /// </summary>
+        /// <returns></returns>
         [HttpPost, DisableRequestSizeLimit]
         public IActionResult Upload( )
         {

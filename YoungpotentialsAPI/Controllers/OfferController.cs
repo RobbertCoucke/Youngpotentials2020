@@ -81,6 +81,8 @@ namespace YoungpotentialsAPI.Controllers
         /// </summary>
         /// <param name="model">The request with the information about the offer</param>
         /// <returns>The offer that is created</returns>
+        /// 
+        [Authorize(Roles = "Company")]
         [HttpPost("create")]
         public IActionResult CreateOffer([FromBody]CreateOfferRequest model)
         {
@@ -176,6 +178,7 @@ namespace YoungpotentialsAPI.Controllers
         /// </summary>
         /// <param name="id">offerId</param>
         /// <returns>An OK response</returns>
+        [Authorize(Roles = "Company")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -191,6 +194,7 @@ namespace YoungpotentialsAPI.Controllers
         /// <summary>
         /// apply for an offer with cv & extra attachement
         /// </summary>
+        [Authorize(Roles = "User")]
         [HttpPost("apply")]
         public async void Apply()
         {

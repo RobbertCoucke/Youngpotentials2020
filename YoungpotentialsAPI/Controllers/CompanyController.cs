@@ -27,6 +27,10 @@ namespace YoungpotentialsAPI.Controllers
             _favoritesService = favoritesService;
         }
 
+        /// <summary>
+        /// gets all companies who are unverified
+        /// </summary>
+        /// <returns>list of unverified companies</returns>
         [HttpGet("unverified")]
         public IActionResult GetAllUnverifiedCompanies()
         {
@@ -55,6 +59,10 @@ namespace YoungpotentialsAPI.Controllers
             
         }
 
+        /// <summary>
+        /// gets a list of all verified companies
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("verified")]
         public IActionResult GetAllVerifiedCompanies()
         {
@@ -85,7 +93,11 @@ namespace YoungpotentialsAPI.Controllers
         }
 
 
-
+        /// <summary>
+        /// verifies a company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
         [HttpGet("verify/{companyId}")]
         public IActionResult VerifyCompany(int companyId)
         {
@@ -96,6 +108,12 @@ namespace YoungpotentialsAPI.Controllers
             return Ok();
         }
 
+
+        /// <summary>
+        /// deletes a company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <returns></returns>
         [HttpDelete("delete/{companyId}")]
         public IActionResult DeleteCompany( int companyId)
         {

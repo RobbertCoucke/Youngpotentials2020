@@ -24,7 +24,10 @@ namespace YoungpotentialsAPI.Controllers
             _sectorService = sectorService;
         }
 
-
+        /// <summary>
+        /// gets all sectors
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAll()
         {
