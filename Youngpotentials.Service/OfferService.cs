@@ -41,9 +41,9 @@ namespace Youngpotentials.Service
             _studiegebiedDAO = studiegebiedDAO;
             _opleidingDAO = opleidingDAO;
         }
+
         public Offers CreateOffer(Offers offer)
         {
-            //TODO: Check als er sommige velden leeg zijn en dit dan overnemen van de company.
             return _offerDAO.CreateOffer(offer);
         }
 
@@ -53,10 +53,10 @@ namespace Youngpotentials.Service
         }
         public void UpdateOffer(UpdateOfferRequest offer, int id)
         {
-            //Haalt de huidige vacature info op uit de database
+            ///Retrieves the current offer info from the database
             var oldOffer = GetOfferById(id);
 
-            //check if tags have to be added or removed
+            ///check if tags have to be added or removed
             var list = new List<Studiegebied>();
             foreach(var studiegebiedOffer in oldOffer.StudiegebiedOffer)
             {
@@ -82,8 +82,6 @@ namespace Youngpotentials.Service
             {
                 removeTagsFromOffer(toDelete, id);
             }
-
-
 
             /*Checkt indien de nieuwe vacature informatie leeg is, 
              *indien leeg moet de huidige vacature info in de nieuwe geplaatst worden.*/
@@ -127,9 +125,6 @@ namespace Youngpotentials.Service
                 oldOffer.City = offer.City;
             }
 
-
-            
-
             _offerDAO.UpdateOffer(oldOffer);
         }
         public IEnumerable<Offers> GetAllOffers()
@@ -145,10 +140,14 @@ namespace Youngpotentials.Service
             return _offerDAO.GetOfferById(id);
         }
 
-        //gets all offers from studiegebiedId/opleidingId/afstudeerrichtingId/keuzeId
+        /// <summary>
+        /// Gets all the offers by 1 TagID (=studiegebiedId/opleidingId/afstudeerrichtingId/keuzeId)
+        /// afstudeerrichttingId and keuzeId are not used anymore
+        /// </summary>
+        /// <param name="id">a tagId</param>
+        /// <returns>Offers</returns>
         public IEnumerable<Offers> GetOffersByTagId(string id)
         {
-            //Misschien substring van (0,1)
             string substring = id.Substring(0,1);
             switch (substring)
             {
@@ -186,7 +185,12 @@ namespace Youngpotentials.Service
             return _offerDAO.GetOffersByKeuzeId(id);
         }
 
-        //gets all offers with corresponding tags (studiegebied, opleiding, afstudeerrichting, keuze)
+        /// <summary>
+        /// gets all offers with corresponding tags (studiegebied, opleiding, afstudeerrichting, keuze)
+        /// </summary>
+        /// <param name="studiegebied"></param>
+        /// <returns></returns>
+        //
         public IEnumerable<Offers> GetOffersByTags(IList<Studiegebied> studiegebied)
         {
             HashSet<Offers> hashOffers = new HashSet<Offers>();
@@ -197,18 +201,16 @@ namespace Youngpotentials.Service
                 {
                     var offers = GetOffersByTagId(id);
                     hashOffers.UnionWith(offers);
-                    //foreach (var offer in offers)
-                    //{
-                    //    hashOffers.Add(offer);
-                    //}
                 }
             }
-
             return hashOffers;         
         }
 
-
-        //converts studiegebiedArray to idArray
+        /// <summary>
+        /// Converts a list of studiegebieden to a list of strings
+        /// </summary>
+        /// <param name="studiegebied">A list with studiegebieden</param>
+        /// <returns>A list with the ids of studiegebieden</returns>
         public IList<string> GetStudiegebiedToTags(IList<Studiegebied> studiegebied)
         {
             List<string> ids = new List<string>();
@@ -224,77 +226,29 @@ namespace Youngpotentials.Service
                     {
 
                             ids.Add(o.Id);
-  
-                            //foreach (var a in o.Afstudeerrichting)
-                            //{
-
-                            //        ids.Add(a.Id);
-                     
-                            //        foreach (var k in a.Keuze)
-                            //        {
-                            //            ids.Add(k.Id);
-                            //        }
-                                
-
-                            //}
                         
                     }
                 
             }
             return ids;
         }
-        //public IList<string> GetStudiegebiedToTags(IList<Studiegebied> studiegebied)
-        //{
-        //    List<string> ids = new List<string>();
-        //    foreach (var s in studiegebied)
-        //    {
-        //        if (s.Opleiding.Count == 0)
-        //        {
-        //            ids.Add(s.Id);
-        //        }
-        //        else
-        //        {
-        //            foreach (var o in s.Opleiding)
-        //            {
-        //                if (o.Afstudeerrichting.Count == 0)
-        //                {
-        //                    ids.Add(o.Id);
-        //                }
-        //                else
-        //                {
-        //                    foreach (var a in o.Afstudeerrichting)
-        //                    {
-        //                        if (a.Keuze.Count == 0)
-        //                        {
-        //                            ids.Add(a.Id);
-        //                        }
-        //                        else
-        //                        {
-        //                            foreach (var k in a.Keuze)
-        //                            {
-        //                                ids.Add(k.Id);
-        //                            }
-        //                        }
 
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return ids;
-        //}
-
-
-            //gets all offers with corresponding type and tags
+        /// <summary>
+        /// Gets all offers with corresponding types and tags
+        /// </summary>
+        /// <param name="types">A list with types</param>
+        /// <param name="ids">A list with studiegebieden</param>
+        /// <returns>A hashset with offers</returns>
         public IEnumerable<Offers> GetOffersByTypesAndTags(IList<Type> types, IList<Studiegebied> ids)
         {
             try
             {
                 HashSet<Offers> hashOffers = new HashSet<Offers>();
                 hashOffers.UnionWith(GetOffersByTypes(types));
+
                 if (types.Count > 0 && ids.Count > 0)
                 {
-
+                    //Get only the offers that are present in both Lists
                     hashOffers.IntersectWith(GetOffersByTags(ids));
                 }
                 else
@@ -310,7 +264,11 @@ namespace Youngpotentials.Service
             }
         }
 
-        //gets all offers with corresponding types
+        /// <summary>
+        /// Gets all offers with corresponding types
+        /// </summary>
+        /// <param name="types">List of types</param>
+        /// <returns>Offers with the type equal to a type present in types</returns>
         public IEnumerable<Offers> GetOffersByTypes(IList<Type> types)
         {
             HashSet<Offers> hashOffers = new HashSet<Offers>();
@@ -325,13 +283,22 @@ namespace Youngpotentials.Service
             return hashOffers;
         }
 
+        /// <summary>
+        /// Gets all offers with corresponding type
+        /// </summary>
+        /// <param name="type">a Type</param>
+        /// <returns>Offers with the type equal to the param type</returns>
         public IEnumerable<Offers> GetOffersByType(Type type)
         {
 
             return _offerDAO.GetOffersByType(type);
         }
 
-        //couples studiegebied and opleidingtags to offer
+        /// <summary>
+        /// Couples studiegebied and opleidingtags to offer
+        /// </summary>
+        /// <param name="tags">tags that needs to be coupled</param>
+        /// <param name="offerId">offerId where tags should be coupled to</param>
         public void AddTagsToOffer(IList<Studiegebied> tags, int offerId)
         {
             foreach(var studiegebied in tags)
@@ -345,8 +312,11 @@ namespace Youngpotentials.Service
                 }
             }
         }
-
-        //decouples studiegebied and opleidingtags from offer
+        /// <summary>
+        /// Decouples studiegebied and opleidingtags from offer
+        /// </summary>
+        /// <param name="tags">tags that needs to be decoupled from offer</param>
+        /// <param name="offerId">offerId where tags should be decoupled</param>
         public void removeTagsFromOffer(IList<Studiegebied> tags, int offerId)
         {
             foreach (var studiegebied in tags)
@@ -367,8 +337,10 @@ namespace Youngpotentials.Service
             return _offerDAO.GetAllTypes();
         }
 
-
-        //decouples all tags from offer
+        /// <summary>
+        /// Decouples all tags from offer
+        /// </summary>
+        /// <param name="offerId">offerId where the tags needs to be decoupled</param>
         public void DeleteAllStudieConnectionsFromOfferId(int id)
         {
             var studiegebieden = _offerDAO.GetStudiegebiedOffersFromOfferId(id);
