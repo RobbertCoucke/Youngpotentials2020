@@ -26,44 +26,92 @@ namespace Youngpotentials.DAO
         }
         public Opleiding CreateOpleiding(Opleiding opleiding)
         {
-            _db.Entry(opleiding).State = EntityState.Added;
-            _db.SaveChanges();
-            return opleiding;
+            try
+            {
+                _db.Entry(opleiding).State = EntityState.Added;
+                _db.SaveChanges();
+                return opleiding;
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public void DeleteById(string id)
         {
-            var opleiding = _db.Opleiding.FirstOrDefault(o => o.Id == id);
-            _db.Opleiding.Remove(opleiding);
-            _db.SaveChanges();
+            try
+            {
+                var opleiding = _db.Opleiding.FirstOrDefault(o => o.Id == id);
+                _db.Opleiding.Remove(opleiding);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public IEnumerable<Opleiding> GetAll()
         {
-            return _db.Opleiding.Include(s => s.IdStudiegebiedNavigation)
-                                .Include(a => a.Afstudeerrichting)
-                                .Include(o => o.OpleidingOffer)
-                                .ToList();
+            try
+            {
+                return _db.Opleiding.Include(s => s.IdStudiegebiedNavigation)
+                                    .Include(a => a.Afstudeerrichting)
+                                    .Include(o => o.OpleidingOffer)
+                                    .ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public Opleiding GetById(string id)
         {
-            return _db.Opleiding.Where(op => op.Id == id).Include(s => s.IdStudiegebiedNavigation)
-                                .Include(a => a.Afstudeerrichting)
-                                .Include(o => o.OpleidingOffer).FirstOrDefault();
+            try
+            {
+                return _db.Opleiding.Where(op => op.Id == id).Include(s => s.IdStudiegebiedNavigation)
+                                    .Include(a => a.Afstudeerrichting)
+                                    .Include(o => o.OpleidingOffer).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public IEnumerable<Opleiding> GetAllByStudiegebied(string id)
         {
-            return _db.Opleiding.Where(op => op.IdStudiegebied == id).Include(s => s.IdStudiegebiedNavigation)
-                    .Include(a => a.Afstudeerrichting)
-                    .Include(o => o.OpleidingOffer).ToList();
+            try
+            {
+                return _db.Opleiding.Where(op => op.IdStudiegebied == id).Include(s => s.IdStudiegebiedNavigation)
+                        .Include(a => a.Afstudeerrichting)
+                        .Include(o => o.OpleidingOffer).ToList();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public void Update(Opleiding opleiding)
         {
-            _db.Entry(opleiding).State = EntityState.Modified;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(opleiding).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
     }
 }
