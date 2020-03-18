@@ -32,42 +32,94 @@ namespace Youngpotentials.DAO
 
         public AspNetUsers CreateUser(AspNetUsers user)
         {
-            _db.Entry(user).State = EntityState.Added;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(user).State = EntityState.Added;
+                _db.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
             return user;
         }
 
         public void DeleteUser(int id)
         {
-            var record = _db.AspNetUsers.FirstOrDefault(x => x.Id == id);
-            _db.AspNetUsers.Remove(record);
-            _db.SaveChanges();
+            try
+            {
+                var record = _db.AspNetUsers.FirstOrDefault(x => x.Id == id);
+                _db.AspNetUsers.Remove(record);
+                _db.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public IEnumerable<AspNetUsers> GetAdmins()
         {
-            return _db.AspNetUsers.Where(u => u.Role.Name == "Admin").ToList();
+            try
+            {
+                return _db.AspNetUsers.Where(u => u.Role.Name == "Admin").ToList();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public IEnumerable<AspNetUsers> GetAllUsers()
         {
-            return _db.AspNetUsers.ToList();
+            try
+            {
+                return _db.AspNetUsers.ToList();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public AspNetUsers GetUserByEmail(string email)
         {
-           return _db.AspNetUsers.Where(u => u.Email == email).Include(u=> u.Role).FirstOrDefault();
+            try
+            {
+                return _db.AspNetUsers.Where(u => u.Email == email).Include(u => u.Role).FirstOrDefault();
+            }catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+           
         }
 
         public AspNetUsers GetUserById(int id)
         {
-            return _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
+            try
+            {
+                return _db.AspNetUsers.FirstOrDefault(u => u.Id == id);
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public void UpdateUser(AspNetUsers user)
         {
-            _db.Entry(user).State = EntityState.Modified;
-            _db.SaveChanges();
+            try
+            {
+                _db.Entry(user).State = EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
             
         }
     }
